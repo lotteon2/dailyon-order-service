@@ -1,0 +1,17 @@
+server:
+  port: 8089
+spring:
+  config:
+    activate:
+      on-profile: local,dev,prod
+  application:
+    name: order-service
+  # config service settings
+  cloud:
+    config:
+      name: order-service
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, refresh, busrefresh
