@@ -1,6 +1,8 @@
 package com.dailyon.orderservice.domain.order.entity;
 
 import com.dailyon.orderservice.domain.common.BaseEntity;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderStatus;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
