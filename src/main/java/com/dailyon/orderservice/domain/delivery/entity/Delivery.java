@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
+@Entity
 public class Delivery extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,6 @@ public class Delivery extends BaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  @Builder.Default
   private DeliveryStatus status = DeliveryStatus.READY;
 
   @NotNull private String receiver;

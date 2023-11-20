@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
+@Entity
 public class OrderDetail extends BaseEntity {
 
   @Id
@@ -45,7 +46,6 @@ public class OrderDetail extends BaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  @Builder.Default
   private OrderDetailStatus status = OrderDetailStatus.COMPLETED;
 
   @Column(nullable = false, columnDefinition = "boolean default false")

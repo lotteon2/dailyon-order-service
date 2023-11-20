@@ -33,7 +33,6 @@ public class Order extends BaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  @Builder.Default
   private OrderStatus status = OrderStatus.PENDING;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
