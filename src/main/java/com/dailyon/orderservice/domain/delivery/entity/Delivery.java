@@ -40,17 +40,15 @@ public class Delivery extends BaseEntity {
   @Column(nullable = true)
   private String phoneNumber;
 
-  @Builder
+  @Builder(toBuilder = true)
   private Delivery(
       Order order,
-      DeliveryStatus status,
       String receiver,
       String postCode,
       String roadAddress,
       String detailAddress,
       String phoneNumber) {
     this.order = order;
-    this.status = status;
     this.receiver = receiver;
     this.postCode = postCode;
     this.roadAddress = roadAddress;

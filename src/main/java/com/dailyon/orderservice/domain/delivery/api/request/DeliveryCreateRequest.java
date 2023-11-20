@@ -1,7 +1,7 @@
 package com.dailyon.orderservice.domain.delivery.api.request;
 
 import com.dailyon.orderservice.domain.delivery.entity.Delivery;
-import com.dailyon.orderservice.domain.order.entity.Order;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class DeliveryCreateRequest {
   @NotNull(message = "주문번호는 필수입니다.")
@@ -28,9 +29,8 @@ public class DeliveryCreateRequest {
 
   private String phoneNumber;
 
-  public Delivery toEntity(Order order) {
+  public Delivery toEntity() {
     return Delivery.builder()
-        .order(order)
         .receiver(receiver)
         .postCode(postCode)
         .roadAddress(roadAddress)

@@ -40,11 +40,10 @@ public class Order extends BaseEntity {
 
   @Builder
   private Order(
-      Long memberId, OrderType type, String productsName, Integer orderPrice, OrderStatus status) {
+      Long memberId, OrderType type, String productsName, Integer orderPrice) {
     this.memberId = memberId;
     this.type = type;
     this.productsName = productsName;
     this.orderPrice = orderPrice;
-    this.status = status;
   }
 }
