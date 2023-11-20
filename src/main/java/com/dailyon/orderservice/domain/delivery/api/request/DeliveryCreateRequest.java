@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Getter
 public class DeliveryCreateRequest {
-  @NotNull(message = "주문번호는 필수입니다.")
+  @NotNull(message = "주문번호는 필수 입니다.")
   private Long orderId;
 
   @NotEmpty(message = "수령인은 필수 입니다.")
