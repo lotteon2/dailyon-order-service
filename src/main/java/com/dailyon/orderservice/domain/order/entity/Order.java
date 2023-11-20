@@ -31,7 +31,10 @@ public class Order extends BaseEntity {
 
   @NotNull private Integer orderPrice;
 
-  @NotNull private OrderStatus status;
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  @Builder.Default
+  private OrderStatus status = OrderStatus.PENDING;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean isDeleted;

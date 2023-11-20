@@ -26,7 +26,8 @@ public class Delivery extends BaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  private DeliveryStatus status;
+  @Builder.Default
+  private DeliveryStatus status = DeliveryStatus.READY;
 
   @NotNull private String receiver;
 

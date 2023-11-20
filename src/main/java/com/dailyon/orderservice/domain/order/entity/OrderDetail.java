@@ -45,7 +45,8 @@ public class OrderDetail extends BaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  private OrderDetailStatus status;
+  @Builder.Default
+  private OrderDetailStatus status = OrderDetailStatus.COMPLETED;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean reviewCheck;
