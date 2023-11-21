@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -47,19 +48,19 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
     String detailAddress = "강서아파트 111호";
     String phoneNumber = null;
     DeliveryCreateRequest request =
-            new DeliveryCreateRequest(
-                    orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
+        new DeliveryCreateRequest(
+            orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
 
     // when // then
     mockMvc
-            .perform(
-                    post("/deliveries")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-            .andExpect(jsonPath("$.validation.orderId").value("주문번호는 필수 입니다."));
+        .perform(
+            post("/deliveries")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+        .andExpect(jsonPath("$.validation.orderId").value("주문번호는 필수 입니다."));
   }
 
   @DisplayName("배송 등록 시 수령인은 필수이다.")
@@ -73,19 +74,19 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
     String detailAddress = "강서아파트 111호";
     String phoneNumber = null;
     DeliveryCreateRequest request =
-            new DeliveryCreateRequest(
-                    orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
+        new DeliveryCreateRequest(
+            orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
 
     // when // then
     mockMvc
-            .perform(
-                    post("/deliveries")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-            .andExpect(jsonPath("$.validation.receiver").value("수령인은 필수 입니다."));
+        .perform(
+            post("/deliveries")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+        .andExpect(jsonPath("$.validation.receiver").value("수령인은 필수 입니다."));
   }
 
   @DisplayName("배송 등록 시 우편 번호는 필수이다.")
@@ -99,19 +100,19 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
     String detailAddress = "강서아파트 111호";
     String phoneNumber = null;
     DeliveryCreateRequest request =
-            new DeliveryCreateRequest(
-                    orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
+        new DeliveryCreateRequest(
+            orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
 
     // when // then
     mockMvc
-            .perform(
-                    post("/deliveries")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-            .andExpect(jsonPath("$.validation.postCode").value("우편번호는 필수 입니다."));
+        .perform(
+            post("/deliveries")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+        .andExpect(jsonPath("$.validation.postCode").value("우편번호는 필수 입니다."));
   }
 
   @DisplayName("배송 등록 시 도로명 주소는 필수이다.")
@@ -125,19 +126,19 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
     String detailAddress = "강서아파트 111호";
     String phoneNumber = null;
     DeliveryCreateRequest request =
-            new DeliveryCreateRequest(
-                    orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
+        new DeliveryCreateRequest(
+            orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
 
     // when // then
     mockMvc
-            .perform(
-                    post("/deliveries")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-            .andExpect(jsonPath("$.validation.roadAddress").value("도로명 주소는 필수 입니다."));
+        .perform(
+            post("/deliveries")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+        .andExpect(jsonPath("$.validation.roadAddress").value("도로명 주소는 필수 입니다."));
   }
 
   @DisplayName("배송 등록 시 상세 주소는 필수이다.")
@@ -151,19 +152,30 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
     String detailAddress = null;
     String phoneNumber = null;
     DeliveryCreateRequest request =
-            new DeliveryCreateRequest(
-                    orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
+        new DeliveryCreateRequest(
+            orderId, receiver, postCode, roadAddress, detailAddress, phoneNumber);
 
     // when // then
     mockMvc
-            .perform(
-                    post("/deliveries")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-            .andExpect(jsonPath("$.validation.detailAddress").value("상세 주소는 필수 입니다."));
+        .perform(
+            post("/deliveries")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+        .andExpect(jsonPath("$.validation.detailAddress").value("상세 주소는 필수 입니다."));
   }
 
+  @DisplayName("주문번호로 배송 정보를 조회할 수 있다.")
+  @Test
+  void getDeliveryDetailByOrderId() throws Exception {
+    // given
+    Long orderId = 1L;
+    // when // then
+    mockMvc
+        .perform(get("/deliveries/orders/{orderId}", orderId))
+        .andDo(print())
+        .andExpect(status().isOk());
+  }
 }
