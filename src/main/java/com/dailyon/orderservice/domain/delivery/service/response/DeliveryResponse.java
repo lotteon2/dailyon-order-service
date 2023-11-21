@@ -13,6 +13,7 @@ public class DeliveryResponse {
   private String roadAddress;
   private String detailAddress;
   private String phoneNumber;
+  private String status;
 
   @Builder
   private DeliveryResponse(
@@ -20,12 +21,14 @@ public class DeliveryResponse {
       String postCode,
       String roadAddress,
       String detailAddress,
-      String phoneNumber) {
+      String phoneNumber,
+      String status) {
     this.receiver = receiver;
     this.postCode = postCode;
     this.roadAddress = roadAddress;
     this.detailAddress = detailAddress;
     this.phoneNumber = phoneNumber;
+    this.status = status;
   }
 
   public static DeliveryResponse from(Delivery delivery) {
@@ -33,8 +36,9 @@ public class DeliveryResponse {
         .receiver(delivery.getReceiver())
         .postCode(delivery.getPostCode())
         .roadAddress(delivery.getRoadAddress())
-        .detailAddress(builder().detailAddress)
+        .detailAddress(delivery.getDetailAddress())
         .phoneNumber(delivery.getPhoneNumber())
+        .status(delivery.getStatus().name())
         .build();
   }
 }
