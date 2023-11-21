@@ -2,13 +2,11 @@ package com.dailyon.orderservice.domain.delivery.api;
 
 import com.dailyon.orderservice.domain.delivery.api.request.DeliveryCreateRequest;
 import com.dailyon.orderservice.domain.delivery.service.DeliveryService;
+import com.dailyon.orderservice.domain.delivery.service.response.DeliveryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,5 +20,10 @@ public class DeliveryApiController {
   public ResponseEntity<Void> createDelivery(@Valid @RequestBody DeliveryCreateRequest request) {
     deliveryService.createDelivery(request);
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @GetMapping("/orders/{orderId}")
+  public ResponseEntity<DeliveryResponse> getDeliveryDetail(@PathVariable("orderId") Long orderId) {
+    return ResponseEntity.ok(deliveryService.getDeliveryDetail(orderId));
   }
 }
