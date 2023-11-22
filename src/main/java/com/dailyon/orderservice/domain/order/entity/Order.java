@@ -17,8 +17,7 @@ import javax.validation.constraints.NotNull;
 @DynamicInsert
 @Entity(name = "orders")
 public class Order extends BaseEntity {
-  @Id
-  private String id;
+  @Id private String id;
 
   @NotNull private Long memberId;
 
@@ -38,8 +37,8 @@ public class Order extends BaseEntity {
   private Boolean isDeleted;
 
   @Builder
-  private Order(
-      Long memberId, OrderType type, String productsName, Integer orderPrice) {
+  private Order(String id, Long memberId, OrderType type, String productsName, Integer orderPrice) {
+    this.id = id;
     this.memberId = memberId;
     this.type = type;
     this.productsName = productsName;

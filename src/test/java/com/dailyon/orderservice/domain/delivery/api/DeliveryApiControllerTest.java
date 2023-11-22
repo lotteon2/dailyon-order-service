@@ -17,7 +17,7 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
   @DisplayName("배송을 등록한다.")
   @Test
   void createDelivery() throws Exception {
-    Long orderId = 1L;
+    String orderId = "ORDER-001";
     String receiver = "홍길동";
     String postCode = "201-201";
     String roadAddress = "서울 특별시 강서구5길";
@@ -41,7 +41,7 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
   @Test
   void createDeliveryWithNullOrderId() throws Exception {
     // given
-    Long orderId = null;
+    String orderId = null;
     String receiver = "홍길동";
     String postCode = "201-201";
     String roadAddress = "서울 특별시 강서구5길";
@@ -67,7 +67,7 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
   @Test
   void createDeliveryWithNullReceiver() throws Exception {
     // given
-    Long orderId = 1L;
+    String orderId = "ORDER-001";
     String receiver = null;
     String postCode = "201-201";
     String roadAddress = "서울 특별시 강서구5길";
@@ -93,7 +93,7 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
   @Test
   void createDeliveryWithNullPostCode() throws Exception {
     // given
-    Long orderId = 1L;
+    String orderId = "ORDER-001";
     String receiver = "홍길동";
     String postCode = null;
     String roadAddress = "서울 특별시 강서구5길";
@@ -119,7 +119,7 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
   @Test
   void createDeliveryWithNullRoadAddress() throws Exception {
     // given
-    Long orderId = 1L;
+    String orderId = "ORDER-001";
     String receiver = "홍길동";
     String postCode = "201-201";
     String roadAddress = null;
@@ -145,7 +145,7 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
   @Test
   void createDeliveryWithNullDetailAddress() throws Exception {
     // given
-    Long orderId = 1L;
+    String orderId = "ORDER-001";
     String receiver = "홍길동";
     String postCode = "201-201";
     String roadAddress = "서울 특별시 강서구5길";
@@ -171,7 +171,7 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
   @Test
   void getDeliveryDetailByOrderId() throws Exception {
     // given
-    Long orderId = 1L;
+    String orderId = "ORDER-001";
     // when // then
     mockMvc
         .perform(get("/deliveries/orders/{orderId}", orderId))

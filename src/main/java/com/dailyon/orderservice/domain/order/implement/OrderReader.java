@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class OrderReader {
   private final OrderRepository orderRepository;
 
-  public Order read(Long orderId) {
+  public Order read(String orderId) {
     return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
   }
 }

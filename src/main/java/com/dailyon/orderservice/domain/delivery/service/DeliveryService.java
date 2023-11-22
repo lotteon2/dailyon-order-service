@@ -26,7 +26,7 @@ public class DeliveryService {
     deliveryAppender.append(delivery, order);
   }
 
-  public DeliveryResponse getDeliveryDetail(Long orderId) {
+  public DeliveryResponse getDeliveryDetail(String orderId) {
     Delivery delivery = deliveryReader.read(orderId);
     return DeliveryResponse.from(delivery);
   }
