@@ -18,8 +18,7 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "orders")
 public class Order extends BaseEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private String id;
 
   @NotNull private Long memberId;
 
@@ -33,7 +32,7 @@ public class Order extends BaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  private OrderStatus status = OrderStatus.PENDING;
+  private OrderStatus status = OrderStatus.COMPLETED;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean isDeleted;
