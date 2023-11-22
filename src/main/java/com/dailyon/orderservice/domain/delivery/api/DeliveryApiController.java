@@ -23,7 +23,7 @@ public class DeliveryApiController {
   }
 
   @GetMapping("/orders/{orderId}")
-  public ResponseEntity<DeliveryResponse> getDeliveryDetail(@PathVariable("orderId") Long orderId) {
+  public ResponseEntity<DeliveryResponse> getDeliveryDetail(@PathVariable("orderId") String orderId) {
     return ResponseEntity.ok(deliveryService.getDeliveryDetail(orderId));
   }
 }

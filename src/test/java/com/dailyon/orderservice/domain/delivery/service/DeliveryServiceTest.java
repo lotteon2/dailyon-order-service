@@ -31,13 +31,14 @@ class DeliveryServiceTest {
   @AfterEach
   void tearDown() {
     deliveryRepository.deleteAllInBatch();
+    orderRepository.deleteAllInBatch();
   }
 
   @DisplayName("배송 정보를 입력 받아 배송을 등록한다.")
   @Test
   void createDelivery() {
     // given
-    Order order = createOrder(1L, 15000, "나이키슬리퍼", OrderType.SINGLE);
+    Order order = createOrder("ORDER-01", 1L, 15000, "나이키슬리퍼", OrderType.SINGLE);
     DeliveryCreateRequest request =
         new DeliveryCreateRequest(
             order.getId(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
@@ -52,7 +53,7 @@ class DeliveryServiceTest {
   @Test
   void createDeliveryWithNoExistOrder() {
     // given
-    Long noExistOrderId = 0L;
+    String noExistOrderId = "00000";
     DeliveryCreateRequest request =
         new DeliveryCreateRequest(
             noExistOrderId, "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
@@ -71,7 +72,7 @@ class DeliveryServiceTest {
     String roadAddress = "강서구 5길";
     String detailAddress = "강서아파트 101호";
 
-    Order order = createOrder(1L, 15000, "나이키슬리퍼", OrderType.SINGLE);
+    Order order = createOrder("ORDER-01", 1L, 15000, "나이키슬리퍼", OrderType.SINGLE);
     Delivery delivery = saveDelivery(order, receiver, postCode, roadAddress, detailAddress, null);
     // when
     DeliveryResponse deliveryResponse = deliveryService.getDeliveryDetail(order.getId());
@@ -87,7 +88,7 @@ class DeliveryServiceTest {
   @Test
   void getDeliveryDetailWithNoExistOrder() {
     // given
-    Long noExistOrderId = 0L;
+    String noExistOrderId = "ORDER-000";
     // when // then
     assertThatThrownBy(() -> deliveryService.getDeliveryDetail(noExistOrderId))
         .isInstanceOf(DeliveryNotFoundException.class)
@@ -95,9 +96,10 @@ class DeliveryServiceTest {
   }
 
   private Order createOrder(
-      Long memberId, Integer orderPrice, String productsName, OrderType type) {
+      String orderId, Long memberId, Integer orderPrice, String productsName, OrderType type) {
     return orderRepository.save(
         Order.builder()
+            .id(orderId)
             .memberId(memberId)
             .orderPrice(orderPrice)
             .productsName(productsName)

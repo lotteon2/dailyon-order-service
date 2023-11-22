@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class DeliveryReader {
   private final DeliveryRepository deliveryRepository;
 
-  public Delivery read(Long orderId) {
-    return deliveryRepository.findById(orderId).orElseThrow(DeliveryNotFoundException::new);
+  public Delivery read(String orderId) {
+    return deliveryRepository.findByOrderId(orderId).orElseThrow(DeliveryNotFoundException::new);
   }
 }

@@ -17,9 +17,7 @@ import javax.validation.constraints.NotNull;
 @DynamicInsert
 @Entity(name = "orders")
 public class Order extends BaseEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Id private String id;
 
   @NotNull private Long memberId;
 
@@ -33,14 +31,14 @@ public class Order extends BaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  private OrderStatus status = OrderStatus.PENDING;
+  private OrderStatus status = OrderStatus.COMPLETED;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean isDeleted;
 
   @Builder
-  private Order(
-      Long memberId, OrderType type, String productsName, Integer orderPrice) {
+  private Order(String id, Long memberId, OrderType type, String productsName, Integer orderPrice) {
+    this.id = id;
     this.memberId = memberId;
     this.type = type;
     this.productsName = productsName;
