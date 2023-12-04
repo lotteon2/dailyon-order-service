@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-abstract class OrderNoGenerator {
+public abstract class OrderNoGenerator {
 
   // 오늘 날짜 + userId + 4자리수 random 수로 주문번호가 결정된다.
   public static String generate(Long userId) {

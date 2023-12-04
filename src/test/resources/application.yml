@@ -27,3 +27,7 @@ logging:
       springframework:
         transaction:
           interceptor: TRACE
+  cloud:
+    aws:
+      credentials:
+        instance-profile: false
