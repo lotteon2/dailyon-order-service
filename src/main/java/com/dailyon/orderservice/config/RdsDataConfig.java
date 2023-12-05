@@ -7,13 +7,22 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import static com.dailyon.orderservice.config.RdsDataConfig.RDS_DOMAIN_PACKAGE;
+import static com.dailyon.orderservice.config.RdsDataConfig.*;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableJpaRepositories(basePackages = {RDS_DOMAIN_PACKAGE}) // JpaRepository 패키지 위치 등록
+@EnableJpaRepositories(
+    basePackages = {
+      RDS_ORDER_DOMAIN_PACKAGE,
+      RDS_DELIVERY_DOMAIN_PACKAGE,
+      RDS_REFUND_DOMAIN_PACKAGE
+    }) // JpaRepository 패키지 위치 등록
 @EnableConfigurationProperties({JpaProperties.class, HibernateProperties.class})
 public class RdsDataConfig {
 
-  static final String RDS_DOMAIN_PACKAGE = "com.dailyon.orderservice.domain";
+  static final String RDS_ORDER_DOMAIN_PACKAGE = "com.dailyon.orderservice.domain.order.repository";
+  static final String RDS_DELIVERY_DOMAIN_PACKAGE =
+      "com.dailyon.orderservice.domain.delivery.repository";
+  static final String RDS_REFUND_DOMAIN_PACKAGE =
+      "com.dailyon.orderservice.domain.refund.repository";
 }

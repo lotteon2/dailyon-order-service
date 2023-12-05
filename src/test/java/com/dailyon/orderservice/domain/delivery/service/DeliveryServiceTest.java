@@ -1,5 +1,6 @@
 package com.dailyon.orderservice.domain.delivery.service;
 
+import com.dailyon.orderservice.IntegrationTestSupport;
 import com.dailyon.orderservice.domain.delivery.api.request.DeliveryCreateRequest;
 import com.dailyon.orderservice.domain.delivery.entity.Delivery;
 import com.dailyon.orderservice.domain.delivery.exception.DeliveryNotFoundException;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -21,8 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
-class DeliveryServiceTest {
+class DeliveryServiceTest extends IntegrationTestSupport {
   @Autowired DeliveryService deliveryService;
   @Autowired EntityManager entityManager;
   @Autowired DeliveryRepository deliveryRepository;

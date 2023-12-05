@@ -1,23 +1,18 @@
-package com.dailyon.orderservice.domain.order.entity.dynamo;
+package com.dailyon.orderservice.domain.torder.entity;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.*;
+import com.dailyon.orderservice.ContainerBaseTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@TestPropertySource(properties = "embedded-dynamodb.use=true")
-@ActiveProfiles("test")
-class TOrder {
+class TOrderTest extends ContainerBaseTestSupport {
 
   @Autowired private AmazonDynamoDB dynamoDB;
 

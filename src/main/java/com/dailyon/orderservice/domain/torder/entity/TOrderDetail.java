@@ -1,4 +1,4 @@
-package com.dailyon.orderservice.dynamodb.entity;
+package com.dailyon.orderservice.domain.torder.entity;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus;
@@ -56,7 +56,7 @@ public class TOrderDetail {
   @DynamoDBAttribute(attributeName = "status")
   private String status = OrderDetailStatus.PENDING.name();
 
-  @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.BOOL) //빼면 0으로 들어감, 넣으면 false로 들어감
+  @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.BOOL) // 빼면 0으로 들어감, 넣으면 false로 들어감
   @DynamoDBAttribute(attributeName = "review_check")
   private boolean reviewCheck;
 

@@ -1,17 +1,19 @@
-package com.dailyon.orderservice.dynamodb.entity;
+package com.dailyon.orderservice.domain.torder.entity;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.dailyon.orderservice.config.DynamoDbConfig;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderStatus;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.dailyon.orderservice.dynamodb.entity.TOrder.DYNAMO_TABLE_NAME;
+import static com.dailyon.orderservice.domain.torder.entity.TOrder.DYNAMO_TABLE_NAME;
 
 @Getter
 @Setter

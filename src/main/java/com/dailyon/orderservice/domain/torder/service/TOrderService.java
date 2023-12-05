@@ -1,7 +1,7 @@
-package com.dailyon.orderservice.dynamodb.service;
+package com.dailyon.orderservice.domain.torder.service;
 
-import com.dailyon.orderservice.dynamodb.implement.TOrderAppender;
-import com.dailyon.orderservice.dynamodb.service.request.CreateTOrderServiceRequest;
+import com.dailyon.orderservice.domain.torder.implement.TOrderAppender;
+import com.dailyon.orderservice.domain.torder.service.request.CreateTOrderServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

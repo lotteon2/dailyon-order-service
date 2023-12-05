@@ -1,36 +1,30 @@
-package com.dailyon.orderservice.dynamodb;
+package com.dailyon.orderservice.domain.torder.repository;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
-import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
+import com.dailyon.orderservice.ContainerBaseTestSupport;
 import com.dailyon.orderservice.common.utils.OrderNoGenerator;
-import com.dailyon.orderservice.dynamodb.entity.TOrder;
-import com.dailyon.orderservice.dynamodb.entity.TOrderDetail;
-import com.dailyon.orderservice.dynamodb.repository.OrderDynamoRepository;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
+import com.dailyon.orderservice.domain.torder.entity.TOrder;
+import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
 import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.SINGLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@TestPropertySource(properties = "embedded-dynamodb.use=true")
-class TOrderDynamoRepositoryTest {
+class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
 
   @Autowired AmazonDynamoDB dynamoDB;
-
   @Autowired DynamoDBMapper dynamoDBMapper;
-
   @Autowired OrderDynamoRepository orderDynamoRepository;
 
   @BeforeEach
@@ -62,9 +56,9 @@ class TOrderDynamoRepositoryTest {
         createTOrderDetail(
             orderId, 1L, 2L, 3L, "나이키신발", 1, "260", "MAN", "testUrl", 54000, "10%할인쿠폰", 6000);
 
-    TOrderDetail tOrderDetail2 = createTOrderDetail(
+    TOrderDetail tOrderDetail2 =
+        createTOrderDetail(
             orderId, 2L, 3L, null, "나이키 양말", 1, "260", "MAN", "testUrl", 30000, null, 0);
-
 
     tOrder.setOrderDetails(List.of(tOrderDetail1, tOrderDetail2));
     // when
@@ -74,7 +68,6 @@ class TOrderDynamoRepositoryTest {
     TOrder savedTOrder = orderDynamoRepository.findAll().iterator().next();
     assertThat(savedTOrder.getId()).isEqualTo(orderId);
     assertThat(savedTOrder.getOrderPrice()).isEqualTo(84000);
-    System.out.println(savedTOrder.getStatus());
   }
 
   private TOrder createOrder(
