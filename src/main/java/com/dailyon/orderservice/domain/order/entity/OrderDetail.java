@@ -75,7 +75,7 @@ public class OrderDetail extends BaseEntity {
     this.productSize = productSize;
     this.productGender = productGender;
     this.productImgUrl = productImgUrl;
-    OrderPrice = orderPrice;
+    this.OrderPrice = orderPrice;
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
     this.status = status;

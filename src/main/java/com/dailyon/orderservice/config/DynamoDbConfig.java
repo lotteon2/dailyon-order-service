@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +17,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.TimeZone;
+
 @Slf4j
 @Configuration
-@EnableDynamoDBRepositories(basePackages = {"com.dailyon.orderservice.dynamodb"})
+@EnableDynamoDBRepositories(basePackages = {"com.dailyon.orderservice.dynamodb.repository"})
 public class DynamoDbConfig {
 
   @Bean
@@ -27,7 +33,7 @@ public class DynamoDbConfig {
     return DynamoDBMapperConfig.DEFAULT;
   }
 
-  @Profile({"!test"}) // (2)
+  @Profile({"!test"})
   @Bean
   @Primary
   public AmazonDynamoDB amazonDynamoDB() {
@@ -38,7 +44,7 @@ public class DynamoDbConfig {
         .build();
   }
 
-  @Profile({"test","local"}) // (4)
+  @Profile({"test", "local"})
   @Bean(name = "amazonDynamoDB")
   @Primary
   public AmazonDynamoDB localAmazonDynamoDB() {
@@ -56,5 +62,17 @@ public class DynamoDbConfig {
   @Primary
   public DynamoDBMapper dynamoDBMapper(AmazonDynamoDB amazonDynamoDB, DynamoDBMapperConfig config) {
     return new DynamoDBMapper(amazonDynamoDB, config);
+  }
+
+  public static class LocalDateTimeConverter implements DynamoDBTypeConverter<Date, LocalDateTime> {
+    @Override
+    public Date convert(LocalDateTime source) {
+      return Date.from(source.toInstant(ZoneOffset.UTC));
+    }
+
+    @Override
+    public LocalDateTime unconvert(Date source) {
+      return source.toInstant().atZone(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+    }
   }
 }

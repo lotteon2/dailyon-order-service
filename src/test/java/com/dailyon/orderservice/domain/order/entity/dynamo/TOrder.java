@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @TestPropertySource(properties = "embedded-dynamodb.use=true")
 @ActiveProfiles("test")
-class Order {
+class TOrder {
 
   @Autowired private AmazonDynamoDB dynamoDB;
 
@@ -53,6 +53,7 @@ class Order {
     List<KeySchemaElement> ks = new ArrayList<>();
     ks.add(new KeySchemaElement(hashKeyName, KeyType.HASH));
 
+    // ThrottlingException 을 반환하기 전 초당 사용 되는 최대 쓰기, 일기 수 PAY_PER_REQUEST 일 경우 0으로 설정된다.
     ProvisionedThroughput provisionedthroughput = new ProvisionedThroughput(1000L, 1000L);
 
     CreateTableRequest request =
