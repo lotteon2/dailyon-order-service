@@ -72,7 +72,6 @@ class TOrderDynamoRepositoryTest {
 
     // then
     TOrder savedTOrder = orderDynamoRepository.findAll().iterator().next();
-    System.out.println(savedTOrder);
     assertThat(savedTOrder.getId()).isEqualTo(orderId);
     assertThat(savedTOrder.getOrderPrice()).isEqualTo(84000);
     System.out.println(savedTOrder.getStatus());
