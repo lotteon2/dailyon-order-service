@@ -2,7 +2,9 @@ package com.dailyon.orderservice.domain.torder.entity;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.*;
+import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.dailyon.orderservice.ContainerBaseTestSupport;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TOrderTest extends ContainerBaseTestSupport {
 
   @Autowired private AmazonDynamoDB dynamoDB;
+
+  @AfterEach
+  void after() {
+
+    DeleteTableRequest deleteTableRequest = new DeleteTableRequest("order");
+    TableUtils.deleteTableIfExists(dynamoDB, deleteTableRequest);
+  }
 
   @Test
   @DisplayName("dynamodb order table 생성 테스트")
