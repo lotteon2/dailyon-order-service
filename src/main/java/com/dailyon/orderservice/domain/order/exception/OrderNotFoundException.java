@@ -1,6 +1,6 @@
 package com.dailyon.orderservice.domain.order.exception;
 
-import com.dailyon.orderservice.exception.CustomException;
+import com.dailyon.orderservice.common.exception.CustomException;
 import org.springframework.http.HttpStatus;
 
 public class OrderNotFoundException extends CustomException {

@@ -1,4 +1,4 @@
-package com.dailyon.orderservice.exception.response;
+package com.dailyon.orderservice.common.exception.response;
 
 import lombok.Builder;
 import lombok.Data;

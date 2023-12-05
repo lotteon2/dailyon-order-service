@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
-import com.dailyon.orderservice.domain.order.utils.OrderNoGenerator;
+import com.dailyon.orderservice.common.utils.OrderNoGenerator;
 import com.dailyon.orderservice.dynamodb.entity.TOrder;
 import com.dailyon.orderservice.dynamodb.entity.TOrderDetail;
 import com.dailyon.orderservice.dynamodb.repository.OrderDynamoRepository;

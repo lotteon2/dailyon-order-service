@@ -1,7 +1,7 @@
-package com.dailyon.orderservice.exception.advice;
+package com.dailyon.orderservice.common.exception.advice;
 
-import com.dailyon.orderservice.exception.CustomException;
-import com.dailyon.orderservice.exception.response.ErrorResponse;
+import com.dailyon.orderservice.common.exception.CustomException;
+import com.dailyon.orderservice.common.exception.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
