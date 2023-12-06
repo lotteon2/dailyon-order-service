@@ -22,7 +22,7 @@ import static com.dailyon.orderservice.domain.torder.entity.TOrder.DYNAMO_TABLE_
 @DynamoDBTable(tableName = DYNAMO_TABLE_NAME)
 public class TOrder {
 
-  public static final String DYNAMO_TABLE_NAME = "order";
+  public static final String DYNAMO_TABLE_NAME = "orders";
 
   @Id @DynamoDBHashKey private String id;
 

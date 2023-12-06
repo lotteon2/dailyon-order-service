@@ -21,7 +21,7 @@ class TOrderTest extends ContainerBaseTestSupport {
   @AfterEach
   void after() {
 
-    DeleteTableRequest deleteTableRequest = new DeleteTableRequest("order");
+    DeleteTableRequest deleteTableRequest = new DeleteTableRequest("orders");
     TableUtils.deleteTableIfExists(dynamoDB, deleteTableRequest);
   }
 
@@ -29,7 +29,7 @@ class TOrderTest extends ContainerBaseTestSupport {
   @DisplayName("dynamodb order table 생성 테스트")
   void test_createTable() throws Exception {
     // given
-    String tableName = "order";
+    String tableName = "orders";
     String hashKeyName = "order_id";
 
     // when

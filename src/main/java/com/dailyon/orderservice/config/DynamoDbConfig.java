@@ -27,13 +27,13 @@ import java.util.TimeZone;
 @EnableDynamoDBRepositories(basePackages = {"com.dailyon.orderservice.domain.torder.repository"})
 public class DynamoDbConfig {
 
-  @Value("${amazon.dynamodb.endpoint}")
+  @Value("${amazon.dynamodb.endpoint:test}")
   private String amazonDynamoDBEndpoint;
 
-  @Value("${amazon.aws.accesskey}")
+  @Value("${amazon.aws.accesskey:test}")
   private String amazonAWSAccessKey;
 
-  @Value("${amazon.aws.secretkey}")
+  @Value("${amazon.aws.secretkey:test}")
   private String amazonAWSSecretKey;
 
   public AWSCredentials amazonAWSCredentials() {
