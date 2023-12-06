@@ -1,6 +1,8 @@
 package com.dailyon.orderservice.config;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -38,6 +40,10 @@ public class DynamoDbConfig {
     return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
   }
 
+  public AWSCredentialsProvider amazonAWSCredentialsProvider() {
+    return new AWSStaticCredentialsProvider(amazonAWSCredentials());
+  }
+
   @Bean
   @Primary
   public DynamoDBMapperConfig dynamoDBMapperConfig() {
@@ -51,6 +57,7 @@ public class DynamoDbConfig {
         new AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint, "");
 
     return AmazonDynamoDBClientBuilder.standard()
+        .withCredentials(amazonAWSCredentialsProvider())
         .withEndpointConfiguration(endpointConfiguration)
         .build();
   }
