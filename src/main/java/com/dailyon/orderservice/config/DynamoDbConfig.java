@@ -22,18 +22,22 @@ import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.TimeZone;
 
+import static com.dailyon.orderservice.config.DynamoDbConfig.*;
+
 @Slf4j
 @Configuration
-@EnableDynamoDBRepositories(basePackages = {"com.dailyon.orderservice.domain.torder.repository"})
+@EnableDynamoDBRepositories(basePackages = DYNAMO_DOMAIN_PACKAGE)
 public class DynamoDbConfig {
 
-  @Value("${amazon.dynamodb.endpoint:test}")
+  static final String DYNAMO_DOMAIN_PACKAGE = "com.dailyon.orderservice.domain.torder.repository";
+
+  @Value("${cloud.aws.dynamodb.endpoint:test}")
   private String amazonDynamoDBEndpoint;
 
-  @Value("${amazon.aws.accesskey:test}")
+  @Value("${cloud.aws.credentials.ACCESS_KEY_ID:test}")
   private String amazonAWSAccessKey;
 
-  @Value("${amazon.aws.secretkey:test}")
+  @Value("${cloud.aws.credentials.SECRET_ACCESS_KEY:test}")
   private String amazonAWSSecretKey;
 
   public AWSCredentials amazonAWSCredentials() {

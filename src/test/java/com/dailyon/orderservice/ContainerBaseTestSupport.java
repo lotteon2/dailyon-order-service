@@ -24,8 +24,8 @@ public class ContainerBaseTestSupport extends IntegrationTestSupport {
     final String endpoint =
         String.format(
             "http://%s:%s", DYNAMODB_CONTAINER.getHost(), DYNAMODB_CONTAINER.getMappedPort(8000));
-    registry.add("amazon.dynamodb.endpoint", () -> endpoint);
-    registry.add("amazon.aws.accesskey", () -> "testkey");
-    registry.add("amazon.aws.secretkey", () -> "testkey");
+    registry.add("cloud.aws.dynamodb.endpoint", () -> endpoint);
+    registry.add("cloud.aws.credentials.ACCESS_KEY_ID", () -> "testkey");
+    registry.add("cloud.aws.credentials.SECRET_ACCESS_KEY", () -> "testkey");
   }
 }
