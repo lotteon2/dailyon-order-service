@@ -46,7 +46,7 @@ class TOrderTest extends ContainerBaseTestSupport {
     assertThat(tableDesc.getProvisionedThroughput().getWriteCapacityUnits()).isEqualTo(1000L);
     assertThat(tableDesc.getTableStatus()).isEqualTo("ACTIVE");
     assertThat(tableDesc.getTableArn())
-        .isEqualTo("arn:aws:dynamodb:ddblocal:000000000000:table/order");
+        .isEqualTo("arn:aws:dynamodb:ddblocal:000000000000:table/orders");
     assertThat(dynamoDB.listTables().getTableNames()).hasSizeGreaterThanOrEqualTo(1);
   }
 
