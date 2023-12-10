@@ -1,5 +1,6 @@
 package com.dailyon.orderservice.domain.torder.service.request;
 
+import com.dailyon.orderservice.common.utils.OrderValidator;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
@@ -67,7 +68,10 @@ public class TOrderServiceRequest {
                           ? calculateDiscountPrice(
                               orderProduct, couponOptional.get(), orderProductInfo.getQuantity())
                           : 0;
-
+                  OrderValidator.validateCouponInfo(
+                      discountPrice,
+                      orderProduct.getPrice() * orderProductInfo.getQuantity(),
+                      couponOptional);
                   int orderPrice =
                       calculateOrderPrice(orderProduct, orderProductInfo, discountPrice);
 
