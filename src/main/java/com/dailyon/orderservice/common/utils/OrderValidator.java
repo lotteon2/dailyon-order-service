@@ -8,11 +8,11 @@ import java.util.Optional;
 public abstract class OrderValidator {
 
   public static void validateCouponInfo(
-      int discountPrice, int totalPerchaseAmount, Optional<ProductCouponDTO> coupon) {
+      int discountPrice, int totalPurchaseAmount, Optional<ProductCouponDTO> coupon) {
     if (coupon.isEmpty()) return;
     ProductCouponDTO getCoupon = coupon.get();
     if (discountPrice > getCoupon.getMaxDiscountAmount()
-        || totalPerchaseAmount < getCoupon.getMinPurchaseAmount()) {
+        || totalPurchaseAmount < getCoupon.getMinPurchaseAmount()) {
       throw new InvalidParamException();
     }
   }
