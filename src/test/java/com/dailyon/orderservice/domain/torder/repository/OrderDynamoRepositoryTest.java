@@ -50,7 +50,7 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
     // given
     Long memberId = 1L;
     String orderId = OrderNoGenerator.generate(1L);
-    TOrder tOrder = createOrder(orderId, memberId, 84000, "나이키 신발 외 2건", SINGLE);
+    TOrder tOrder = createOrder(orderId, memberId, SINGLE);
 
     TOrderDetail tOrderDetail1 =
         createTOrderDetail(
@@ -67,18 +67,10 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
     // then
     TOrder savedTOrder = orderDynamoRepository.findAll().iterator().next();
     assertThat(savedTOrder.getId()).isEqualTo(orderId);
-    assertThat(savedTOrder.getOrderPrice()).isEqualTo(84000);
   }
 
-  private TOrder createOrder(
-      String orderId, Long memberId, Integer orderPrice, String productsName, OrderType type) {
-    return TOrder.builder()
-        .id(orderId)
-        .memberId(memberId)
-        .orderPrice(orderPrice)
-        .productsName(productsName)
-        .type(type)
-        .build();
+  private TOrder createOrder(String orderId, Long memberId, OrderType type) {
+    return TOrder.builder().id(orderId).memberId(memberId).type(type).build();
   }
 
   private TOrderDetail createTOrderDetail(

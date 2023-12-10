@@ -45,7 +45,7 @@ public class TOrderDetail {
   private String productImgUrl;
 
   @DynamoDBAttribute(attributeName = "order_price")
-  private Integer OrderPrice;
+  private Integer orderPrice;
 
   @DynamoDBAttribute(attributeName = "coupon_name")
   private String couponName;
@@ -83,7 +83,7 @@ public class TOrderDetail {
     this.productSize = productSize;
     this.productGender = productGender;
     this.productImgUrl = productImgUrl;
-    this.OrderPrice = orderPrice;
+    this.orderPrice = orderPrice;
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
   }

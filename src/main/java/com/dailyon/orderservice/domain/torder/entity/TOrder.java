@@ -32,12 +32,6 @@ public class TOrder {
   @DynamoDBAttribute(attributeName = "type")
   private String type;
 
-  @DynamoDBAttribute(attributeName = "products_name")
-  private String productsName;
-
-  @DynamoDBAttribute(attributeName = "order_price")
-  private Integer orderPrice;
-
   @DynamoDBAttribute(attributeName = "status")
   private String status = OrderStatus.PENDING.name();
 
@@ -49,18 +43,10 @@ public class TOrder {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  private TOrder(
-      String id,
-      Long memberId,
-      OrderType type,
-      String productsName,
-      Integer orderPrice,
-      List<TOrderDetail> orderDetails) {
+  private TOrder(String id, Long memberId, OrderType type, List<TOrderDetail> orderDetails) {
     this.id = id;
     this.memberId = memberId;
     this.type = type.name();
-    this.productsName = productsName;
-    this.orderPrice = orderPrice;
     this.orderDetails = orderDetails;
   }
 }

@@ -7,7 +7,7 @@ import org.testcontainers.containers.GenericContainer;
 
 public class ContainerBaseTestSupport extends IntegrationTestSupport {
 
-  private static final String DOCKER_DYNAMODB_IMAGE = "amazon/dynamodb-local:1.24.0";
+  private static final String DOCKER_DYNAMODB_IMAGE = "amazon/dynamodb-local:2.1.0";
 
   @ClassRule public static GenericContainer DYNAMODB_CONTAINER;
 

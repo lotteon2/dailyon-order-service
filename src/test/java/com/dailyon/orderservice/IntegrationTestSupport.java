@@ -6,7 +6,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -20,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
       "amazon.aws.secretkey=testkey"
     })
 public class IntegrationTestSupport {
-
-  @Autowired protected MockMvc mvc;
 
   @Autowired protected ObjectMapper objectMapper;
 }

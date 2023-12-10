@@ -25,10 +25,6 @@ public class Order extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private OrderType type;
 
-  @NotNull private String productsName;
-
-  @NotNull private Integer orderPrice;
-
   @NotNull
   @Enumerated(EnumType.STRING)
   private OrderStatus status = OrderStatus.COMPLETED;
@@ -37,11 +33,9 @@ public class Order extends BaseEntity {
   private Boolean isDeleted;
 
   @Builder
-  private Order(String id, Long memberId, OrderType type, String productsName, Integer orderPrice) {
+  private Order(String id, Long memberId, OrderType type) {
     this.id = id;
     this.memberId = memberId;
     this.type = type;
-    this.productsName = productsName;
-    this.orderPrice = orderPrice;
   }
 }
