@@ -4,6 +4,8 @@ import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.CouponInfo;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +25,7 @@ public class TOrderRequest {
   public static class TOrderCreateRequest {
     @Valid private List<OrderItem> orderItems;
     @Valid private OrderInfo orderInfo;
+    private DeliveryInfo deliveryInfo; // null 일수 있음. 선물하기 주문 시 배송지 정보는 추후 등록
 
     @NotBlank(message = "결제 수단은 필수 입니다.")
     private String paymentType;
@@ -50,6 +53,8 @@ public class TOrderRequest {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class OrderItem {
 
       @NotNull(message = "상품 아이디는 필수 입니다.")
@@ -89,6 +94,10 @@ public class TOrderRequest {
       }
     }
 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class OrderInfo {
       @PositiveOrZero(message = "포인트는 0이상 이어야 합니다.")
       private int usedPoints;
@@ -109,6 +118,18 @@ public class TOrderRequest {
             .totalCouponDiscountPrice(totalCouponDiscountPrice)
             .build();
       }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DeliveryInfo {
+      private String receiver;
+      private String postCode;
+      private String roadAddress;
+      private String detailAddress;
+      private String phoneNumber;
     }
   }
 }
