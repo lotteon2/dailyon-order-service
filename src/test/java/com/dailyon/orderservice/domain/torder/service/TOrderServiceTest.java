@@ -6,10 +6,12 @@ import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.dailyon.orderservice.ContainerBaseTestSupport;
+import com.dailyon.orderservice.common.exception.InvalidParamException;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
+import com.dailyon.orderservice.domain.torder.exception.InsufficientStockException;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
 import com.dailyon.orderservice.domain.torder.repository.OrderDynamoRepository;
 import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest;
@@ -22,8 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.Assertions.*;
 
 class TOrderServiceTest extends ContainerBaseTestSupport {
 
@@ -76,6 +77,8 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
     Map<Long, OrderProductInfo> productInfoMap = Map.of(1L, opInfo);
     ProductCouponDTO couponDTO =
         ProductCouponDTO.builder()
+            .maxDiscountAmount(0L)
+            .minPurchaseAmount(0L)
             .productId(1L)
             .couponName("2000원 할인쿠폰")
             .couponInfoId(1L)
@@ -94,7 +97,7 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
 
     Long memberId = 1L;
     // when
-    String orderId = tOrderService.createTOrder(request, 1L);
+    String orderId = tOrderService.createTOrder(request, memberId);
     // then
     TOrder getTOrder = orderDynamoRepository.findById(orderId).get();
     assertThat(getTOrder).isNotNull();
@@ -127,5 +130,165 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
                 28000,
                 "2000원 할인쿠폰",
                 2000));
+  }
+
+  @DisplayName("주문 시 최소 주문 금액보다 적은 금액으로 주문요청 시 예외가 발생한다.")
+  @Test
+  void createTOrderWithInvalidCouponParam_minPurchaseAmount() {
+    // given
+    OrderProductDTO orderProductDTO =
+        OrderProductDTO.builder()
+            .productId(1L)
+            .price(15000)
+            .productName("나이키 슬리퍼")
+            .categoryId(1L)
+            .gender("MAN")
+            .imgUrl("testUrl")
+            .sizeId(1L)
+            .sizeName("265")
+            .stock(30)
+            .build();
+    List<OrderProductDTO> orderProductDTOList = List.of(orderProductDTO);
+    OrderProductInfo opInfo =
+        OrderProductInfo.builder()
+            .quantity(2)
+            .productId(1L)
+            .referralCode("reCode")
+            .sizeId(1L)
+            .build();
+
+    Map<Long, OrderProductInfo> productInfoMap = Map.of(1L, opInfo);
+    ProductCouponDTO couponDTO =
+        ProductCouponDTO.builder()
+            .minPurchaseAmount(30001L)
+            .maxDiscountAmount(5000L)
+            .productId(1L)
+            .couponName("2000원 할인쿠폰")
+            .couponInfoId(1L)
+            .discountType("FIXED_AMOUNT")
+            .discountValue(2000L)
+            .build();
+    Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
+
+    TOrderServiceRequest request =
+        TOrderServiceRequest.builder()
+            .orderProductDTOList(orderProductDTOList)
+            .productInfoMap(productInfoMap)
+            .couponInfoMap(couponInfoMap)
+            .type(OrderType.SINGLE)
+            .build();
+
+    Long memberId = 1L;
+    // when then
+    assertThatThrownBy(() -> tOrderService.createTOrder(request, memberId))
+        .isInstanceOf(InvalidParamException.class)
+        .hasMessage("요청한 값이 올바르지 않습니다.");
+  }
+
+  @DisplayName("정률 할인이 적용된 주문의 경우, 주문 할인 금액이 쿠폰의 최대 할인 금액을 넘을 수 없다.")
+  @Test
+  void createTOrderWithInvalidCouponParam_maxDiscountAmount() {
+    // given
+    OrderProductDTO orderProductDTO =
+        OrderProductDTO.builder()
+            .productId(1L)
+            .price(50000000)
+            .productName("샤넬 백")
+            .categoryId(1L)
+            .gender("WOMAN")
+            .imgUrl("testUrl")
+            .sizeId(1L)
+            .sizeName("free")
+            .stock(30)
+            .build();
+    List<OrderProductDTO> orderProductDTOList = List.of(orderProductDTO);
+    OrderProductInfo opInfo =
+        OrderProductInfo.builder()
+            .quantity(1)
+            .productId(1L)
+            .referralCode("reCode")
+            .sizeId(1L)
+            .build();
+
+    Map<Long, OrderProductInfo> productInfoMap = Map.of(1L, opInfo);
+    ProductCouponDTO couponDTO =
+        ProductCouponDTO.builder()
+            .minPurchaseAmount(0L)
+            .maxDiscountAmount(100000L)
+            .productId(1L)
+            .couponName("5% 할인쿠폰")
+            .couponInfoId(1L)
+            .discountType("PERCENTAGE")
+            .discountValue(5L)
+            .build();
+    Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
+
+    TOrderServiceRequest request =
+        TOrderServiceRequest.builder()
+            .orderProductDTOList(orderProductDTOList)
+            .productInfoMap(productInfoMap)
+            .couponInfoMap(couponInfoMap)
+            .type(OrderType.SINGLE)
+            .build();
+
+    Long memberId = 1L;
+    // when then
+    String orderId = tOrderService.createTOrder(request, memberId);
+    TOrder tOrder = orderDynamoRepository.findById(orderId).get();
+    Long totalAmount = tOrder.calculateTotalAmount();
+    assertThat(totalAmount).isEqualTo(49900000);
+  }
+
+  @DisplayName("재고보다 많은 수량을 주문할 수 없다.")
+  @Test
+  void createTOrderWithInSufficientStock() {
+    // given
+    OrderProductDTO orderProductDTO =
+        OrderProductDTO.builder()
+            .productId(1L)
+            .price(15000)
+            .productName("나이키 슬리퍼")
+            .categoryId(1L)
+            .gender("MAN")
+            .imgUrl("testUrl")
+            .sizeId(1L)
+            .sizeName("265")
+            .stock(1)
+            .build();
+    List<OrderProductDTO> orderProductDTOList = List.of(orderProductDTO);
+    OrderProductInfo opInfo =
+        OrderProductInfo.builder()
+            .quantity(2)
+            .productId(1L)
+            .referralCode("reCode")
+            .sizeId(1L)
+            .build();
+
+    Map<Long, OrderProductInfo> productInfoMap = Map.of(1L, opInfo);
+    ProductCouponDTO couponDTO =
+        ProductCouponDTO.builder()
+            .maxDiscountAmount(0L)
+            .minPurchaseAmount(0L)
+            .productId(1L)
+            .couponName("2000원 할인쿠폰")
+            .couponInfoId(1L)
+            .discountType("FIXED_AMOUNT")
+            .discountValue(2000L)
+            .build();
+    Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
+
+    TOrderServiceRequest request =
+        TOrderServiceRequest.builder()
+            .orderProductDTOList(orderProductDTOList)
+            .productInfoMap(productInfoMap)
+            .couponInfoMap(couponInfoMap)
+            .type(OrderType.SINGLE)
+            .build();
+
+    Long memberId = 1L;
+    // when
+    assertThatThrownBy(() -> tOrderService.createTOrder(request, memberId))
+        .isInstanceOf(InsufficientStockException.class)
+        .hasMessage("재고가 부족합니다.");
   }
 }

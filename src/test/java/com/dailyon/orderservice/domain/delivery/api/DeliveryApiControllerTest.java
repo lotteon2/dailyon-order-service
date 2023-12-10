@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,7 +32,6 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
             post("/deliveries")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-        .andDo(print())
         .andExpect(status().isCreated());
   }
 
@@ -57,7 +55,6 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
             post("/deliveries")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-        .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
         .andExpect(jsonPath("$.validation.orderId").value("주문번호는 필수 입니다."));
@@ -83,7 +80,6 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
             post("/deliveries")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-        .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
         .andExpect(jsonPath("$.validation.receiver").value("수령인은 필수 입니다."));
@@ -109,7 +105,6 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
             post("/deliveries")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-        .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
         .andExpect(jsonPath("$.validation.postCode").value("우편번호는 필수 입니다."));
@@ -135,7 +130,6 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
             post("/deliveries")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-        .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
         .andExpect(jsonPath("$.validation.roadAddress").value("도로명 주소는 필수 입니다."));
@@ -161,7 +155,6 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
             post("/deliveries")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-        .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
         .andExpect(jsonPath("$.validation.detailAddress").value("상세 주소는 필수 입니다."));
@@ -173,9 +166,6 @@ class DeliveryApiControllerTest extends ControllerTestSupport {
     // given
     String orderId = "ORDER-001";
     // when // then
-    mockMvc
-        .perform(get("/deliveries/orders/{orderId}", orderId))
-        .andDo(print())
-        .andExpect(status().isOk());
+    mockMvc.perform(get("/deliveries/orders/{orderId}", orderId)).andExpect(status().isOk());
   }
 }

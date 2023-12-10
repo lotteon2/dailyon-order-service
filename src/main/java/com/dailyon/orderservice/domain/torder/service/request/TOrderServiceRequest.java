@@ -1,6 +1,5 @@
 package com.dailyon.orderservice.domain.torder.service.request;
 
-import com.dailyon.orderservice.common.utils.OrderValidator;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
@@ -18,6 +17,8 @@ import java.util.stream.Collectors;
 
 import static com.dailyon.orderservice.common.utils.OrderCalculator.calculateDiscountPrice;
 import static com.dailyon.orderservice.common.utils.OrderCalculator.calculateOrderPrice;
+import static com.dailyon.orderservice.common.utils.OrderValidator.validateCouponInfo;
+import static com.dailyon.orderservice.common.utils.OrderValidator.validateStock;
 
 @Getter
 @NoArgsConstructor
@@ -63,12 +64,15 @@ public class TOrderServiceRequest {
                   OrderProductInfo orderProductInfo =
                       productInfoMap.get(orderProduct.getProductId());
 
+                  validateStock(orderProductInfo.getQuantity(), orderProduct.getStock());
+
                   int discountPrice =
                       couponOptional.isPresent()
                           ? calculateDiscountPrice(
                               orderProduct, couponOptional.get(), orderProductInfo.getQuantity())
                           : 0;
-                  OrderValidator.validateCouponInfo(
+
+                  validateCouponInfo(
                       discountPrice,
                       orderProduct.getPrice() * orderProductInfo.getQuantity(),
                       couponOptional);
