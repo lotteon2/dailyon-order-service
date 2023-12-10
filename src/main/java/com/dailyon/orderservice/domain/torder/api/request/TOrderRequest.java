@@ -10,10 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,10 +19,11 @@ import static java.util.stream.Collectors.*;
 public class TOrderRequest {
   @Getter
   @NoArgsConstructor
+  @AllArgsConstructor
   public static class TOrderCreateRequest {
     @Valid private List<OrderItem> orderItems;
     @Valid private OrderInfo orderInfo;
-    private DeliveryInfo deliveryInfo; // null 일수 있음. 선물하기 주문 시 배송지 정보는 추후 등록
+    @Valid private DeliveryInfo deliveryInfo;
 
     @NotBlank(message = "결제 수단은 필수 입니다.")
     private String paymentType;
@@ -66,6 +64,7 @@ public class TOrderRequest {
       @NotNull(message = "치수는 필수 입니다.")
       private Long sizeId;
 
+      @NotNull(message = "주문 가격은 필수 입니다.")
       @PositiveOrZero(message = "주문 가격은 0원 이상이어야 합니다.")
       private Integer orderPrice;
 
@@ -102,7 +101,7 @@ public class TOrderRequest {
       @PositiveOrZero(message = "포인트는 0이상 이어야 합니다.")
       private int usedPoints;
 
-      @NotBlank(message = "주문 타입은 필수 입니다.")
+      @NotNull(message = "주문 타입은 필수 입니다.")
       private OrderType type;
 
       @PositiveOrZero(message = "배송비는 0이상 이어야 합니다.")
@@ -125,10 +124,18 @@ public class TOrderRequest {
     @AllArgsConstructor
     @Builder
     public static class DeliveryInfo {
+      @NotEmpty(message = "수령인은 필수 입니다.")
       private String receiver;
+
+      @NotEmpty(message = "우편번호는 필수 입니다.")
       private String postCode;
+
+      @NotEmpty(message = "도로명 주소는 필수 입니다.")
       private String roadAddress;
+
+      @NotEmpty(message = "상세 주소는 필수 입니다.")
       private String detailAddress;
+
       private String phoneNumber;
     }
   }
