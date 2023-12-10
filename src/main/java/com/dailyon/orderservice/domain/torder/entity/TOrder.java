@@ -49,4 +49,8 @@ public class TOrder {
     this.type = type.name();
     this.orderDetails = orderDetails;
   }
+
+  public Long calculateTotalAmount() {
+    return orderDetails.stream().mapToLong(TOrderDetail::getOrderPrice).sum();
+  }
 }
