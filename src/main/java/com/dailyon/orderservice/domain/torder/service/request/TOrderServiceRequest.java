@@ -6,6 +6,7 @@ import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProduc
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,30 +28,30 @@ public class TOrderServiceRequest {
   private List<OrderProductDTO> orderProductDTOList;
   private Map<Long, OrderProductInfo> productInfoMap;
   private Map<Long, ProductCouponDTO> couponInfoMap;
-  private OrderType type;
+  private OrderInfo orderInfo;
 
   @Builder
   private TOrderServiceRequest(
       List<OrderProductDTO> orderProductDTOList,
       Map<Long, OrderProductInfo> productInfoMap,
       Map<Long, ProductCouponDTO> couponInfoMap,
-      OrderType type) {
+      OrderInfo orderInfo) {
     this.orderProductDTOList = orderProductDTOList;
     this.productInfoMap = productInfoMap;
     this.couponInfoMap = couponInfoMap;
-    this.type = type;
+    this.orderInfo = orderInfo;
   }
 
   public static TOrderServiceRequest of(
       List<OrderProductDTO> orderProductDTOList,
       Map<Long, OrderProductInfo> productInfoMap,
       Map<Long, ProductCouponDTO> couponInfoMap,
-      OrderType type) {
+      OrderInfo orderInfo) {
     return TOrderServiceRequest.builder()
         .orderProductDTOList(orderProductDTOList)
         .productInfoMap(productInfoMap)
         .couponInfoMap(couponInfoMap)
-        .type(type)
+        .orderInfo(orderInfo)
         .build();
   }
 
@@ -73,7 +74,6 @@ public class TOrderServiceRequest {
                           : 0;
 
                   validateCouponInfo(
-                      discountPrice,
                       orderProduct.getPrice() * orderProductInfo.getQuantity(),
                       couponOptional);
                   int orderPrice =
@@ -92,7 +92,10 @@ public class TOrderServiceRequest {
     return TOrder.builder()
         .id(orderId)
         .memberId(memberId)
-        .type(type)
+        .deliveryFee(orderInfo.getDeliveryFee())
+        .usedPoints(orderInfo.getUsedPoints())
+        .totalCouponDiscountPrice(orderInfo.getTotalCouponDiscountPrice())
+        .type(orderInfo.getType().name())
         .orderDetails(orderDetails)
         .build();
   }
@@ -123,5 +126,16 @@ public class TOrderServiceRequest {
           .couponName(coupon.getCouponName());
     }
     return builder.build();
+  }
+
+  @Getter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  public static class OrderInfo {
+    private int deliveryFee;
+    private int usedPoints;
+    private int totalCouponDiscountPrice;
+    private OrderType type;
   }
 }

@@ -70,7 +70,7 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
   }
 
   private TOrder createOrder(String orderId, Long memberId, OrderType type) {
-    return TOrder.builder().id(orderId).memberId(memberId).type(type).build();
+    return TOrder.builder().id(orderId).memberId(memberId).type(type.name()).build();
   }
 
   private TOrderDetail createTOrderDetail(

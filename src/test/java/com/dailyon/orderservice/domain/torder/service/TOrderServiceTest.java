@@ -7,7 +7,6 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.dailyon.orderservice.ContainerBaseTestSupport;
 import com.dailyon.orderservice.common.exception.InvalidParamException;
-import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
@@ -15,6 +14,7 @@ import com.dailyon.orderservice.domain.torder.exception.InsufficientStockExcepti
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
 import com.dailyon.orderservice.domain.torder.repository.OrderDynamoRepository;
 import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest;
+import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest.OrderInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.SINGLE;
 import static org.assertj.core.api.Assertions.*;
 
 class TOrderServiceTest extends ContainerBaseTestSupport {
@@ -87,19 +88,21 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .build();
     Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
 
+    OrderInfo orderInfo = OrderInfo.builder().type(SINGLE).build();
+
     TOrderServiceRequest request =
         TOrderServiceRequest.builder()
             .orderProductDTOList(orderProductDTOList)
             .productInfoMap(productInfoMap)
             .couponInfoMap(couponInfoMap)
-            .type(OrderType.SINGLE)
+            .orderInfo(orderInfo)
             .build();
 
     Long memberId = 1L;
     // when
-    String orderId = tOrderService.createTOrder(request, memberId);
+    TOrder tOrder = tOrderService.createTOrder(request, memberId);
     // then
-    TOrder getTOrder = orderDynamoRepository.findById(orderId).get();
+    TOrder getTOrder = orderDynamoRepository.findById(tOrder.getId()).get();
     assertThat(getTOrder).isNotNull();
     assertThat(getTOrder.getMemberId()).isEqualTo(memberId);
     assertThat(getTOrder.getOrderDetails())
@@ -119,7 +122,7 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             "couponDiscountPrice")
         .containsExactlyInAnyOrder(
             tuple(
-                orderId,
+                tOrder.getId(),
                 1L,
                 1L,
                 1L,
@@ -170,12 +173,14 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .build();
     Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
 
+    OrderInfo orderInfo = OrderInfo.builder().type(SINGLE).build();
+
     TOrderServiceRequest request =
         TOrderServiceRequest.builder()
             .orderProductDTOList(orderProductDTOList)
             .productInfoMap(productInfoMap)
             .couponInfoMap(couponInfoMap)
-            .type(OrderType.SINGLE)
+            .orderInfo(orderInfo)
             .build();
 
     Long memberId = 1L;
@@ -223,19 +228,21 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .build();
     Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
 
+    OrderInfo orderInfo = OrderInfo.builder().type(SINGLE).build();
+
     TOrderServiceRequest request =
         TOrderServiceRequest.builder()
             .orderProductDTOList(orderProductDTOList)
             .productInfoMap(productInfoMap)
             .couponInfoMap(couponInfoMap)
-            .type(OrderType.SINGLE)
+            .orderInfo(orderInfo)
             .build();
 
     Long memberId = 1L;
     // when then
-    String orderId = tOrderService.createTOrder(request, memberId);
+    String orderId = tOrderService.createTOrder(request, memberId).getId();
     TOrder tOrder = orderDynamoRepository.findById(orderId).get();
-    Long totalAmount = tOrder.calculateTotalAmount();
+    Integer totalAmount = tOrder.calculateTotalAmount();
     assertThat(totalAmount).isEqualTo(49900000);
   }
 
@@ -277,12 +284,14 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .build();
     Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
 
+    OrderInfo orderInfo = OrderInfo.builder().type(SINGLE).build();
+
     TOrderServiceRequest request =
         TOrderServiceRequest.builder()
             .orderProductDTOList(orderProductDTOList)
             .productInfoMap(productInfoMap)
             .couponInfoMap(couponInfoMap)
-            .type(OrderType.SINGLE)
+            .orderInfo(orderInfo)
             .build();
 
     Long memberId = 1L;

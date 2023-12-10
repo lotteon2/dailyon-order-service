@@ -3,6 +3,7 @@ package com.dailyon.orderservice.domain.torder.facade.request;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.CouponParam;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductParam;
+import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,21 +20,18 @@ public class TOrderFacadeRequest {
   @Getter
   @NoArgsConstructor
   public static class TOrderFacadeCreateRequest {
-    private OrderType type;
-    private Integer memberPoints;
     private List<CouponInfo> couponInfos;
     private List<OrderProductInfo> orderProductInfos;
+    private OrderInfo orderInfo;
 
     @Builder
-    public TOrderFacadeCreateRequest(
-        OrderType type,
-        Integer memberPoints,
+    private TOrderFacadeCreateRequest(
         List<CouponInfo> couponInfos,
-        List<OrderProductInfo> orderProductInfos) {
-      this.type = type;
-      this.memberPoints = memberPoints;
+        List<OrderProductInfo> orderProductInfos,
+        OrderInfo orderInfo) {
       this.couponInfos = couponInfos;
       this.orderProductInfos = orderProductInfos;
+      this.orderInfo = orderInfo;
     }
 
     public Map<Long, OrderProductInfo> extractOrderInfoToMap() {
@@ -49,6 +47,15 @@ public class TOrderFacadeRequest {
       return orderProductInfos.stream()
           .map(OrderProductInfo::toOrderProductParam)
           .collect(toUnmodifiableList());
+    }
+
+    public TOrderServiceRequest.OrderInfo toServiceOrderInfo() {
+      return TOrderServiceRequest.OrderInfo.builder()
+          .deliveryFee(orderInfo.getDeliveryFee())
+          .type(orderInfo.getType())
+          .totalCouponDiscountPrice(orderInfo.getTotalCouponDiscountPrice())
+          .usedPoints(orderInfo.usedPoints)
+          .build();
     }
 
     @Getter
@@ -82,6 +89,17 @@ public class TOrderFacadeRequest {
       public OrderProductParam toOrderProductParam() {
         return OrderProductParam.builder().productId(productId).sizeId(sizeId).build();
       }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class OrderInfo {
+      private int deliveryFee;
+      private int usedPoints;
+      private int totalCouponDiscountPrice;
+      private OrderType type;
     }
   }
 }

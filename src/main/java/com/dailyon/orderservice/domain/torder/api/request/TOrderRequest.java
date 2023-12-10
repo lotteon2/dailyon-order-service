@@ -20,14 +20,9 @@ import static java.util.stream.Collectors.*;
 public class TOrderRequest {
   @Getter
   @NoArgsConstructor
-  public class TOrderCreateRequest {
+  public static class TOrderCreateRequest {
     @Valid private List<OrderItem> orderItems;
-
-    @PositiveOrZero(message = "포인트는 0이상 이어야 합니다.")
-    private Integer memberPoints;
-
-    @NotBlank(message = "주문 타입은 필수 입니다.")
-    private OrderType type;
+    @Valid private OrderInfo orderInfo;
 
     @NotBlank(message = "결제 수단은 필수 입니다.")
     private String paymentType;
@@ -47,16 +42,15 @@ public class TOrderRequest {
                       Collections::unmodifiableList));
 
       return TOrderFacadeCreateRequest.builder()
-          .type(type)
-          .memberPoints(memberPoints)
           .couponInfos(couponInfos)
           .orderProductInfos(orderProductInfos)
+          .orderInfo(orderInfo.toFacadeOrderInfo())
           .build();
     }
 
     @Getter
     @NoArgsConstructor
-    public class OrderItem {
+    public static class OrderItem {
 
       @NotNull(message = "상품 아이디는 필수 입니다.")
       private Long productId;
@@ -91,6 +85,28 @@ public class TOrderRequest {
             .sizeId(sizeId)
             .quantity(quantity)
             .referralCode(referralCode)
+            .build();
+      }
+    }
+
+    public static class OrderInfo {
+      @PositiveOrZero(message = "포인트는 0이상 이어야 합니다.")
+      private int usedPoints;
+
+      @NotBlank(message = "주문 타입은 필수 입니다.")
+      private OrderType type;
+
+      @PositiveOrZero(message = "배송비는 0이상 이어야 합니다.")
+      private int deliveryFee;
+
+      private int totalCouponDiscountPrice;
+
+      public TOrderFacadeCreateRequest.OrderInfo toFacadeOrderInfo() {
+        return TOrderFacadeCreateRequest.OrderInfo.builder()
+            .deliveryFee(deliveryFee)
+            .usedPoints(usedPoints)
+            .type(type)
+            .totalCouponDiscountPrice(totalCouponDiscountPrice)
             .build();
       }
     }

@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 public class TOrderService {
   private final TOrderAppender tOrderAppender;
 
-  public String createTOrder(TOrderServiceRequest request, Long memberId) {
+  public TOrder createTOrder(TOrderServiceRequest request, Long memberId) {
     String orderId = OrderNoGenerator.generate(memberId);
     TOrder tOrder = request.createOrder(orderId, memberId);
     TOrder savedOrder = tOrderAppender.append(tOrder);
-    return savedOrder.getId();
+    return savedOrder;
   }
 }

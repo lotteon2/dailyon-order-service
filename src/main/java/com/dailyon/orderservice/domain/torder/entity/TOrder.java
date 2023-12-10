@@ -6,7 +6,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.dailyon.orderservice.config.DynamoDbConfig;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderStatus;
-import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import lombok.*;
 
 import javax.persistence.Id;
@@ -32,6 +31,15 @@ public class TOrder {
   @DynamoDBAttribute(attributeName = "type")
   private String type;
 
+  @DynamoDBAttribute(attributeName = "used_points")
+  private int usedPoints;
+
+  @DynamoDBAttribute(attributeName = "delivery_fee")
+  private int deliveryFee;
+
+  @DynamoDBAttribute(attributeName = "total_coupon_discount_price")
+  private int totalCouponDiscountPrice;
+
   @DynamoDBAttribute(attributeName = "status")
   private String status = OrderStatus.PENDING.name();
 
@@ -43,14 +51,28 @@ public class TOrder {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @Builder
-  private TOrder(String id, Long memberId, OrderType type, List<TOrderDetail> orderDetails) {
+  public TOrder(
+      String id,
+      Long memberId,
+      String type,
+      int usedPoints,
+      int deliveryFee,
+      int totalCouponDiscountPrice,
+      List<TOrderDetail> orderDetails) {
     this.id = id;
     this.memberId = memberId;
-    this.type = type.name();
+    this.type = type;
+    this.usedPoints = usedPoints;
+    this.deliveryFee = deliveryFee;
+    this.totalCouponDiscountPrice = totalCouponDiscountPrice;
     this.orderDetails = orderDetails;
   }
 
-  public Long calculateTotalAmount() {
-    return orderDetails.stream().mapToLong(TOrderDetail::getOrderPrice).sum();
+  public Integer calculateTotalAmount() {
+    return orderDetails.stream().mapToInt(TOrderDetail::getOrderPrice).sum();
+  }
+
+  public Integer calculateTotalCouponDiscountPrice() {
+    return orderDetails.stream().mapToInt(TOrderDetail::getCouponDiscountPrice).sum();
   }
 }
