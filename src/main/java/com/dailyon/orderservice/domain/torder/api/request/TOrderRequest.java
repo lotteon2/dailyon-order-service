@@ -1,6 +1,7 @@
 package com.dailyon.orderservice.domain.torder.api.request;
 
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
+import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeApproveRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.CouponInfo;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
@@ -137,6 +138,25 @@ public class TOrderRequest {
       private String detailAddress;
 
       private String phoneNumber;
+    }
+  }
+
+  @Getter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  public static class OrderApproveRequest {
+    @NotEmpty(message = "pgToken은 필수 입니다.")
+    private String pg_token;
+
+    public TOrderFacadeApproveRequest toFacadeRequest(String orderId, String method, Long memberId) {
+      return TOrderFacadeApproveRequest.builder()
+          .orderId(orderId)
+          .memberId(memberId)
+          .method(method)
+          .pgToken(pg_token)
+          .type("ORDER")
+          .build();
     }
   }
 }

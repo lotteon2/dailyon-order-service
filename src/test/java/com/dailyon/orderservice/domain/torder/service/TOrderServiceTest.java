@@ -7,9 +7,13 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.dailyon.orderservice.ContainerBaseTestSupport;
 import com.dailyon.orderservice.common.exception.InvalidParamException;
+import com.dailyon.orderservice.common.utils.OrderNoGenerator;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
+import com.dailyon.orderservice.domain.order.exception.OrderNotFoundException;
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
+import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
 import com.dailyon.orderservice.domain.torder.exception.InsufficientStockException;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
 import com.dailyon.orderservice.domain.torder.repository.OrderDynamoRepository;
@@ -299,5 +303,74 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
     assertThatThrownBy(() -> tOrderService.createTOrder(request, memberId))
         .isInstanceOf(InsufficientStockException.class)
         .hasMessage("재고가 부족합니다.");
+  }
+
+  @DisplayName("주문 번호로 임시 주문 정보를 조회 한다.")
+  @Test
+  void getTOrder() {
+    // given
+    Long memberId = 1L;
+    String orderId = OrderNoGenerator.generate(1L);
+    TOrder tOrder = createOrder(orderId, memberId, SINGLE);
+
+    TOrderDetail tOrderDetail1 =
+        createTOrderDetail(
+            orderId, 1L, 2L, 3L, "나이키신발", 1, "260", "MAN", "testUrl", 54000, "10%할인쿠폰", 6000);
+
+    TOrderDetail tOrderDetail2 =
+        createTOrderDetail(
+            orderId, 2L, 3L, null, "나이키 양말", 1, "260", "MAN", "testUrl", 30000, null, 0);
+
+    tOrder.setOrderDetails(List.of(tOrderDetail1, tOrderDetail2));
+    orderDynamoRepository.save(tOrder);
+    // when
+    TOrder getTOrder = tOrderService.getTOrder(orderId);
+    // then
+    assertThat(getTOrder).isNotNull();
+    assertThat(getTOrder.getId()).isEqualTo(orderId);
+  }
+
+  @DisplayName("존재하지 않는 주문번호로 조회 시 예외가 발생한다.")
+  @Test
+  void getTOrderWithNoExistOrderID() {
+    // given
+    String noExistOrderId = "noExistORderId";
+    // when // then
+    assertThatThrownBy(() -> tOrderService.getTOrder(noExistOrderId))
+        .isInstanceOf(OrderNotFoundException.class)
+        .hasMessage("해당 주문번호에 해당하는 주문이 존재하지 않습니다.");
+  }
+
+  private TOrder createOrder(String orderId, Long memberId, OrderType type) {
+    return TOrder.builder().id(orderId).memberId(memberId).type(type.name()).build();
+  }
+
+  private TOrderDetail createTOrderDetail(
+      String orderId,
+      Long productId,
+      Long productSizeId,
+      Long couponInfoId,
+      String productName,
+      Integer productQuantity,
+      String productSize,
+      String productGender,
+      String productImgUrl,
+      Integer orderPrice,
+      String couponName,
+      Integer couponDiscountPrice) {
+    return TOrderDetail.builder()
+        .orderId(orderId)
+        .productId(productId)
+        .productSizeId(productSizeId)
+        .couponInfoId(couponInfoId)
+        .productName(productName)
+        .productQuantity(productQuantity)
+        .productSize(productSize)
+        .productGender(productGender)
+        .productImgUrl(productImgUrl)
+        .orderPrice(orderPrice)
+        .couponName(couponName)
+        .couponDiscountPrice(couponDiscountPrice)
+        .build();
   }
 }

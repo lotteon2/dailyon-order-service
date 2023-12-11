@@ -22,4 +22,11 @@ public class TOrderApiController {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(tOrderFacade.orderReady(request.toOrderFacadeCreateRequest(), memberId));
   }
+
+  @GetMapping("/approve/{orderId}")
+  public ResponseEntity<Long> approve(@RequestHeader(value = "memberId") Long memberId, @PathVariable(name = "orderId") String orderId,
+                                      @RequestParam(name = "pg_token") String pgToken) {
+
+    return null;
+  }
 }

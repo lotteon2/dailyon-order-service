@@ -10,6 +10,8 @@ import com.dailyon.orderservice.domain.torder.clients.dto.PaymentDTO.PaymentRead
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductParam;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
+import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest;
+import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeApproveRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
 import com.dailyon.orderservice.domain.torder.service.TOrderService;
@@ -65,6 +67,10 @@ public class TOrderFacade {
             tOrder, "KAKAOPAY", tOrder.getUsedPoints()); // TODO : method, usedPoints 나중에 바꿈;
     String nextUrl = paymentFeignClient.orderPaymentReady(memberId, paymentReadyParam);
     return nextUrl;
+  }
+
+  private String OrderApprove(TOrderFacadeApproveRequest request) {
+    return null;
   }
 
   private List<ProductCouponDTO> getProductCoupons(List<CouponParam> couponParams, Long memberId) {
