@@ -74,8 +74,7 @@ public class TOrderServiceRequest {
                           : 0;
 
                   validateCouponInfo(
-                      orderProduct.getPrice() * orderProductInfo.getQuantity(),
-                      couponOptional);
+                      orderProduct.getPrice() * orderProductInfo.getQuantity(), couponOptional);
                   int orderPrice =
                       calculateOrderPrice(orderProduct, orderProductInfo, discountPrice);
 
@@ -101,7 +100,7 @@ public class TOrderServiceRequest {
   }
 
   private TOrderDetail createTOrderDetail(
-      String orderId,
+      String orderNo,
       OrderProductDTO orderProduct,
       ProductCouponDTO coupon,
       OrderProductInfo orderProductInfo,
@@ -111,7 +110,7 @@ public class TOrderServiceRequest {
         TOrderDetail.builder()
             .orderPrice(orderPrice)
             .productId(orderProduct.getProductId())
-            .orderId(orderId)
+            .orderNo(orderNo)
             .productName(orderProduct.getProductName())
             .productGender(orderProduct.getGender())
             .productImgUrl(orderProduct.getImgUrl())

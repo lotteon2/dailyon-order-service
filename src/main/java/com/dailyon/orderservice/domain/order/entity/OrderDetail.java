@@ -25,6 +25,8 @@ public class OrderDetail extends BaseEntity {
   @JoinColumn(name = "order_id", nullable = false)
   private Order order;
 
+  @NotNull private String orderNo;
+
   @NotNull private Long productId;
   @NotNull private Long productSizeId;
 
@@ -54,6 +56,7 @@ public class OrderDetail extends BaseEntity {
   @Builder
   private OrderDetail(
       Order order,
+      String orderNo,
       Long productId,
       Long productSizeId,
       Long couponInfoId,
@@ -66,6 +69,7 @@ public class OrderDetail extends BaseEntity {
       String couponName,
       Integer couponDiscountPrice) {
     this.order = order;
+    this.orderNo = orderNo;
     this.productId = productId;
     this.productSizeId = productSizeId;
     this.couponInfoId = couponInfoId;

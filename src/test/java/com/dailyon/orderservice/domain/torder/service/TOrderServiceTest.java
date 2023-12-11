@@ -113,7 +113,7 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
         .isNotEmpty()
         .hasSize(1)
         .extracting(
-            "orderId",
+            "orderNo",
             "productId",
             "productSizeId",
             "couponInfoId",
@@ -346,7 +346,7 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
   }
 
   private TOrderDetail createTOrderDetail(
-      String orderId,
+      String orderNo,
       Long productId,
       Long productSizeId,
       Long couponInfoId,
@@ -359,7 +359,7 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
       String couponName,
       Integer couponDiscountPrice) {
     return TOrderDetail.builder()
-        .orderId(orderId)
+        .orderNo(orderNo)
         .productId(productId)
         .productSizeId(productSizeId)
         .couponInfoId(couponInfoId)

@@ -40,7 +40,7 @@ class DeliveryServiceTest extends IntegrationTestSupport {
     Order order = createOrder("ORDER-01", 1L, OrderType.SINGLE);
     DeliveryCreateRequest request =
         new DeliveryCreateRequest(
-            order.getOrderId(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
+            order.getOrderNo(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
     // when
     deliveryService.createDelivery(request);
     // then
@@ -74,7 +74,7 @@ class DeliveryServiceTest extends IntegrationTestSupport {
     Order order = createOrder("ORDER-01", 1L, OrderType.SINGLE);
     Delivery delivery = saveDelivery(order, receiver, postCode, roadAddress, detailAddress, null);
     // when
-    DeliveryResponse deliveryResponse = deliveryService.getDeliveryDetail(order.getOrderId());
+    DeliveryResponse deliveryResponse = deliveryService.getDeliveryDetail(order.getOrderNo());
     // then
     assertThat(deliveryResponse)
         .isNotNull()
@@ -94,9 +94,9 @@ class DeliveryServiceTest extends IntegrationTestSupport {
         .hasMessage(DeliveryNotFoundException.MESSAGE);
   }
 
-  private Order createOrder(String orderId, Long memberId, OrderType type) {
+  private Order createOrder(String orderNo, Long memberId, OrderType type) {
     return orderRepository.save(
-        Order.builder().orderId(orderId).memberId(memberId).type(type).build());
+        Order.builder().orderNo(orderNo).memberId(memberId).type(type).build());
   }
 
   private Delivery saveDelivery(

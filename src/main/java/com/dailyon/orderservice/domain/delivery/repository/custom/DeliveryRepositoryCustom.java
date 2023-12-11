@@ -5,5 +5,5 @@ import com.dailyon.orderservice.domain.delivery.entity.Delivery;
 import java.util.Optional;
 
 public interface DeliveryRepositoryCustom {
-  Optional<Delivery> findByOrderId(String orderId);
+  Optional<Delivery> findByOrderNo(String orderNo);
 }

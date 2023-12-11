@@ -13,8 +13,8 @@ public class DeliveryRepositoryImpl implements DeliveryRepositoryCustom {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Optional<Delivery> findByOrderId(String orderId) {
+  public Optional<Delivery> findByOrderNo(String orderNo) {
     return Optional.ofNullable(
-        queryFactory.selectFrom(delivery).where(delivery.order.orderId.eq(orderId)).fetchOne());
+        queryFactory.selectFrom(delivery).where(delivery.order.orderNo.eq(orderNo)).fetchOne());
   }
 }

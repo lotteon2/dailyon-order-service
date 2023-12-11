@@ -70,7 +70,7 @@ class OrderServiceTest extends ContainerBaseTestSupport {
     // when
     Order order = orderService.createOrder(tOrder);
     // then
-    assertThat(order.getOrderId()).isNotNull().isEqualTo(tOrder.getId());
+    assertThat(order.getOrderNo()).isNotNull().isEqualTo(tOrder.getId());
   }
 
   private TOrder createOrder(String orderId, Long memberId, OrderType type) {
@@ -78,7 +78,7 @@ class OrderServiceTest extends ContainerBaseTestSupport {
   }
 
   private TOrderDetail createTOrderDetail(
-      String orderId,
+      String orderNo,
       Long productId,
       Long productSizeId,
       Long couponInfoId,
@@ -91,7 +91,7 @@ class OrderServiceTest extends ContainerBaseTestSupport {
       String couponName,
       Integer couponDiscountPrice) {
     return TOrderDetail.builder()
-        .orderId(orderId)
+        .orderNo(orderNo)
         .productId(productId)
         .productSizeId(productSizeId)
         .couponInfoId(couponInfoId)

@@ -74,7 +74,7 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
   }
 
   private TOrderDetail createTOrderDetail(
-      String orderId,
+      String orderNo,
       Long productId,
       Long productSizeId,
       Long couponInfoId,
@@ -87,7 +87,7 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
       String couponName,
       Integer couponDiscountPrice) {
     return TOrderDetail.builder()
-        .orderId(orderId)
+        .orderNo(orderNo)
         .productId(productId)
         .productSizeId(productSizeId)
         .couponInfoId(couponInfoId)

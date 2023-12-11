@@ -13,8 +13,8 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Optional<Order> findByOrderId(String orderId) {
+  public Optional<Order> findByOrderNo(String orderNo) {
     return Optional.ofNullable(
-        queryFactory.selectFrom(order).where(order.orderId.eq(orderId)).fetchOne());
+        queryFactory.selectFrom(order).where(order.orderNo.eq(orderNo)).fetchOne());
   }
 }

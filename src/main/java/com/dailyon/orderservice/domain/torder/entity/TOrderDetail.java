@@ -19,8 +19,8 @@ public class TOrderDetail {
   @DynamoDBHashKey(attributeName = "order_detail_id")
   private String id = UUID.randomUUID().toString();
 
-  @DynamoDBAttribute(attributeName = "order_id")
-  private String orderId;
+  @DynamoDBAttribute(attributeName = "order_no")
+  private String orderNo;
 
   @DynamoDBAttribute(attributeName = "product_id")
   private Long productId;
@@ -64,7 +64,7 @@ public class TOrderDetail {
 
   @Builder
   private TOrderDetail(
-      String orderId,
+      String orderNo,
       Long productId,
       Long productSizeId,
       Long couponInfoId,
@@ -76,7 +76,7 @@ public class TOrderDetail {
       Integer orderPrice,
       String couponName,
       Integer couponDiscountPrice) {
-    this.orderId = orderId;
+    this.orderNo = orderNo;
     this.productId = productId;
     this.productSizeId = productSizeId;
     this.couponInfoId = couponInfoId;
@@ -93,6 +93,7 @@ public class TOrderDetail {
   public OrderDetail toEntity(Order order) {
     return OrderDetail.builder()
         .order(order)
+        .orderNo(orderNo)
         .productSize(productSize)
         .couponDiscountPrice(couponDiscountPrice)
         .couponInfoId(couponInfoId)
