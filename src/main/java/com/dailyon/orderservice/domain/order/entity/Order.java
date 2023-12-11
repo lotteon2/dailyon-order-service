@@ -11,23 +11,26 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @Entity(name = "orders")
+@Table(indexes = @Index(name = "idx_order_id", columnList = "orderId", unique = true))
 public class Order extends BaseEntity {
-  @Id private String id;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @NotNull private String orderId;
 
   @NotNull private Long memberId;
 
   @NotNull
   @Enumerated(EnumType.STRING)
   private OrderType type;
-
-  @NotNull private String productsName;
-
-  @NotNull private Integer orderPrice;
 
   @NotNull
   @Enumerated(EnumType.STRING)
@@ -36,12 +39,17 @@ public class Order extends BaseEntity {
   @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean isDeleted;
 
+  @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+  private List<OrderDetail> orderDetails;
+
   @Builder
-  private Order(String id, Long memberId, OrderType type, String productsName, Integer orderPrice) {
-    this.id = id;
+  private Order(String orderId, Long memberId, OrderType type) {
+    this.orderId = orderId;
     this.memberId = memberId;
     this.type = type;
-    this.productsName = productsName;
-    this.orderPrice = orderPrice;
+  }
+
+  public void add(List<OrderDetail> orderDetails) {
+    this.orderDetails = orderDetails;
   }
 }

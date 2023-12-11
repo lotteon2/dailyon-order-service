@@ -1,6 +1,6 @@
 package com.dailyon.orderservice.domain.delivery.exception;
 
-import com.dailyon.orderservice.exception.CustomException;
+import com.dailyon.orderservice.common.exception.CustomException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

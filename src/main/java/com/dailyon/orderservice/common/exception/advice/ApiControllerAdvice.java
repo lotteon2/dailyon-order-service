@@ -1,7 +1,7 @@
-package com.dailyon.orderservice.exception.advice;
+package com.dailyon.orderservice.common.exception.advice;
 
-import com.dailyon.orderservice.exception.CustomException;
-import com.dailyon.orderservice.exception.response.ErrorResponse;
+import com.dailyon.orderservice.common.exception.CustomException;
+import com.dailyon.orderservice.common.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +35,8 @@ public class ApiControllerAdvice {
     ErrorResponse response =
         ErrorResponse.builder().code(HttpStatus.BAD_REQUEST).message("잘못된 요청입니다.").build();
 
-    for (FieldError fieldError : e.getFieldErrors()) {
-      response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
-    }
+    FieldError fieldError = e.getFieldErrors().get(0);
+    response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
     return response;
   }
 }

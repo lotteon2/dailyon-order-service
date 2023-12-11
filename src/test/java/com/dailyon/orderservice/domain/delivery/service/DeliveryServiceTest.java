@@ -1,5 +1,6 @@
 package com.dailyon.orderservice.domain.delivery.service;
 
+import com.dailyon.orderservice.IntegrationTestSupport;
 import com.dailyon.orderservice.domain.delivery.api.request.DeliveryCreateRequest;
 import com.dailyon.orderservice.domain.delivery.entity.Delivery;
 import com.dailyon.orderservice.domain.delivery.exception.DeliveryNotFoundException;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -21,8 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
-class DeliveryServiceTest {
+class DeliveryServiceTest extends IntegrationTestSupport {
   @Autowired DeliveryService deliveryService;
   @Autowired EntityManager entityManager;
   @Autowired DeliveryRepository deliveryRepository;
@@ -38,10 +37,10 @@ class DeliveryServiceTest {
   @Test
   void createDelivery() {
     // given
-    Order order = createOrder("ORDER-01", 1L, 15000, "나이키슬리퍼", OrderType.SINGLE);
+    Order order = createOrder("ORDER-01", 1L, OrderType.SINGLE);
     DeliveryCreateRequest request =
         new DeliveryCreateRequest(
-            order.getId(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
+            order.getOrderId(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
     // when
     deliveryService.createDelivery(request);
     // then
@@ -72,10 +71,10 @@ class DeliveryServiceTest {
     String roadAddress = "강서구 5길";
     String detailAddress = "강서아파트 101호";
 
-    Order order = createOrder("ORDER-01", 1L, 15000, "나이키슬리퍼", OrderType.SINGLE);
+    Order order = createOrder("ORDER-01", 1L, OrderType.SINGLE);
     Delivery delivery = saveDelivery(order, receiver, postCode, roadAddress, detailAddress, null);
     // when
-    DeliveryResponse deliveryResponse = deliveryService.getDeliveryDetail(order.getId());
+    DeliveryResponse deliveryResponse = deliveryService.getDeliveryDetail(order.getOrderId());
     // then
     assertThat(deliveryResponse)
         .isNotNull()
@@ -95,16 +94,9 @@ class DeliveryServiceTest {
         .hasMessage(DeliveryNotFoundException.MESSAGE);
   }
 
-  private Order createOrder(
-      String orderId, Long memberId, Integer orderPrice, String productsName, OrderType type) {
+  private Order createOrder(String orderId, Long memberId, OrderType type) {
     return orderRepository.save(
-        Order.builder()
-            .id(orderId)
-            .memberId(memberId)
-            .orderPrice(orderPrice)
-            .productsName(productsName)
-            .type(type)
-            .build());
+        Order.builder().orderId(orderId).memberId(memberId).type(type).build());
   }
 
   private Delivery saveDelivery(

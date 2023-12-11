@@ -64,8 +64,7 @@ public class OrderDetail extends BaseEntity {
       String productImgUrl,
       Integer orderPrice,
       String couponName,
-      Integer couponDiscountPrice,
-      OrderDetailStatus status) {
+      Integer couponDiscountPrice) {
     this.order = order;
     this.productId = productId;
     this.productSizeId = productSizeId;
@@ -75,9 +74,8 @@ public class OrderDetail extends BaseEntity {
     this.productSize = productSize;
     this.productGender = productGender;
     this.productImgUrl = productImgUrl;
-    OrderPrice = orderPrice;
+    this.OrderPrice = orderPrice;
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
-    this.status = status;
   }
 }
