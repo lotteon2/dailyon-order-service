@@ -19,7 +19,7 @@ public class TOrderEventListener {
   public void cancel(String message, Acknowledgment ack) {
     try {
       OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);
-      tOrderService.modifyTOrder(orderDTO.getOrderId(), orderDTO.getOrderEvent());
+      tOrderService.modifyTOrder(orderDTO.getOrderNo(), orderDTO.getOrderEvent());
       ack.acknowledge();
     } catch (JsonProcessingException e) {
       e.printStackTrace();

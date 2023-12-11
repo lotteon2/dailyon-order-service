@@ -22,7 +22,7 @@ public class OrderDTO {
   private List<ProductInfo> productInfos;
   private List<Long> couponInfos;
   private PaymentInfo paymentInfo;
-  private String orderId;
+  private String orderNo;
   private Long memberId;
   private int usedPoints;
   private OrderEvent orderEvent;
@@ -36,7 +36,7 @@ public class OrderDTO {
         .productInfos(productInfo)
         .couponInfos(couponInfo)
         .paymentInfo(paymentInfo)
-        .orderId(tOrder.getId())
+        .orderNo(tOrder.getId())
         .memberId(tOrder.getMemberId())
         .usedPoints(tOrder.getUsedPoints())
         .orderEvent(PENDING)

@@ -16,10 +16,10 @@ public class TOrderEventProducer {
   private final ObjectMapper objectMapper;
 
   public void orderCreated(OrderDTO orderDTO) {
-    log.info("order-created -> orderId {}", orderDTO.getOrderId());
+    log.info("order-created -> orderId {}", orderDTO.getOrderNo());
     try {
       kafkaTemplate.send(
-          "create-order", orderDTO.getOrderId(), objectMapper.writeValueAsString(orderDTO));
+          "create-order", orderDTO.getOrderNo(), objectMapper.writeValueAsString(orderDTO));
     } catch (JsonProcessingException e) {
       e.printStackTrace();
     }
