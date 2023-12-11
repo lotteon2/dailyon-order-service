@@ -15,6 +15,6 @@ public class DeliveryRepositoryImpl implements DeliveryRepositoryCustom {
   @Override
   public Optional<Delivery> findByOrderId(String orderId) {
     return Optional.ofNullable(
-        queryFactory.selectFrom(delivery).where(delivery.order.id.eq(orderId)).fetchOne());
+        queryFactory.selectFrom(delivery).where(delivery.order.orderId.eq(orderId)).fetchOne());
   }
 }

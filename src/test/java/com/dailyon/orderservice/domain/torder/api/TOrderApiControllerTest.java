@@ -1,6 +1,7 @@
 package com.dailyon.orderservice.domain.torder.api;
 
 import com.dailyon.orderservice.ControllerTestSupport;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest.DeliveryInfo;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest.OrderInfo;
@@ -350,7 +351,7 @@ class TOrderApiControllerTest extends ControllerTestSupport {
                 .sizeId(1L)
                 .build());
     OrderInfo orderInfo =
-        OrderInfo.builder().deliveryFee(0).totalCouponDiscountPrice(0).usedPoints(-1).build();
+        OrderInfo.builder().deliveryFee(0).totalCouponDiscountPrice(0).usedPoints(0).build();
     DeliveryInfo deliveryInfo =
         DeliveryInfo.builder()
             .receiver("수령인")

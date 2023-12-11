@@ -86,7 +86,7 @@ public class TOrder {
   }
 
   public Order toEntity() {
-    return Order.builder().id(id).type(OrderType.valueOf(type)).memberId(memberId).build();
+    return Order.builder().orderId(id).type(OrderType.valueOf(type)).memberId(memberId).build();
   }
 
   public List<OrderDetail> createOrderDetails(Order order) {

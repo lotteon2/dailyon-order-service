@@ -17,7 +17,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class OrderDetail extends BaseEntity {
 
-  @Id private String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id", nullable = false)
@@ -51,7 +53,6 @@ public class OrderDetail extends BaseEntity {
 
   @Builder
   private OrderDetail(
-      String id,
       Order order,
       Long productId,
       Long productSizeId,
@@ -63,9 +64,7 @@ public class OrderDetail extends BaseEntity {
       String productImgUrl,
       Integer orderPrice,
       String couponName,
-      Integer couponDiscountPrice,
-      OrderDetailStatus status) {
-    this.id = id;
+      Integer couponDiscountPrice) {
     this.order = order;
     this.productId = productId;
     this.productSizeId = productSizeId;
@@ -78,6 +77,5 @@ public class OrderDetail extends BaseEntity {
     this.OrderPrice = orderPrice;
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
-    this.status = status;
   }
 }

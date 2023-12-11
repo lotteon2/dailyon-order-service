@@ -17,8 +17,14 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @Entity(name = "orders")
+@Table(indexes = @Index(name = "idx_order_id", columnList = "orderId", unique = true))
 public class Order extends BaseEntity {
-  @Id private String id;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @NotNull private String orderId;
 
   @NotNull private Long memberId;
 
@@ -37,8 +43,8 @@ public class Order extends BaseEntity {
   private List<OrderDetail> orderDetails;
 
   @Builder
-  private Order(String id, Long memberId, OrderType type) {
-    this.id = id;
+  private Order(String orderId, Long memberId, OrderType type) {
+    this.orderId = orderId;
     this.memberId = memberId;
     this.type = type;
   }

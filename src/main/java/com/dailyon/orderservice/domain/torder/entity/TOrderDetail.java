@@ -93,7 +93,6 @@ public class TOrderDetail {
   public OrderDetail toEntity(Order order) {
     return OrderDetail.builder()
         .order(order)
-        .id(order.getId())
         .productSize(productSize)
         .couponDiscountPrice(couponDiscountPrice)
         .couponInfoId(couponInfoId)

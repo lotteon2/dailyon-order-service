@@ -40,7 +40,7 @@ class DeliveryServiceTest extends IntegrationTestSupport {
     Order order = createOrder("ORDER-01", 1L, OrderType.SINGLE);
     DeliveryCreateRequest request =
         new DeliveryCreateRequest(
-            order.getId(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
+            order.getOrderId(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
     // when
     deliveryService.createDelivery(request);
     // then
@@ -74,7 +74,7 @@ class DeliveryServiceTest extends IntegrationTestSupport {
     Order order = createOrder("ORDER-01", 1L, OrderType.SINGLE);
     Delivery delivery = saveDelivery(order, receiver, postCode, roadAddress, detailAddress, null);
     // when
-    DeliveryResponse deliveryResponse = deliveryService.getDeliveryDetail(order.getId());
+    DeliveryResponse deliveryResponse = deliveryService.getDeliveryDetail(order.getOrderId());
     // then
     assertThat(deliveryResponse)
         .isNotNull()
@@ -95,7 +95,8 @@ class DeliveryServiceTest extends IntegrationTestSupport {
   }
 
   private Order createOrder(String orderId, Long memberId, OrderType type) {
-    return orderRepository.save(Order.builder().id(orderId).memberId(memberId).type(type).build());
+    return orderRepository.save(
+        Order.builder().orderId(orderId).memberId(memberId).type(type).build());
   }
 
   private Delivery saveDelivery(

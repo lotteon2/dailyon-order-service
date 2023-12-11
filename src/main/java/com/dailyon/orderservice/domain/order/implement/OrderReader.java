@@ -12,6 +12,6 @@ public class OrderReader {
   private final OrderRepository orderRepository;
 
   public Order read(String orderId) {
-    return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+    return orderRepository.findByOrderId(orderId).orElseThrow(OrderNotFoundException::new);
   }
 }

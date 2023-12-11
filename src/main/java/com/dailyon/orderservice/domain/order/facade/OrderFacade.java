@@ -15,6 +15,6 @@ public class OrderFacade {
 
   public String orderCreate(TOrder tOrder, OrderEvent event) {
     tOrderService.modifyTOrder(tOrder.getId(), event);
-    return orderService.createOrder(tOrder).getId();
+    return orderService.createOrder(tOrder).getOrderId();
   }
 }
