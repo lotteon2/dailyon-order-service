@@ -110,9 +110,5 @@ public class TOrderFacadeRequest {
   public static class TOrderFacadeApproveRequest {
     private String orderId;
     private String pgToken;
-    private Long memberId;
-    private String type;
-    private String method;
-
   }
 }

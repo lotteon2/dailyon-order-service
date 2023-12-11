@@ -10,10 +10,11 @@ import com.dailyon.orderservice.domain.torder.clients.dto.PaymentDTO.PaymentRead
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductParam;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeApproveRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
+import com.dailyon.orderservice.domain.torder.kafka.event.TOrderEventProducer;
+import com.dailyon.orderservice.domain.torder.kafka.event.dto.OrderDTO;
 import com.dailyon.orderservice.domain.torder.service.TOrderService;
 import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class TOrderFacade {
   private final PromotionFeignClient promotionFeignClient;
   private final MemberFeignClient memberFeignClient;
   private final PaymentFeignClient paymentFeignClient;
+  private final TOrderEventProducer producer;
 
   /**
    * ready 결제 준비 성공 시 QR Code를 반환한다.
@@ -69,8 +71,11 @@ public class TOrderFacade {
     return nextUrl;
   }
 
-  private String OrderApprove(TOrderFacadeApproveRequest request) {
-    return null;
+  public String orderApprove(TOrderFacadeApproveRequest request) {
+    String orderId = request.getOrderId();
+    TOrder tOrder = tOrderService.getTOrder(orderId);
+    producer.orderCreated(OrderDTO.from(tOrder, request.getPgToken()));
+    return tOrder.getId();
   }
 
   private List<ProductCouponDTO> getProductCoupons(List<CouponParam> couponParams, Long memberId) {

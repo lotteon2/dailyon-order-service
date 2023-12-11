@@ -1,6 +1,8 @@
 package com.dailyon.orderservice.domain.torder.entity;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.dailyon.orderservice.domain.order.entity.Order;
+import com.dailyon.orderservice.domain.order.entity.OrderDetail;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus;
 import lombok.*;
 
@@ -86,5 +88,23 @@ public class TOrderDetail {
     this.orderPrice = orderPrice;
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
+  }
+
+  public OrderDetail toEntity(Order order) {
+    return OrderDetail.builder()
+        .order(order)
+        .id(order.getId())
+        .productSize(productSize)
+        .couponDiscountPrice(couponDiscountPrice)
+        .couponInfoId(couponInfoId)
+        .couponName(couponName)
+        .orderPrice(orderPrice)
+        .productGender(productGender)
+        .productId(productId)
+        .productImgUrl(productImgUrl)
+        .productName(productName)
+        .productQuantity(productQuantity)
+        .productSizeId(productSizeId)
+        .build();
   }
 }

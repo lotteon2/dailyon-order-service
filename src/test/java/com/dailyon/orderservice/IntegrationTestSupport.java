@@ -14,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @TestPropertySource(
     properties = {
-      "amazon.dynamodb.endpoint=http://localhost:8000",
-      "amazon.aws.accesskey=testkey",
-      "amazon.aws.secretkey=testkey"
+      "cloud.aws.dynamodb.endpoint=http://localhost:8000",
+      "cloud.aws.credentials.ACCESS_KEY_ID=testkey",
+      "cloud.aws.credentials.SECRET_ACCESS_KEY=testkey"
     })
 public class IntegrationTestSupport {
 

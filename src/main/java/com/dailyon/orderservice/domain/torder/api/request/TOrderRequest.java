@@ -149,13 +149,10 @@ public class TOrderRequest {
     @NotEmpty(message = "pgToken은 필수 입니다.")
     private String pg_token;
 
-    public TOrderFacadeApproveRequest toFacadeRequest(String orderId, String method, Long memberId) {
+    public TOrderFacadeApproveRequest toFacadeRequest(String orderId) {
       return TOrderFacadeApproveRequest.builder()
           .orderId(orderId)
-          .memberId(memberId)
-          .method(method)
           .pgToken(pg_token)
-          .type("ORDER")
           .build();
     }
   }

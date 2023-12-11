@@ -1,5 +1,6 @@
 package com.dailyon.orderservice.domain.torder.api;
 
+import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest;
 import com.dailyon.orderservice.domain.torder.facade.TOrderFacade;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,10 @@ public class TOrderApiController {
   }
 
   @GetMapping("/approve/{orderId}")
-  public ResponseEntity<Long> approve(@RequestHeader(value = "memberId") Long memberId, @PathVariable(name = "orderId") String orderId,
-                                      @RequestParam(name = "pg_token") String pgToken) {
-
-    return null;
+  public ResponseEntity<String> approve(
+      @RequestHeader(value = "memberId") Long memberId,
+      @PathVariable(name = "orderId") String orderId,
+      @Valid TOrderRequest.OrderApproveRequest request) {
+    return ResponseEntity.ok(tOrderFacade.orderApprove(request.toFacadeRequest(orderId)));
   }
 }

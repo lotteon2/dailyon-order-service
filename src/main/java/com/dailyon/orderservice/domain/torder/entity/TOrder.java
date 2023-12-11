@@ -5,12 +5,17 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.dailyon.orderservice.config.DynamoDbConfig;
+import com.dailyon.orderservice.domain.order.entity.Order;
+import com.dailyon.orderservice.domain.order.entity.OrderDetail;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderStatus;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
+import com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent;
 import lombok.*;
 
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.dailyon.orderservice.domain.torder.entity.TOrder.DYNAMO_TABLE_NAME;
 
@@ -74,5 +79,19 @@ public class TOrder {
 
   public Integer calculateTotalCouponDiscountPrice() {
     return orderDetails.stream().mapToInt(TOrderDetail::getCouponDiscountPrice).sum();
+  }
+
+  public void changeStatus(OrderEvent status) {
+    this.status = status.name();
+  }
+
+  public Order toEntity() {
+    return Order.builder().id(id).type(OrderType.valueOf(type)).memberId(memberId).build();
+  }
+
+  public List<OrderDetail> createOrderDetails(Order order) {
+    return orderDetails.stream()
+        .map(tOrderDetail -> tOrderDetail.toEntity(order))
+        .collect(Collectors.toUnmodifiableList());
   }
 }

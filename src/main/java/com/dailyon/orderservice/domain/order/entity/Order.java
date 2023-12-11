@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,10 +33,17 @@ public class Order extends BaseEntity {
   @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean isDeleted;
 
+  @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+  private List<OrderDetail> orderDetails;
+
   @Builder
   private Order(String id, Long memberId, OrderType type) {
     this.id = id;
     this.memberId = memberId;
     this.type = type;
+  }
+
+  public void add(List<OrderDetail> orderDetails) {
+    this.orderDetails = orderDetails;
   }
 }
