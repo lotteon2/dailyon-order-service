@@ -45,6 +45,9 @@ public class TOrder {
   @DynamoDBAttribute(attributeName = "total_coupon_discount_price")
   private int totalCouponDiscountPrice;
 
+  @DynamoDBAttribute(attributeName = "total_amount")
+  private Long totalAmount;
+
   @DynamoDBAttribute(attributeName = "status")
   private String status = OrderStatus.PENDING.name();
 
@@ -66,6 +69,7 @@ public class TOrder {
       int usedPoints,
       int deliveryFee,
       int totalCouponDiscountPrice,
+      Long totalAmount,
       List<TOrderDetail> orderDetails,
       TDelivery delivery) {
     this.id = id;
@@ -74,12 +78,13 @@ public class TOrder {
     this.usedPoints = usedPoints;
     this.deliveryFee = deliveryFee;
     this.totalCouponDiscountPrice = totalCouponDiscountPrice;
+    this.totalAmount = totalAmount;
     this.orderDetails = orderDetails;
     this.delivery = delivery;
   }
 
-  public Integer calculateTotalAmount() {
-    return orderDetails.stream().mapToInt(TOrderDetail::getOrderPrice).sum();
+  public Long calculateTotalAmount() {
+    return orderDetails.stream().mapToLong(TOrderDetail::getOrderPrice).sum();
   }
 
   public Integer calculateTotalCouponDiscountPrice() {
@@ -91,7 +96,12 @@ public class TOrder {
   }
 
   public Order toEntity() {
-    return Order.builder().orderNo(id).type(OrderType.valueOf(type)).memberId(memberId).build();
+    return Order.builder()
+        .orderNo(id)
+        .type(OrderType.valueOf(type))
+        .memberId(memberId)
+        .totalAmount(totalAmount)
+        .build();
   }
 
   public List<OrderDetail> createOrderDetails(Order order) {

@@ -93,6 +93,7 @@ public class TOrderServiceRequest {
                       orderPrice);
                 })
             .collect(Collectors.toUnmodifiableList());
+    Long totalAmount = orderDetails.stream().mapToLong(TOrderDetail::getOrderPrice).sum();
 
     return TOrder.builder()
         .id(orderId)
@@ -100,6 +101,7 @@ public class TOrderServiceRequest {
         .deliveryFee(orderInfo.getDeliveryFee())
         .usedPoints(orderInfo.getUsedPoints())
         .totalCouponDiscountPrice(orderInfo.getTotalCouponDiscountPrice())
+        .totalAmount(totalAmount)
         .type(orderInfo.getType().name())
         .orderDetails(orderDetails)
         .delivery(deliveryInfo != null ? deliveryInfo.toEntity(orderId) : null)

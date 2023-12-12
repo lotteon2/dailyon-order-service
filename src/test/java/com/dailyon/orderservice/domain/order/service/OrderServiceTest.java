@@ -54,7 +54,7 @@ class OrderServiceTest extends ContainerBaseTestSupport {
     // given
     Long memberId = 1L;
     String orderId = OrderNoGenerator.generate(1L);
-    TOrder tOrder = createOrder(orderId, memberId, SINGLE);
+    TOrder tOrder = createOrder(orderId, memberId, 84000L, SINGLE);
 
     TOrderDetail tOrderDetail1 =
         createTOrderDetail(
@@ -71,10 +71,16 @@ class OrderServiceTest extends ContainerBaseTestSupport {
     Order order = orderService.createOrder(tOrder);
     // then
     assertThat(order.getOrderNo()).isNotNull().isEqualTo(tOrder.getId());
+    assertThat(order.getTotalAmount()).isEqualTo(tOrder.getTotalAmount());
   }
 
-  private TOrder createOrder(String orderId, Long memberId, OrderType type) {
-    return TOrder.builder().id(orderId).memberId(memberId).type(type.name()).build();
+  private TOrder createOrder(String orderId, Long memberId, Long totalAmount, OrderType type) {
+    return TOrder.builder()
+        .id(orderId)
+        .memberId(memberId)
+        .totalAmount(totalAmount)
+        .type(type.name())
+        .build();
   }
 
   private TOrderDetail createTOrderDetail(

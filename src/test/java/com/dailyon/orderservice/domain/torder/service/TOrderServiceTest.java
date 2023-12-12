@@ -246,7 +246,7 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
     // when then
     String orderId = tOrderService.createTOrder(request, memberId).getId();
     TOrder tOrder = orderDynamoRepository.findById(orderId).get();
-    Integer totalAmount = tOrder.calculateTotalAmount();
+    Long totalAmount = tOrder.calculateTotalAmount();
     assertThat(totalAmount).isEqualTo(49900000);
   }
 
