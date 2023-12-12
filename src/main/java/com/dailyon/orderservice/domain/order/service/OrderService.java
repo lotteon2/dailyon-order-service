@@ -34,4 +34,8 @@ public class OrderService {
   public Page<Order> getOrders(Pageable pageable, Long memberId) {
     return orderReader.read(pageable, memberId);
   }
+
+  public List<OrderDetail> getOrderDetails(String orderNo) {
+    return orderReader.readDetails(orderNo);
+  }
 }
