@@ -16,7 +16,7 @@ public class OrderDetailRepositoryImpl implements OrderDetailRepositoryCustom {
   public List<OrderDetail> findByOrderNo(String orderNo) {
     return queryFactory
         .selectFrom(orderDetail)
-        .where(orderDetail.order.orderNo.eq(orderNo))
+        .where(orderDetail.orderNo.eq(orderNo))
         .fetch();
   }
 }
