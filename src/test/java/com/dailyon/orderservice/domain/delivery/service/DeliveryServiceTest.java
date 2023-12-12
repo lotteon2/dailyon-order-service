@@ -1,10 +1,10 @@
 package com.dailyon.orderservice.domain.delivery.service;
 
 import com.dailyon.orderservice.IntegrationTestSupport;
-import com.dailyon.orderservice.domain.delivery.api.request.DeliveryCreateRequest;
 import com.dailyon.orderservice.domain.delivery.entity.Delivery;
 import com.dailyon.orderservice.domain.delivery.exception.DeliveryNotFoundException;
 import com.dailyon.orderservice.domain.delivery.repository.DeliveryRepository;
+import com.dailyon.orderservice.domain.delivery.service.request.DeliveryServiceRequest;
 import com.dailyon.orderservice.domain.delivery.service.response.DeliveryResponse;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
@@ -38,8 +38,8 @@ class DeliveryServiceTest extends IntegrationTestSupport {
   void createDelivery() {
     // given
     Order order = createOrder("ORDER-01", 1L, OrderType.SINGLE);
-    DeliveryCreateRequest request =
-        new DeliveryCreateRequest(
+    DeliveryServiceRequest request =
+        new DeliveryServiceRequest(
             order.getOrderNo(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
     // when
     deliveryService.createDelivery(request);
@@ -53,8 +53,8 @@ class DeliveryServiceTest extends IntegrationTestSupport {
   void createDeliveryWithNoExistOrder() {
     // given
     String noExistOrderId = "00000";
-    DeliveryCreateRequest request =
-        new DeliveryCreateRequest(
+    DeliveryServiceRequest request =
+        new DeliveryServiceRequest(
             noExistOrderId, "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
     // when // then
     assertThatThrownBy(() -> deliveryService.createDelivery(request))

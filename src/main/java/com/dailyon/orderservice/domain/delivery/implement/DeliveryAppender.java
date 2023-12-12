@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 public class DeliveryAppender {
   private final DeliveryRepository deliveryRepository;
 
-  public Long append(Delivery delivery, Order order) {
-    Delivery newDelivery = delivery.toBuilder().order(order).build();
-    return deliveryRepository.save(newDelivery).getId();
+  public Long append(Delivery delivery) {
+    return deliveryRepository.save(delivery).getId();
   }
 }

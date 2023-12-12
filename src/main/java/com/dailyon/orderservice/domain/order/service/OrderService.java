@@ -20,8 +20,7 @@ public class OrderService {
 
   @Transactional
   public Order createOrder(TOrder tOrder) {
-    Order order = tOrder.toEntity();
-    Order savedOrder = orderAppender.append(order);
+    Order savedOrder = orderAppender.append(tOrder.toEntity());
     List<OrderDetail> orderDetails = tOrder.createOrderDetails(savedOrder);
     List<OrderDetail> savedOrderDetails = orderDetailAppender.append(orderDetails);
     savedOrder.add(savedOrderDetails);

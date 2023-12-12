@@ -18,7 +18,7 @@ public class DeliveryApiController {
 
   @PostMapping("")
   public ResponseEntity<Void> createDelivery(@Valid @RequestBody DeliveryCreateRequest request) {
-    deliveryService.createDelivery(request);
+    deliveryService.createDelivery(request.toServiceRequest());
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 

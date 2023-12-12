@@ -51,6 +51,9 @@ public class TOrder {
   @DynamoDBAttribute(attributeName = "order_details")
   private List<TOrderDetail> orderDetails;
 
+  @DynamoDBAttribute(attributeName = "delivery")
+  private TDelivery delivery;
+
   @DynamoDBAttribute(attributeName = "created_at")
   @DynamoDBTypeConverted(converter = DynamoDbConfig.LocalDateTimeConverter.class)
   private LocalDateTime createdAt = LocalDateTime.now();
@@ -63,7 +66,8 @@ public class TOrder {
       int usedPoints,
       int deliveryFee,
       int totalCouponDiscountPrice,
-      List<TOrderDetail> orderDetails) {
+      List<TOrderDetail> orderDetails,
+      TDelivery delivery) {
     this.id = id;
     this.memberId = memberId;
     this.type = type;
@@ -71,6 +75,7 @@ public class TOrder {
     this.deliveryFee = deliveryFee;
     this.totalCouponDiscountPrice = totalCouponDiscountPrice;
     this.orderDetails = orderDetails;
+    this.delivery = delivery;
   }
 
   public Integer calculateTotalAmount() {

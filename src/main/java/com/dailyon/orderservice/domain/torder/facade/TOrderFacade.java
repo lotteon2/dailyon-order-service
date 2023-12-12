@@ -61,7 +61,11 @@ public class TOrderFacade {
     TOrder tOrder =
         tOrderService.createTOrder(
             TOrderServiceRequest.of(
-                orderProducts, orderProductMap, productCouponMap, request.toServiceOrderInfo()),
+                orderProducts,
+                orderProductMap,
+                productCouponMap,
+                request.toServiceOrderInfo(),
+                request.getDeliveryInfo().toServiceDeliveryInfo()),
             memberId);
 
     PaymentReadyParam paymentReadyParam =

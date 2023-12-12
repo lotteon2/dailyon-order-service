@@ -23,15 +23,18 @@ public class TOrderFacadeRequest {
     private List<CouponInfo> couponInfos;
     private List<OrderProductInfo> orderProductInfos;
     private OrderInfo orderInfo;
+    private DeliveryInfo deliveryInfo;
 
     @Builder
     private TOrderFacadeCreateRequest(
         List<CouponInfo> couponInfos,
         List<OrderProductInfo> orderProductInfos,
-        OrderInfo orderInfo) {
+        OrderInfo orderInfo,
+        DeliveryInfo deliveryInfo) {
       this.couponInfos = couponInfos;
       this.orderProductInfos = orderProductInfos;
       this.orderInfo = orderInfo;
+      this.deliveryInfo = deliveryInfo;
     }
 
     public Map<Long, OrderProductInfo> extractOrderInfoToMap() {
@@ -100,6 +103,28 @@ public class TOrderFacadeRequest {
       private int usedPoints;
       private int totalCouponDiscountPrice;
       private OrderType type;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DeliveryInfo {
+      private String receiver;
+      private String postCode;
+      private String roadAddress;
+      private String detailAddress;
+      private String phoneNumber;
+
+      public TOrderServiceRequest.DeliveryInfo toServiceDeliveryInfo() {
+        return TOrderServiceRequest.DeliveryInfo.builder()
+            .receiver(receiver)
+            .postCode(postCode)
+            .roadAddress(roadAddress)
+            .detailAddress(detailAddress)
+            .phoneNumber(phoneNumber)
+            .build();
+      }
     }
   }
 

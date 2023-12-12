@@ -1,12 +1,11 @@
 package com.dailyon.orderservice.domain.delivery.api.request;
 
-import com.dailyon.orderservice.domain.delivery.entity.Delivery;
+import com.dailyon.orderservice.domain.delivery.service.request.DeliveryServiceRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,13 +28,14 @@ public class DeliveryCreateRequest {
 
   private String phoneNumber;
 
-  public Delivery toEntity() {
-    return Delivery.builder()
+  public DeliveryServiceRequest toServiceRequest() {
+    return DeliveryServiceRequest.builder()
+        .orderId(orderId)
         .receiver(receiver)
         .postCode(postCode)
         .roadAddress(roadAddress)
         .detailAddress(detailAddress)
-        .phoneNumber(phoneNumber)
+        .detailAddress(detailAddress)
         .build();
   }
 }

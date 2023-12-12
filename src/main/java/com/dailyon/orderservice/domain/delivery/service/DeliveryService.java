@@ -1,9 +1,9 @@
 package com.dailyon.orderservice.domain.delivery.service;
 
-import com.dailyon.orderservice.domain.delivery.api.request.DeliveryCreateRequest;
 import com.dailyon.orderservice.domain.delivery.entity.Delivery;
 import com.dailyon.orderservice.domain.delivery.implement.DeliveryAppender;
 import com.dailyon.orderservice.domain.delivery.implement.DeliveryReader;
+import com.dailyon.orderservice.domain.delivery.service.request.DeliveryServiceRequest;
 import com.dailyon.orderservice.domain.delivery.service.response.DeliveryResponse;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.implement.OrderReader;
@@ -20,10 +20,10 @@ public class DeliveryService {
   private final DeliveryReader deliveryReader;
 
   @Transactional
-  public void createDelivery(DeliveryCreateRequest request) {
+  public void createDelivery(DeliveryServiceRequest request) {
     Order order = orderReader.read(request.getOrderId());
-    Delivery delivery = request.toEntity();
-    deliveryAppender.append(delivery, order);
+    Delivery delivery = request.toEntity(order);
+    deliveryAppender.append(delivery);
   }
 
   public DeliveryResponse getDeliveryDetail(String orderId) {

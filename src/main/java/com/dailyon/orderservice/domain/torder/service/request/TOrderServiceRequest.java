@@ -3,6 +3,7 @@ package com.dailyon.orderservice.domain.torder.service.request;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
+import com.dailyon.orderservice.domain.torder.entity.TDelivery;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
@@ -29,29 +30,34 @@ public class TOrderServiceRequest {
   private Map<Long, OrderProductInfo> productInfoMap;
   private Map<Long, ProductCouponDTO> couponInfoMap;
   private OrderInfo orderInfo;
+  private DeliveryInfo deliveryInfo;
 
   @Builder
   private TOrderServiceRequest(
       List<OrderProductDTO> orderProductDTOList,
       Map<Long, OrderProductInfo> productInfoMap,
       Map<Long, ProductCouponDTO> couponInfoMap,
-      OrderInfo orderInfo) {
+      OrderInfo orderInfo,
+      DeliveryInfo deliveryInfo) {
     this.orderProductDTOList = orderProductDTOList;
     this.productInfoMap = productInfoMap;
     this.couponInfoMap = couponInfoMap;
     this.orderInfo = orderInfo;
+    this.deliveryInfo = deliveryInfo;
   }
 
   public static TOrderServiceRequest of(
       List<OrderProductDTO> orderProductDTOList,
       Map<Long, OrderProductInfo> productInfoMap,
       Map<Long, ProductCouponDTO> couponInfoMap,
-      OrderInfo orderInfo) {
+      OrderInfo orderInfo,
+      DeliveryInfo deliveryInfo) {
     return TOrderServiceRequest.builder()
         .orderProductDTOList(orderProductDTOList)
         .productInfoMap(productInfoMap)
         .couponInfoMap(couponInfoMap)
         .orderInfo(orderInfo)
+        .deliveryInfo(deliveryInfo)
         .build();
   }
 
@@ -96,6 +102,7 @@ public class TOrderServiceRequest {
         .totalCouponDiscountPrice(orderInfo.getTotalCouponDiscountPrice())
         .type(orderInfo.getType().name())
         .orderDetails(orderDetails)
+        .delivery(deliveryInfo != null ? deliveryInfo.toEntity(orderId) : null)
         .build();
   }
 
@@ -136,5 +143,28 @@ public class TOrderServiceRequest {
     private int usedPoints;
     private int totalCouponDiscountPrice;
     private OrderType type;
+  }
+
+  @Getter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  public static class DeliveryInfo {
+    private String receiver;
+    private String postCode;
+    private String roadAddress;
+    private String detailAddress;
+    private String phoneNumber;
+
+    public TDelivery toEntity(String orderNo) {
+      return TDelivery.builder()
+          .orderNo(orderNo)
+          .receiver(receiver)
+          .postCode(postCode)
+          .roadAddress(roadAddress)
+          .detailAddress(detailAddress)
+          .phoneNumber(phoneNumber)
+          .build();
+    }
   }
 }

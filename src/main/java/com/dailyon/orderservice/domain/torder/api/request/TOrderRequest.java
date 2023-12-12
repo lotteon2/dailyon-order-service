@@ -47,6 +47,7 @@ public class TOrderRequest {
           .couponInfos(couponInfos)
           .orderProductInfos(orderProductInfos)
           .orderInfo(orderInfo.toFacadeOrderInfo())
+          .deliveryInfo(deliveryInfo.toFacadeDeliveryInfo())
           .build();
     }
 
@@ -138,6 +139,16 @@ public class TOrderRequest {
       private String detailAddress;
 
       private String phoneNumber;
+
+      public TOrderFacadeCreateRequest.DeliveryInfo toFacadeDeliveryInfo() {
+        return TOrderFacadeCreateRequest.DeliveryInfo.builder()
+            .receiver(receiver)
+            .postCode(postCode)
+            .roadAddress(roadAddress)
+            .detailAddress(detailAddress)
+            .phoneNumber(phoneNumber)
+            .build();
+      }
     }
   }
 
@@ -150,10 +161,7 @@ public class TOrderRequest {
     private String pg_token;
 
     public TOrderFacadeApproveRequest toFacadeRequest(String orderId) {
-      return TOrderFacadeApproveRequest.builder()
-          .orderId(orderId)
-          .pgToken(pg_token)
-          .build();
+      return TOrderFacadeApproveRequest.builder().orderId(orderId).pgToken(pg_token).build();
     }
   }
 }

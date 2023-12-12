@@ -1,5 +1,7 @@
 package com.dailyon.orderservice.domain.order.facade;
 
+import com.dailyon.orderservice.domain.delivery.service.DeliveryService;
+import com.dailyon.orderservice.domain.delivery.service.request.DeliveryServiceRequest;
 import com.dailyon.orderservice.domain.order.service.OrderService;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent;
@@ -12,9 +14,12 @@ import org.springframework.stereotype.Service;
 public class OrderFacade {
   private final OrderService orderService;
   private final TOrderService tOrderService;
+  private final DeliveryService deliveryService;
 
   public String orderCreate(TOrder tOrder, OrderEvent event) {
     tOrderService.modifyTOrder(tOrder.getId(), event);
-    return orderService.createOrder(tOrder).getOrderNo();
+    orderService.createOrder(tOrder);
+    deliveryService.createDelivery(DeliveryServiceRequest.from(tOrder.getDelivery()));
+    return tOrder.getId();
   }
 }
