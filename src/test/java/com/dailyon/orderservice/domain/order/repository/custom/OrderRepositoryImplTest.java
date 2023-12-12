@@ -7,6 +7,7 @@ import com.dailyon.orderservice.domain.order.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ class OrderRepositoryImplTest extends IntegrationTestSupport {
               OrderType.SINGLE));
     }
     // when
-    List<Order> orders = orderRepository.findAllWithPaging(8, memberId);
+    List<Order> orders = orderRepository.findAllWithPaging(PageRequest.of(0, 8), memberId);
     // then
     assertThat(orders).isNotEmpty().hasSize(8);
   }

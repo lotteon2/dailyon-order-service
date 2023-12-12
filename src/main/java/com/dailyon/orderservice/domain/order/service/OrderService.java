@@ -7,6 +7,7 @@ import com.dailyon.orderservice.domain.order.implement.OrderDetailAppender;
 import com.dailyon.orderservice.domain.order.implement.OrderReader;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +30,8 @@ public class OrderService {
     return savedOrder;
   }
 
-  public List<Order> getOrders(int pageSize, Long memberId) {
-    return orderReader.read(pageSize, memberId);
+  public List<Order> getOrders(Pageable pageable, Long memberId) {
+    return orderReader.read(pageable, memberId);
   }
 
   public Long getOrderCount(Long memberId) {

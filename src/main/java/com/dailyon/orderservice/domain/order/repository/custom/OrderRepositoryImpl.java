@@ -23,9 +23,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
   }
 
   @Override
-  public List<Order> findAllWithPaging(int pageSize, Long memberId) {
-
-    Pageable pageable = Pageable.ofSize(pageSize);
+  public List<Order> findAllWithPaging(Pageable pageable, Long memberId) {
 
     List<Long> ids =
         queryFactory
@@ -33,7 +31,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
             .from(order)
             .where(order.memberId.eq(memberId))
             .offset(pageable.getOffset())
-            .limit(pageSize)
+            .limit(pageable.getPageSize())
             .orderBy(order.id.desc())
             .fetch();
 
