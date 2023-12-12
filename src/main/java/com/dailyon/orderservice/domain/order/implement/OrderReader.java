@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Component
 public class OrderReader {
@@ -22,5 +20,4 @@ public class OrderReader {
   public Page<Order> read(Pageable pageable, Long memberId) {
     return orderRepository.findAllWithPaging(pageable, memberId);
   }
-
 }
