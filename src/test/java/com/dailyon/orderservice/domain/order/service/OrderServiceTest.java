@@ -78,6 +78,7 @@ class OrderServiceTest extends ContainerBaseTestSupport {
     return TOrder.builder()
         .id(orderId)
         .memberId(memberId)
+        .productsName("testProducts")
         .totalAmount(totalAmount)
         .type(type.name())
         .build();

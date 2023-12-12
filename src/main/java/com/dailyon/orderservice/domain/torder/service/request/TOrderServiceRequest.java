@@ -101,6 +101,10 @@ public class TOrderServiceRequest {
         .deliveryFee(orderInfo.getDeliveryFee())
         .usedPoints(orderInfo.getUsedPoints())
         .totalCouponDiscountPrice(orderInfo.getTotalCouponDiscountPrice())
+        .productsName(
+            orderDetails.size() == 1
+                ? orderDetails.get(0).getProductName()
+                : orderDetails.get(0).getProductName() + "외 " + (orderDetails.size() - 1) + "항목")
         .totalAmount(totalAmount)
         .type(orderInfo.getType().name())
         .orderDetails(orderDetails)

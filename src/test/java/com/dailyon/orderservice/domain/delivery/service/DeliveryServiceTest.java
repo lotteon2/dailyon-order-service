@@ -37,7 +37,7 @@ class DeliveryServiceTest extends IntegrationTestSupport {
   @Test
   void createDelivery() {
     // given
-    Order order = createOrder("ORDER-01", 1L,10000L, OrderType.SINGLE);
+    Order order = createOrder("ORDER-01", 1L, 10000L, OrderType.SINGLE);
     DeliveryServiceRequest request =
         new DeliveryServiceRequest(
             order.getOrderNo(), "홍길동", "201-201", "서울특별시 강서구5길", "강서아파트111호", null);
@@ -99,6 +99,7 @@ class DeliveryServiceTest extends IntegrationTestSupport {
         Order.builder()
             .orderNo(orderNo)
             .memberId(memberId)
+            .productsName("testProducts")
             .totalAmount(totalAmount)
             .type(type)
             .build());

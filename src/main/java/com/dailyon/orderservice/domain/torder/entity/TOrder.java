@@ -45,6 +45,9 @@ public class TOrder {
   @DynamoDBAttribute(attributeName = "total_coupon_discount_price")
   private int totalCouponDiscountPrice;
 
+  @DynamoDBAttribute(attributeName = "products_name")
+  private String productsName;
+
   @DynamoDBAttribute(attributeName = "total_amount")
   private Long totalAmount;
 
@@ -69,6 +72,7 @@ public class TOrder {
       int usedPoints,
       int deliveryFee,
       int totalCouponDiscountPrice,
+      String productsName,
       Long totalAmount,
       List<TOrderDetail> orderDetails,
       TDelivery delivery) {
@@ -78,6 +82,7 @@ public class TOrder {
     this.usedPoints = usedPoints;
     this.deliveryFee = deliveryFee;
     this.totalCouponDiscountPrice = totalCouponDiscountPrice;
+    this.productsName = productsName;
     this.totalAmount = totalAmount;
     this.orderDetails = orderDetails;
     this.delivery = delivery;
@@ -100,6 +105,7 @@ public class TOrder {
         .orderNo(id)
         .type(OrderType.valueOf(type))
         .memberId(memberId)
+        .productsName(productsName)
         .totalAmount(totalAmount)
         .build();
   }
