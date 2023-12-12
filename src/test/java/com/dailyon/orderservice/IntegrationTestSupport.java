@@ -8,6 +8,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -21,4 +23,5 @@ import org.springframework.transaction.annotation.Transactional;
 public class IntegrationTestSupport {
 
   @Autowired protected ObjectMapper objectMapper;
+  @Autowired protected EntityManager em;
 }

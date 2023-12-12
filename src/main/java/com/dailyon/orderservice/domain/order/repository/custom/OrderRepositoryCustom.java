@@ -8,5 +8,7 @@ import java.util.Optional;
 public interface OrderRepositoryCustom {
   Optional<Order> findByOrderNo(String orderNo);
 
-//  List<Order> findAllWithPaging(int pageSize, Long memberId)
+  List<Order> findAllWithPaging(int pageSize, Long memberId);
+
+  Long getTotalPageCount(Long memberId);
 }

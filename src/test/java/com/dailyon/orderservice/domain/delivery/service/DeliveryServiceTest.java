@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DeliveryServiceTest extends IntegrationTestSupport {
   @Autowired DeliveryService deliveryService;
-  @Autowired EntityManager entityManager;
   @Autowired DeliveryRepository deliveryRepository;
   @Autowired OrderRepository orderRepository;
 

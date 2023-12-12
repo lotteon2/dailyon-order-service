@@ -76,12 +76,12 @@ public class DynamoDbConfig {
   public static class LocalDateTimeConverter implements DynamoDBTypeConverter<Date, LocalDateTime> {
     @Override
     public Date convert(LocalDateTime source) {
-      return Date.from(source.atZone(ZoneId.of("Asia/Seoul")).toInstant());
+      return Date.from(source.toInstant(ZoneOffset.UTC));
     }
 
     @Override
     public LocalDateTime unconvert(Date source) {
-      return source.toInstant().atZone(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+      return LocalDateTime.ofInstant(source.toInstant(), ZoneId.of("UTC"));
     }
   }
 }

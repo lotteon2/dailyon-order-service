@@ -31,7 +31,6 @@ class OrderServiceTest extends ContainerBaseTestSupport {
   @Autowired DynamoDBMapper dynamoDBMapper;
   @Autowired OrderDynamoRepository orderDynamoRepository;
   @Autowired OrderService orderService;
-  @Autowired EntityManager em;
 
   @BeforeEach
   void setup() {
