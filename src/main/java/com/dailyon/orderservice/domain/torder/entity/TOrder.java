@@ -1,9 +1,6 @@
 package com.dailyon.orderservice.domain.torder.entity;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.dailyon.orderservice.config.DynamoDbConfig;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
@@ -31,6 +28,7 @@ public class TOrder {
   @Id @DynamoDBHashKey private String id;
 
   @DynamoDBAttribute(attributeName = "member_id")
+  @DynamoDBIndexHashKey(globalSecondaryIndexName = "memberIndex")
   private Long memberId;
 
   @DynamoDBAttribute(attributeName = "type")
@@ -61,6 +59,7 @@ public class TOrder {
   private TDelivery delivery;
 
   @DynamoDBAttribute(attributeName = "created_at")
+  @DynamoDBIndexRangeKey(globalSecondaryIndexName = "memberIndex")
   @DynamoDBTypeConverted(converter = DynamoDbConfig.LocalDateTimeConverter.class)
   private LocalDateTime createdAt = LocalDateTime.now();
 

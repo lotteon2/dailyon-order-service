@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.TimeZone;
@@ -75,7 +76,7 @@ public class DynamoDbConfig {
   public static class LocalDateTimeConverter implements DynamoDBTypeConverter<Date, LocalDateTime> {
     @Override
     public Date convert(LocalDateTime source) {
-      return Date.from(source.toInstant(ZoneOffset.UTC));
+      return Date.from(source.atZone(ZoneId.of("Asia/Seoul")).toInstant());
     }
 
     @Override
