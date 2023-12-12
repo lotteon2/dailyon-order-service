@@ -17,7 +17,7 @@ class OrderRepositoryImplTest extends IntegrationTestSupport {
 
   @Autowired OrderRepository orderRepository;
 
-  @DisplayName("주문 내역을 8개씩 조회 한다.")
+  @DisplayName("pageSize 만큼 주문 내역을 조회 한다.")
   @Test
   void getOrdersWithPaging() {
     // given

@@ -6,6 +6,8 @@ import com.dailyon.orderservice.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class OrderReader {
@@ -13,5 +15,13 @@ public class OrderReader {
 
   public Order read(String orderNo) {
     return orderRepository.findByOrderNo(orderNo).orElseThrow(OrderNotFoundException::new);
+  }
+
+  public List<Order> read(int pageSize, Long memberId) {
+    return orderRepository.findAllWithPaging(pageSize, memberId);
+  }
+
+  public Long readCount(Long memberId) {
+    return orderRepository.getTotalPageCount(memberId);
   }
 }

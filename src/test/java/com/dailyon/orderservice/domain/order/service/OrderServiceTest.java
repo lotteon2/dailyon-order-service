@@ -1,57 +1,26 @@
 package com.dailyon.orderservice.domain.order.service;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.Projection;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.util.TableUtils;
-import com.dailyon.orderservice.ContainerBaseTestSupport;
+import com.dailyon.orderservice.IntegrationTestSupport;
 import com.dailyon.orderservice.common.utils.OrderNoGenerator;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
+import com.dailyon.orderservice.domain.order.repository.OrderRepository;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
-import com.dailyon.orderservice.domain.torder.repository.OrderDynamoRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.dailyon.orderservice.common.utils.OrderNoGenerator.generate;
 import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.SINGLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class OrderServiceTest extends ContainerBaseTestSupport {
+class OrderServiceTest extends IntegrationTestSupport {
 
-  @Autowired AmazonDynamoDB dynamoDB;
-  @Autowired DynamoDBMapper dynamoDBMapper;
-  @Autowired OrderDynamoRepository orderDynamoRepository;
+  @Autowired OrderRepository orderRepository;
   @Autowired OrderService orderService;
-
-  @BeforeEach
-  void setup() {
-    CreateTableRequest createTableRequest =
-        dynamoDBMapper
-            .generateCreateTableRequest(TOrder.class)
-            .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
-
-    createTableRequest.getGlobalSecondaryIndexes().forEach(
-            idx -> idx
-                    .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
-                    .withProjection(new Projection().withProjectionType("ALL")));
-
-    TableUtils.createTableIfNotExists(dynamoDB, createTableRequest);
-  }
-
-  @AfterEach
-  void after() {
-    TableUtils.deleteTableIfExists(
-        dynamoDB, dynamoDBMapper.generateDeleteTableRequest(TOrder.class));
-  }
 
   @DisplayName("임시 주문 정보를 통해 주문을 생성한다.")
   @Test
@@ -71,12 +40,61 @@ class OrderServiceTest extends ContainerBaseTestSupport {
 
     tOrder.setOrderDetails(List.of(tOrderDetail1, tOrderDetail2));
     // when
-    orderDynamoRepository.save(tOrder);
-    // when
     Order order = orderService.createOrder(tOrder);
     // then
     assertThat(order.getOrderNo()).isNotNull().isEqualTo(tOrder.getId());
     assertThat(order.getTotalAmount()).isEqualTo(tOrder.getTotalAmount());
+  }
+
+  @DisplayName("pageSize 만큼 주문 내역을 조회 한다.")
+  @Test
+  void getOrdersWithPaging() {
+    // given
+    Long memberId = 1L;
+    for (int i = 0; i < 10; i++) {
+      orderRepository.save(
+          createOrder(
+              generate(memberId),
+              memberId,
+              "testProducts" + i,
+              (long) (10000 * i),
+              OrderType.SINGLE));
+    }
+    // when
+    List<Order> orders = orderService.getOrders(8, memberId);
+    // then
+    assertThat(orders).isNotEmpty().hasSize(8);
+  }
+
+  @DisplayName("사용자의 총 주문 내역 개수를 조회한다.")
+  @Test
+  void getOrderCount() {
+    // given
+    Long memberId = 1L;
+    for (int i = 0; i < 10; i++) {
+      orderRepository.save(
+              createOrder(
+                      generate(memberId),
+                      memberId,
+                      "testProducts" + i,
+                      (long) (10000 * i),
+                      OrderType.SINGLE));
+    }
+    // when
+    Long orderCount = orderService.getOrderCount(memberId);
+    // then
+    assertThat(orderCount).isEqualTo(10);
+  }
+
+  private Order createOrder(
+      String orderNo, Long memberId, String productsName, Long totalAmount, OrderType type) {
+    return Order.builder()
+        .orderNo(orderNo)
+        .memberId(memberId)
+        .productsName(productsName)
+        .totalAmount(totalAmount)
+        .type(type)
+        .build();
   }
 
   private TOrder createOrder(String orderId, Long memberId, Long totalAmount, OrderType type) {
