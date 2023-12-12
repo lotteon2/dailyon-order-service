@@ -33,4 +33,8 @@ public class TOrderService {
     TOrder changedTOrder = tOrderManager.changeStatus(tOrder, event);
     return changedTOrder;
   }
+
+  public void deleteTOrder(String orderId) {
+    tOrderManager.delete(orderId);
+  }
 }

@@ -16,4 +16,8 @@ public class TOrderManager {
     TOrder savedTOrder = orderDynamoRepository.save(tOrder);
     return savedTOrder;
   }
+
+  public void delete(String orderId) {
+    orderDynamoRepository.deleteById(orderId);
+  }
 }

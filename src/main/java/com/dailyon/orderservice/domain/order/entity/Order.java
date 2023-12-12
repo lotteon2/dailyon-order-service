@@ -25,8 +25,9 @@ public class Order extends BaseEntity {
   private Long id;
 
   @NotNull private String orderNo;
-
   @NotNull private Long memberId;
+  @NotNull private String productsName;
+  @NotNull private Long totalAmount;
 
   @NotNull
   @Enumerated(EnumType.STRING)
@@ -43,9 +44,12 @@ public class Order extends BaseEntity {
   private List<OrderDetail> orderDetails;
 
   @Builder
-  private Order(String orderNo, Long memberId, OrderType type) {
+  private Order(
+      String orderNo, Long memberId, String productsName, Long totalAmount, OrderType type) {
     this.orderNo = orderNo;
     this.memberId = memberId;
+    this.productsName = productsName;
+    this.totalAmount = totalAmount;
     this.type = type;
   }
 

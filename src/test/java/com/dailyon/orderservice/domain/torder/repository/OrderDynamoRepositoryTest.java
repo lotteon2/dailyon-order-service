@@ -3,6 +3,7 @@ package com.dailyon.orderservice.domain.torder.repository;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.Projection;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.dailyon.orderservice.ContainerBaseTestSupport;
@@ -33,6 +34,13 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
         dynamoDBMapper
             .generateCreateTableRequest(TOrder.class)
             .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+    createTableRequest
+        .getGlobalSecondaryIndexes()
+        .forEach(
+            idx ->
+                idx.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
+                    .withProjection(new Projection().withProjectionType("ALL")));
 
     TableUtils.createTableIfNotExists(dynamoDB, createTableRequest);
   }
@@ -66,6 +74,7 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
 
     // then
     TOrder savedTOrder = orderDynamoRepository.findAll().iterator().next();
+    System.out.println(savedTOrder.getCreatedAt());
     assertThat(savedTOrder.getId()).isEqualTo(orderId);
   }
 

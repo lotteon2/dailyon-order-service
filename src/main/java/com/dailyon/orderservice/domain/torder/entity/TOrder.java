@@ -1,9 +1,6 @@
 package com.dailyon.orderservice.domain.torder.entity;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.dailyon.orderservice.config.DynamoDbConfig;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
@@ -11,6 +8,7 @@ import com.dailyon.orderservice.domain.order.entity.enums.OrderStatus;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent;
 import lombok.*;
+import org.socialsignin.spring.data.dynamodb.config.EnableDynamoDBAuditing;
 
 import javax.persistence.Id;
 import java.time.LocalDateTime;
@@ -31,6 +29,7 @@ public class TOrder {
   @Id @DynamoDBHashKey private String id;
 
   @DynamoDBAttribute(attributeName = "member_id")
+  @DynamoDBIndexHashKey(globalSecondaryIndexName = "memberIndex")
   private Long memberId;
 
   @DynamoDBAttribute(attributeName = "type")
@@ -45,6 +44,12 @@ public class TOrder {
   @DynamoDBAttribute(attributeName = "total_coupon_discount_price")
   private int totalCouponDiscountPrice;
 
+  @DynamoDBAttribute(attributeName = "products_name")
+  private String productsName;
+
+  @DynamoDBAttribute(attributeName = "total_amount")
+  private Long totalAmount;
+
   @DynamoDBAttribute(attributeName = "status")
   private String status = OrderStatus.PENDING.name();
 
@@ -55,6 +60,7 @@ public class TOrder {
   private TDelivery delivery;
 
   @DynamoDBAttribute(attributeName = "created_at")
+  @DynamoDBIndexRangeKey(globalSecondaryIndexName = "memberIndex")
   @DynamoDBTypeConverted(converter = DynamoDbConfig.LocalDateTimeConverter.class)
   private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -66,6 +72,8 @@ public class TOrder {
       int usedPoints,
       int deliveryFee,
       int totalCouponDiscountPrice,
+      String productsName,
+      Long totalAmount,
       List<TOrderDetail> orderDetails,
       TDelivery delivery) {
     this.id = id;
@@ -74,12 +82,14 @@ public class TOrder {
     this.usedPoints = usedPoints;
     this.deliveryFee = deliveryFee;
     this.totalCouponDiscountPrice = totalCouponDiscountPrice;
+    this.productsName = productsName;
+    this.totalAmount = totalAmount;
     this.orderDetails = orderDetails;
     this.delivery = delivery;
   }
 
-  public Integer calculateTotalAmount() {
-    return orderDetails.stream().mapToInt(TOrderDetail::getOrderPrice).sum();
+  public Long calculateTotalAmount() {
+    return orderDetails.stream().mapToLong(TOrderDetail::getOrderPrice).sum();
   }
 
   public Integer calculateTotalCouponDiscountPrice() {
@@ -91,7 +101,13 @@ public class TOrder {
   }
 
   public Order toEntity() {
-    return Order.builder().orderNo(id).type(OrderType.valueOf(type)).memberId(memberId).build();
+    return Order.builder()
+        .orderNo(id)
+        .type(OrderType.valueOf(type))
+        .memberId(memberId)
+        .productsName(productsName)
+        .totalAmount(totalAmount)
+        .build();
   }
 
   public List<OrderDetail> createOrderDetails(Order order) {
