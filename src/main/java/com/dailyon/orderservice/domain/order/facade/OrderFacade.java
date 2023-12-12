@@ -17,9 +17,9 @@ public class OrderFacade {
   private final DeliveryService deliveryService;
 
   public String orderCreate(TOrder tOrder, OrderEvent event) {
-    tOrderService.modifyTOrder(tOrder.getId(), event);
     orderService.createOrder(tOrder);
     deliveryService.createDelivery(DeliveryServiceRequest.from(tOrder.getDelivery()));
+    tOrderService.deleteTOrder(tOrder.getId());
     return tOrder.getId();
   }
 }
