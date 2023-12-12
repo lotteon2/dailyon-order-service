@@ -14,6 +14,5 @@ public interface ProductFeignClient {
 
   @PostMapping("/clients/products/orders")
   ProductDTO.OrderProductListDTO getOrderProducts(
-      @RequestHeader(value = "memberId") Long memberId,
       @RequestBody List<ProductDTO.OrderProductParam> productParams);
 }

@@ -50,7 +50,7 @@ public class TOrderFacade {
 
     List<ProductCouponDTO> productCoupons = getProductCoupons(request.toCouponParams(), memberId);
     List<OrderProductDTO> orderProducts =
-        getOrderProducts(request.toOrderProductParams(), memberId);
+        getOrderProducts(request.toOrderProductParams());
 
     int points = memberFeignClient.getMyPoints(memberId);
     validateMemberPoint(request.getOrderInfo().getUsedPoints(), points);
@@ -89,8 +89,8 @@ public class TOrderFacade {
   }
 
   private List<OrderProductDTO> getOrderProducts(
-      List<OrderProductParam> orderProductParams, Long memberId) {
-    return productFeignClient.getOrderProducts(memberId, orderProductParams).getResponse();
+      List<OrderProductParam> orderProductParams) {
+    return productFeignClient.getOrderProducts(orderProductParams).getResponse();
   }
 
   private Map<Long, ProductCouponDTO> extractProductCouponToMap(
