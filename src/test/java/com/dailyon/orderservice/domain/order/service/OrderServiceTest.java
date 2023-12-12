@@ -10,6 +10,7 @@ import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -63,29 +64,9 @@ class OrderServiceTest extends IntegrationTestSupport {
     }
     // when
     PageRequest page = PageRequest.of(0, 8);
-    List<Order> orders = orderService.getOrders(page, memberId);
+    Page<Order> orders = orderService.getOrders(page, memberId);
     // then
-    assertThat(orders).isNotEmpty().hasSize(8);
-  }
-
-  @DisplayName("사용자의 총 주문 내역 개수를 조회한다.")
-  @Test
-  void getOrderCount() {
-    // given
-    Long memberId = 1L;
-    for (int i = 0; i < 10; i++) {
-      orderRepository.save(
-          createOrder(
-              generate(memberId),
-              memberId,
-              "testProducts" + i,
-              (long) (10000 * i),
-              OrderType.SINGLE));
-    }
-    // when
-    Long orderCount = orderService.getOrderCount(memberId);
-    // then
-    assertThat(orderCount).isEqualTo(10);
+    assertThat(orders.getContent()).isNotEmpty().hasSize(8);
   }
 
   private Order createOrder(
