@@ -27,7 +27,7 @@ public class OrderApiController {
 
   @GetMapping("/{orderNo}")
   public ResponseEntity<List<OrderDetailResponse>> getOrderDetails(
-      @RequestHeader(value = "memberId") Long memberId,
+      @RequestHeader(value = "memberId", defaultValue = "1") Long memberId,
       @PathVariable(name = "orderNo") String orderNo) {
     return ResponseEntity.ok(orderFacade.getOrderDetails(orderNo, memberId));
   }
