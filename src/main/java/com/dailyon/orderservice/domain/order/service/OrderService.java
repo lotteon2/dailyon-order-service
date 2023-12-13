@@ -35,7 +35,7 @@ public class OrderService {
     return orderReader.read(pageable, memberId);
   }
 
-  public List<OrderDetail> getOrderDetails(String orderNo) {
-    return orderReader.readDetails(orderNo);
+  public List<OrderDetail> getOrderDetails(String orderNo, Long memberId) {
+    return orderReader.readDetails(orderNo, memberId);
   }
 }

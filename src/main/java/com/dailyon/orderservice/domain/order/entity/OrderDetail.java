@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
+@BatchSize(size = 100)
 @Entity
 public class OrderDetail extends BaseEntity {
 
@@ -38,7 +40,7 @@ public class OrderDetail extends BaseEntity {
   @NotNull private String productSize;
   @NotNull private String productGender;
   @NotNull private String productImgUrl;
-  @NotNull private Integer OrderPrice;
+  @NotNull private Integer orderPrice;
 
   @Column(nullable = true)
   private String couponName;
@@ -78,7 +80,7 @@ public class OrderDetail extends BaseEntity {
     this.productSize = productSize;
     this.productGender = productGender;
     this.productImgUrl = productImgUrl;
-    this.OrderPrice = orderPrice;
+    this.orderPrice = orderPrice;
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
   }

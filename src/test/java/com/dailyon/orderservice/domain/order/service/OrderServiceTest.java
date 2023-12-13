@@ -1,6 +1,7 @@
 package com.dailyon.orderservice.domain.order.service;
 
 import com.dailyon.orderservice.IntegrationTestSupport;
+import com.dailyon.orderservice.common.exception.AuthorizationException;
 import com.dailyon.orderservice.common.utils.OrderNoGenerator;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
@@ -20,6 +21,7 @@ import java.util.List;
 import static com.dailyon.orderservice.common.utils.OrderNoGenerator.generate;
 import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.SINGLE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OrderServiceTest extends IntegrationTestSupport {
 
@@ -100,9 +102,23 @@ class OrderServiceTest extends IntegrationTestSupport {
 
     // when
     em.clear();
-    List<OrderDetail> orderDetails = orderService.getOrderDetails(orderNo);
+    List<OrderDetail> orderDetails = orderService.getOrderDetails(orderNo, memberId);
     // then
     assertThat(orderDetails).isNotEmpty().hasSize(5);
+  }
+
+  @DisplayName("다른 사람의 주문 내역을 조회할 수 없다.")
+  @Test
+  void getOrderDetailsWithNoAuthorization() {
+    // given
+    Long memberId = 1L;
+    String orderNo = generate(memberId);
+    Order order = createOrder(orderNo, memberId, "testProducts", 150000L, SINGLE);
+    orderRepository.save(order);
+
+    assertThatThrownBy(() -> orderService.getOrderDetails(orderNo, 2L))
+        .isInstanceOf(AuthorizationException.class)
+        .hasMessage("권한이 없습니다.");
   }
 
   private Order createOrder(
