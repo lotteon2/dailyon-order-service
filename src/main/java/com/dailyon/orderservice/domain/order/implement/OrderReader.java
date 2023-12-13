@@ -31,7 +31,7 @@ public class OrderReader {
     return order.getOrderDetails();
   }
 
-  public void checkAuthorization(Order order, Long memberId) {
+  private void checkAuthorization(Order order, Long memberId) {
     if (order.getMemberId() != memberId) {
       throw new AuthorizationException();
     }
