@@ -19,4 +19,16 @@ class OrderApiControllerTest extends ControllerTestSupport {
         .perform(get("/orders").header("memberId", memberId).param("page", "0"))
         .andExpect(status().isOk());
   }
+
+  @DisplayName("주문 내역상세 를 조회한다.")
+  @Test
+  void getOrderDetails() throws Exception {
+    // given
+    Long memberId = 1L;
+    String orderNo = "testOrderNo";
+    // when // then
+    mockMvc
+        .perform(get("/orders/{orderNo}", orderNo).header("memberId", memberId))
+        .andExpect(status().isOk());
+  }
 }
