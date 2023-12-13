@@ -42,6 +42,7 @@ public class OrderResponse {
         .orderNo(order.getOrderNo())
         .productsName(order.getProductsName())
         .totalAmount(order.getTotalAmount())
+        .status(order.getStatus().getMessage())
         .createdAt(order.getCreatedAt())
         .build();
   }
@@ -51,6 +52,7 @@ public class OrderResponse {
         .orderNo(tOrder.getId())
         .productsName(tOrder.getProductsName())
         .totalAmount(tOrder.getTotalAmount())
+        .status(tOrder.getStatus())
         .createdAt(tOrder.getCreatedAt())
         .build();
   }

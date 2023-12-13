@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
@@ -19,7 +20,7 @@ public class OrderApiController {
 
   @GetMapping("")
   public ResponseEntity<OrderPageResponse> getOrders(
-      @RequestHeader(value = "memberId") Long memberId,
+      @RequestHeader(value = "memberId", defaultValue = "1") Long memberId,
       @PageableDefault(size = 8) Pageable pageable) {
     return ResponseEntity.ok(orderFacade.getOrders(pageable, memberId));
   }

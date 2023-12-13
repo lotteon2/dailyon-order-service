@@ -26,7 +26,11 @@ spring:
 #    password: ssafy
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+    generate-ddl: true
+    show-sql: true
+    # Bean이 생성되기 전에 ddl 실행
+    defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true
