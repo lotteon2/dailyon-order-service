@@ -59,7 +59,7 @@ public class DynamoDbConfig {
   @Primary
   AmazonDynamoDB amazonDynamoDB() {
     AwsClientBuilder.EndpointConfiguration endpointConfiguration =
-        new AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint, "");
+        new AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint, "ap-northeast-2");
 
     return AmazonDynamoDBClientBuilder.standard()
         .withCredentials(amazonAWSCredentialsProvider())
