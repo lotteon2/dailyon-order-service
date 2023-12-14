@@ -39,10 +39,12 @@ public class OrderFacade {
 
   public List<OrderDetailResponse> getOrderDetails(String orderNo, Long memberId) {
     List<OrderDetail> orderDetails = orderService.getOrderDetails(orderNo, memberId);
-    List<OrderDetailResponse> orderDetailResponseList =
-        orderDetails.stream()
-            .map(OrderDetailResponse::from)
-            .collect(Collectors.toUnmodifiableList());
-    return orderDetailResponseList;
+    return extractOrderDetailResponses(orderDetails);
+  }
+
+  private List<OrderDetailResponse> extractOrderDetailResponses(List<OrderDetail> orderDetails) {
+    return orderDetails.stream()
+        .map(OrderDetailResponse::from)
+        .collect(Collectors.toUnmodifiableList());
   }
 }
