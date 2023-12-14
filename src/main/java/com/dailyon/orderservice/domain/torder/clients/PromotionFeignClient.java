@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
-@FeignClient(name = "promotion-service", configuration = DefaultFeignConfig.class)
+@FeignClient(name = "promotion-service", url = "${endpoint.promotion-service}",configuration = DefaultFeignConfig.class)
 public interface PromotionFeignClient {
 
   @PostMapping("/clients/coupons/validate-for-order")

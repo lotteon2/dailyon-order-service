@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
-@FeignClient(name = "product-service", configuration = DefaultFeignConfig.class)
+@FeignClient(name = "product-service", url = "${endpoint.product-service}",configuration = DefaultFeignConfig.class)
 public interface ProductFeignClient {
 
   @PostMapping("/clients/products/orders")

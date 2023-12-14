@@ -51,6 +51,7 @@ public class OrderDetailResponse {
         .orderPrice(orderDetail.getOrderPrice())
         .couponName(orderDetail.getCouponName())
         .couponDiscountPrice(orderDetail.getCouponDiscountPrice())
+        .status(orderDetail.getStatus().getMessage())
         .build();
   }
 }

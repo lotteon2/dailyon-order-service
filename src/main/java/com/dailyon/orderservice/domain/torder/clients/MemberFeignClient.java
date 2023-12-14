@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "member-service", configuration = DefaultFeignConfig.class)
+@FeignClient(name = "member-service", url = "${endpoint.member-service}", configuration = DefaultFeignConfig.class)
 public interface MemberFeignClient {
 
   @GetMapping("/clients/members/points")

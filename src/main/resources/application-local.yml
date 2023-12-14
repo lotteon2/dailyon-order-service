@@ -75,3 +75,9 @@ logging:
         jdbc:
           core:
             JdbcTemplate: DEBUG
+
+endpoint:
+  member-service: localhost:8080
+  promotion-service: localhost:8084
+  product-service: localhost:8085
+  payment-service: localhost:8089
