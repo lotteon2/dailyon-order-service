@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 @DynamicInsert
 @BatchSize(size = 100)
 @Entity
+@Table(indexes = @Index(name = "idx_order_detail_no", columnList = "orderDetailNo", unique = true))
 public class OrderDetail extends BaseEntity {
 
   @Id
@@ -28,6 +29,8 @@ public class OrderDetail extends BaseEntity {
   private Order order;
 
   @NotNull private String orderNo;
+
+  @NotNull private String orderDetailNo;
 
   @NotNull private Long productId;
   @NotNull private Long productSizeId;
@@ -59,6 +62,7 @@ public class OrderDetail extends BaseEntity {
   private OrderDetail(
       Order order,
       String orderNo,
+      String orderDetailNo,
       Long productId,
       Long productSizeId,
       Long couponInfoId,
@@ -72,6 +76,7 @@ public class OrderDetail extends BaseEntity {
       Integer couponDiscountPrice) {
     this.order = order;
     this.orderNo = orderNo;
+    this.orderDetailNo = orderDetailNo;
     this.productId = productId;
     this.productSizeId = productSizeId;
     this.couponInfoId = couponInfoId;

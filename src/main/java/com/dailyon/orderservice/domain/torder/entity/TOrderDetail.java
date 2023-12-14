@@ -94,6 +94,7 @@ public class TOrderDetail {
     return OrderDetail.builder()
         .order(order)
         .orderNo(orderNo)
+        .orderDetailNo(id)
         .productSize(productSize)
         .couponDiscountPrice(couponDiscountPrice)
         .couponInfoId(couponInfoId)

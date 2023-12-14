@@ -23,14 +23,6 @@ spring:
   kafka:
     consumer:
       group-id: sjy
-
-logging:
-  level:
-    org:
-      springframework:
-        transaction:
-          interceptor: TRACE
-  cloud:
-    aws:
-      credentials:
-        instance-profile: false
+  sql:
+    init:
+      mode: never

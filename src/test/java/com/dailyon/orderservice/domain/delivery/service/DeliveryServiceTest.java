@@ -9,13 +9,13 @@ import com.dailyon.orderservice.domain.delivery.service.response.DeliveryRespons
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.exception.OrderNotFoundException;
+import com.dailyon.orderservice.domain.order.repository.OrderDetailRepository;
 import com.dailyon.orderservice.domain.order.repository.OrderRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,10 +25,12 @@ class DeliveryServiceTest extends IntegrationTestSupport {
   @Autowired DeliveryService deliveryService;
   @Autowired DeliveryRepository deliveryRepository;
   @Autowired OrderRepository orderRepository;
+  @Autowired OrderDetailRepository orderDetailRepository;
 
   @AfterEach
   void tearDown() {
     deliveryRepository.deleteAllInBatch();
+    orderDetailRepository.deleteAllInBatch();
     orderRepository.deleteAllInBatch();
   }
 

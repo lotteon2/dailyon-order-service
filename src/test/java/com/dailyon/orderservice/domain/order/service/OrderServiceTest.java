@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.dailyon.orderservice.common.utils.OrderNoGenerator.generate;
 import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.SINGLE;
@@ -87,6 +88,7 @@ class OrderServiceTest extends IntegrationTestSupport {
           createOrderDetail(
               order,
               orderNo,
+              UUID.randomUUID().toString(),
               1L + i,
               1L,
               1L,
@@ -135,6 +137,7 @@ class OrderServiceTest extends IntegrationTestSupport {
   private OrderDetail createOrderDetail(
       Order order,
       String orderNo,
+      String orderDetailNo,
       Long productId,
       Long productSizeId,
       Long couponInfoId,
@@ -149,6 +152,7 @@ class OrderServiceTest extends IntegrationTestSupport {
     return OrderDetail.builder()
         .order(order)
         .orderNo(orderNo)
+        .orderDetailNo(orderDetailNo)
         .productId(productId)
         .productSizeId(productSizeId)
         .couponInfoId(couponInfoId)
