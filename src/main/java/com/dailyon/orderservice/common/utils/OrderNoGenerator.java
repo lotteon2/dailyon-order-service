@@ -6,6 +6,8 @@ import java.util.Locale;
 
 public abstract class OrderNoGenerator {
 
+  private static final String DETAIL_PRE_FIX = "D";
+
   // 오늘 날짜 + memberId + 4자리수 random 수로 주문번호가 결정된다.
   public static String generate(Long memberId) {
     Locale currentLocale = new Locale("KOREAN", "KOREA");
