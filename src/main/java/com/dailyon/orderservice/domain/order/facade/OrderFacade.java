@@ -42,6 +42,10 @@ public class OrderFacade {
     return extractOrderDetailResponses(orderDetails);
   }
 
+  public void cancelOrderDetail(String OrderDetailNo, Long memberId) {
+    OrderDetail orderDetail = orderService.cancelOrderDetail(OrderDetailNo, memberId);
+  }
+
   private List<OrderDetailResponse> extractOrderDetailResponses(List<OrderDetail> orderDetails) {
     return orderDetails.stream()
         .map(OrderDetailResponse::from)

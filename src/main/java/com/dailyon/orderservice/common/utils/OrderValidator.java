@@ -31,8 +31,4 @@ public abstract class OrderValidator {
       throw new InsufficientPointException();
     }
   }
-
-  public static void validateOrderDetailCancel(OrderDetailStatus status) {
-    
-  }
 }
