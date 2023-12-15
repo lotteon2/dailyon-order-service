@@ -51,6 +51,7 @@ public class OrderDTO {
                 ProductInfo.builder()
                     .productId(tOrderDetail.getProductId())
                     .sizeId(tOrderDetail.getProductSizeId())
+                    .quantity(tOrderDetail.getProductQuantity().longValue())
                     .build())
         .collect(Collectors.toUnmodifiableList());
   }
@@ -72,6 +73,7 @@ public class OrderDTO {
   public static class ProductInfo {
     private Long productId;
     private Long sizeId;
+    private Long quantity;
   }
 
   @Getter
