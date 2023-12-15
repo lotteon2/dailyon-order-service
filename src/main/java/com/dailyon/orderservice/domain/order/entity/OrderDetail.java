@@ -2,6 +2,7 @@ package com.dailyon.orderservice.domain.order.entity;
 
 import com.dailyon.orderservice.domain.common.BaseEntity;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus;
+import com.dailyon.orderservice.domain.order.exception.CancellationNotAllowedException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,9 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus.BEFORE_DELIVERY;
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus.CANCEL;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,7 +57,7 @@ public class OrderDetail extends BaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  private OrderDetailStatus status = OrderDetailStatus.COMPLETED;
+  private OrderDetailStatus status = BEFORE_DELIVERY;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
   private Boolean reviewCheck;
@@ -88,5 +92,12 @@ public class OrderDetail extends BaseEntity {
     this.orderPrice = orderPrice;
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
+  }
+
+  public void cancel() {
+    if (!status.equals(BEFORE_DELIVERY)) {
+      throw new CancellationNotAllowedException();
+    }
+    this.status = CANCEL;
   }
 }

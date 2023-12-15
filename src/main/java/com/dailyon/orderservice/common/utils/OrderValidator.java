@@ -1,6 +1,7 @@
 package com.dailyon.orderservice.common.utils;
 
 import com.dailyon.orderservice.common.exception.InvalidParamException;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus;
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
 import com.dailyon.orderservice.domain.torder.exception.InsufficientPointException;
 import com.dailyon.orderservice.domain.torder.exception.InsufficientStockException;
@@ -29,5 +30,9 @@ public abstract class OrderValidator {
     if (usedPoints > memberPoints) {
       throw new InsufficientPointException();
     }
+  }
+
+  public static void validateOrderDetailCancel(OrderDetailStatus status) {
+    
   }
 }

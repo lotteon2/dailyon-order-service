@@ -4,9 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum OrderDetailStatus {
-  PENDING("주문 접수"),
-  COMPLETED("주문 완료"),
-  REFUND("환불 완료");
+  BEFORE_DELIVERY("배송전"),
+  DELIVERY_PREPARE("배송준비중"),
+  DELIVERING("배송중"),
+  COMPLETE_DELIVERY("배송완료"),
+  CANCEL("취소완료");
 
   private final String message;
 
