@@ -41,6 +41,7 @@ public class OrderService {
     return orderReader.readDetails(orderNo, memberId);
   }
 
+  @Transactional
   public OrderDetail cancelOrderDetail(String orderDetailNo, Long memberId) {
     OrderDetail orderDetail = orderReader.readDetail(orderDetailNo, memberId);
     orderManager.cancelDetail(orderDetail);

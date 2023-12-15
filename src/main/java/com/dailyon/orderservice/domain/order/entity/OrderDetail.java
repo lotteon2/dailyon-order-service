@@ -13,8 +13,7 @@ import org.hibernate.annotations.DynamicInsert;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import static com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus.BEFORE_DELIVERY;
-import static com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus.CANCEL;
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,7 +59,7 @@ public class OrderDetail extends BaseEntity {
   private OrderDetailStatus status = BEFORE_DELIVERY;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
-  private Boolean reviewCheck;
+  private Boolean reviewCheck = false;
 
   @Builder
   private OrderDetail(
@@ -99,5 +98,17 @@ public class OrderDetail extends BaseEntity {
       throw new CancellationNotAllowedException();
     }
     this.status = CANCEL;
+  }
+
+  public void prepareDelivery() {
+    this.status = DELIVERY_PREPARE;
+  }
+
+  public void startDelivery() {
+    this.status = DELIVERING;
+  }
+
+  public void completeDelivery() {
+    this.status = COMPLETE_DELIVERY;
   }
 }

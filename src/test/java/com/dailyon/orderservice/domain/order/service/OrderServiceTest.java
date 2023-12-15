@@ -5,7 +5,9 @@ import com.dailyon.orderservice.common.exception.AuthorizationException;
 import com.dailyon.orderservice.common.utils.OrderNoGenerator;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
+import com.dailyon.orderservice.domain.order.exception.CancellationNotAllowedException;
 import com.dailyon.orderservice.domain.order.repository.OrderDetailRepository;
 import com.dailyon.orderservice.domain.order.repository.OrderRepository;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +32,7 @@ class OrderServiceTest extends IntegrationTestSupport {
   @Autowired OrderRepository orderRepository;
   @Autowired OrderDetailRepository orderDetailRepository;
   @Autowired OrderService orderService;
+  @Autowired EntityManager em;
 
   @DisplayName("임시 주문 정보를 통해 주문을 생성한다.")
   @Test
@@ -121,6 +125,106 @@ class OrderServiceTest extends IntegrationTestSupport {
     assertThatThrownBy(() -> orderService.getOrderDetails(orderNo, 2L))
         .isInstanceOf(AuthorizationException.class)
         .hasMessage("권한이 없습니다.");
+  }
+
+  @DisplayName("배송 전인 주문 상품을 취소한다.")
+  @Test
+  void orderDetailCancel() {
+    // given
+    Long memberId = 1L;
+    String orderNo = generate(memberId);
+    Order order = createOrder(orderNo, memberId, "testProducts", 150000L, SINGLE);
+    orderRepository.save(order);
+    OrderDetail orderDetail =
+        orderDetailRepository.save(
+            createOrderDetail(
+                order,
+                orderNo,
+                UUID.randomUUID().toString(),
+                1L,
+                1L,
+                1L,
+                "testProducts",
+                1,
+                "free",
+                "MAN",
+                "testUrl",
+                20000,
+                "testCouponName",
+                0));
+    // when
+    OrderDetail changedOrderDetail =
+        orderService.cancelOrderDetail(orderDetail.getOrderDetailNo(), memberId);
+    // then
+    assertThat(changedOrderDetail.getStatus()).isEqualTo(OrderDetailStatus.CANCEL);
+  }
+
+  @DisplayName("다른 사람의 주문 상세를 취소할 수 없다.")
+  @Test
+  void orderDetailCancelWithNoAuthorization() {
+    // given
+    Long memberId = 1L;
+    String orderNo = generate(memberId);
+    Order order = createOrder(orderNo, memberId, "testProducts", 150000L, SINGLE);
+    orderRepository.save(order);
+    OrderDetail orderDetail =
+        orderDetailRepository.save(
+            createOrderDetail(
+                order,
+                orderNo,
+                UUID.randomUUID().toString(),
+                1L,
+                1L,
+                1L,
+                "testProducts",
+                1,
+                "free",
+                "MAN",
+                "testUrl",
+                20000,
+                "testCouponName",
+                0));
+
+    Long otherMemberId = 2L;
+    // when // then
+    assertThatThrownBy(
+            () -> orderService.cancelOrderDetail(orderDetail.getOrderDetailNo(), otherMemberId))
+        .isInstanceOf(AuthorizationException.class)
+        .hasMessage("권한이 없습니다.");
+  }
+
+  @DisplayName("배송 전 상태가 아닌 주문 상품은 취소할 수 없다.")
+  @Test
+  void orderDetailCancelIfNotBeforeDeliveryStatus() {
+    // given
+    Long memberId = 1L;
+    String orderNo = generate(memberId);
+    Order order = createOrder(orderNo, memberId, "testProducts", 150000L, SINGLE);
+    orderRepository.save(order);
+    OrderDetail orderDetail =
+        orderDetailRepository.save(
+            createOrderDetail(
+                order,
+                orderNo,
+                UUID.randomUUID().toString(),
+                1L,
+                1L,
+                1L,
+                "testProducts",
+                1,
+                "free",
+                "MAN",
+                "testUrl",
+                20000,
+                "testCouponName",
+                0));
+
+    orderDetail.completeDelivery();
+    // when // then
+    assertThatThrownBy(
+            () -> orderService.cancelOrderDetail(orderDetail.getOrderDetailNo(), memberId))
+        .isInstanceOf(CancellationNotAllowedException.class)
+        .hasMessage("배송전 상태의 주문상품만 취소가 가능합니다.");
   }
 
   private Order createOrder(

@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public class OrderNotFoundException extends CustomException {
 
-  public static final String MESSAGE = "해당 주문번호에 해당하는 주문이 존재하지 않습니다.";
+  private static final String MESSAGE = "해당 주문번호에 해당하는 주문이 존재하지 않습니다.";
 
   public OrderNotFoundException() {
     super(MESSAGE);

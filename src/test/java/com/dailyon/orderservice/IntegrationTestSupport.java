@@ -27,5 +27,4 @@ import javax.persistence.EntityManager;
 public class IntegrationTestSupport {
 
   @Autowired protected ObjectMapper objectMapper;
-  @Autowired protected EntityManager em;
 }
