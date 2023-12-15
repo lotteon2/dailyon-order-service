@@ -27,13 +27,6 @@ class DeliveryServiceTest extends IntegrationTestSupport {
   @Autowired OrderRepository orderRepository;
   @Autowired OrderDetailRepository orderDetailRepository;
 
-  @AfterEach
-  void tearDown() {
-    deliveryRepository.deleteAllInBatch();
-    orderDetailRepository.deleteAllInBatch();
-    orderRepository.deleteAllInBatch();
-  }
-
   @DisplayName("배송 정보를 입력 받아 배송을 등록한다.")
   @Test
   void createDelivery() {
