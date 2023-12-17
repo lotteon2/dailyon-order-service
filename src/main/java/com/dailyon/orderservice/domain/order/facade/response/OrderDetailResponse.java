@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @NoArgsConstructor
 public class OrderDetailResponse {
@@ -53,5 +56,11 @@ public class OrderDetailResponse {
         .couponDiscountPrice(orderDetail.getCouponDiscountPrice())
         .status(orderDetail.getStatus().getMessage())
         .build();
+  }
+
+  public static List<OrderDetailResponse> from(List<OrderDetail> orderDetails) {
+    return orderDetails.stream()
+        .map(OrderDetailResponse::from)
+        .collect(Collectors.toUnmodifiableList());
   }
 }

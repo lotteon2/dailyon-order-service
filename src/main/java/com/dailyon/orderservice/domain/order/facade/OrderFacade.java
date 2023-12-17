@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +46,7 @@ public class OrderFacade {
 
   public List<OrderDetailResponse> getOrderDetails(String orderNo, Long memberId) {
     List<OrderDetail> orderDetails = orderService.getOrderDetails(orderNo, memberId);
-    return extractOrderDetailResponses(orderDetails);
+    return OrderDetailResponse.from(orderDetails);
   }
 
   @Transactional
@@ -56,11 +55,5 @@ public class OrderFacade {
     Refund refund = refundService.createRefund(orderDetail);
     producer.createRefund(orderDetail.getOrderDetailNo(), RefundDTO.of(orderDetail, refund));
     return refund.getId();
-  }
-
-  private List<OrderDetailResponse> extractOrderDetailResponses(List<OrderDetail> orderDetails) {
-    return orderDetails.stream()
-        .map(OrderDetailResponse::from)
-        .collect(Collectors.toUnmodifiableList());
   }
 }
