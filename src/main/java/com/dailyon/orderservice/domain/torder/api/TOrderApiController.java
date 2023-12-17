@@ -26,7 +26,6 @@ public class TOrderApiController {
 
   @GetMapping("/approve/{orderId}")
   public ResponseEntity<String> approve(
-      @RequestHeader(value = "memberId") Long memberId,
       @PathVariable(name = "orderId") String orderId,
       @Valid TOrderRequest.OrderApproveRequest request) {
     return ResponseEntity.ok(tOrderFacade.orderApprove(request.toFacadeRequest(orderId)));
