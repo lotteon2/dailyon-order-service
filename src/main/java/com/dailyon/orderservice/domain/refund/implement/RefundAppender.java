@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class RefundAppender {
-  private final RefundRepository refundRepository;
+    private final RefundRepository refundRepository;
 
-  public Refund append(OrderDetail orderDetail, int refundPoints, int refundableAmount) {
-    Refund refund =
-        Refund.builder()
-            .order(orderDetail.getOrder())
-            .orderDetail(orderDetail)
-            .price(refundableAmount)
-            .points(refundPoints)
-            .build();
-    return refundRepository.save(refund);
-  }
+    public Refund append(OrderDetail orderDetail, int refundPoints, int refundableAmount) {
+        Refund refund =
+                Refund.builder()
+                        .order(orderDetail.getOrder())
+                        .orderDetail(orderDetail)
+                        .price(refundableAmount)
+                        .points(refundPoints)
+                        .build();
+        return refundRepository.save(refund);
+    }
 }
