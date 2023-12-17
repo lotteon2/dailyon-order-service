@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RefundRepositoryCustom {
-    List<Refund> findByOrderNo(String orderNo);
-    Optional<Refund> findByOrderDetailNoFetch(String orderDetailNo);
+  List<Refund> findByOrderNo(String orderNo);
+
+  boolean existByOrderDetailNo(String orderDetailNo);
+
+  int getTotalRefundedPoints(String orderNo);
 }

@@ -52,7 +52,7 @@ public class OrderDetail extends BaseEntity {
   private String couponName;
 
   @Column(nullable = true)
-  private Integer couponDiscountPrice;
+  private int couponDiscountPrice;
 
   @NotNull
   @Enumerated(EnumType.STRING)

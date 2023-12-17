@@ -19,13 +19,25 @@ public class RefundRepositoryImpl implements RefundRepositoryCustom {
   }
 
   @Override
-  public Optional<Refund> findByOrderDetailNoFetch(String orderDetailNo) {
+  public boolean existByOrderDetailNo(String orderDetailNo) {
+    return queryFactory
+                .select(refund.count())
+                .from(refund)
+                .where(refund.orderDetail.orderDetailNo.eq(orderDetailNo))
+                .fetchOne()
+            == 1
+        ? true
+        : false;
+  }
+
+  @Override
+  public int getTotalRefundedPoints(String orderNo) {
     return Optional.ofNullable(
-        queryFactory
-            .selectFrom(refund)
-            .join(refund.orderDetail)
-            .fetchJoin()
-            .where(refund.orderDetail.orderDetailNo.eq(orderDetailNo))
-            .fetchOne());
+            queryFactory
+                .select(refund.points.sum())
+                .from(refund)
+                .where(refund.order.orderNo.eq(orderNo))
+                .fetchOne())
+        .orElse(0);
   }
 }

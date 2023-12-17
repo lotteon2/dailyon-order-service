@@ -8,6 +8,7 @@ import com.dailyon.orderservice.domain.order.implement.OrderManager;
 import com.dailyon.orderservice.domain.order.implement.OrderReader;
 import com.dailyon.orderservice.domain.refund.entity.Refund;
 import com.dailyon.orderservice.domain.refund.implement.RefundAppender;
+import com.dailyon.orderservice.domain.refund.implement.RefundReader;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,6 @@ public class OrderService {
   private final OrderDetailAppender orderDetailAppender;
   private final OrderReader orderReader;
   private final OrderManager orderManager;
-  private final RefundAppender refundAppender;
 
   @Transactional
   public Order createOrder(TOrder tOrder) {

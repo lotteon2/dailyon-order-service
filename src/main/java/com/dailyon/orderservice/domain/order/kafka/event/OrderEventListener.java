@@ -20,7 +20,7 @@ public class OrderEventListener {
   public void saveOrder(String message, Acknowledgment ack) {
     try {
       OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);
-      orderFacade.orderCreate(orderDTO.getTOrder(), orderDTO.getOrderEvent());
+      orderFacade.orderCreate(orderDTO.getOrderNo(), orderDTO.getOrderEvent());
       ack.acknowledge();
     } catch (JsonProcessingException e) {
       e.printStackTrace();

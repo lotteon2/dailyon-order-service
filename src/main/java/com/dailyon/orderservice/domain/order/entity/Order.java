@@ -29,6 +29,13 @@ public class Order extends BaseEntity {
   @NotNull private String productsName;
   @NotNull private Long totalAmount;
 
+  @Column(columnDefinition = "int default 0")
+  private int usedPoints;
+  @Column(columnDefinition = "int default 0")
+  private int deliveryFee;
+  @Column(columnDefinition = "int default 0")
+  private int totalCouponDiscountPrice;
+
   @NotNull
   @Enumerated(EnumType.STRING)
   private OrderType type;
@@ -45,11 +52,21 @@ public class Order extends BaseEntity {
 
   @Builder
   private Order(
-      String orderNo, Long memberId, String productsName, Long totalAmount, OrderType type) {
+      String orderNo,
+      Long memberId,
+      String productsName,
+      Long totalAmount,
+      int usedPoints,
+      int deliveryFee,
+      int totalCouponDiscountPrice,
+      OrderType type) {
     this.orderNo = orderNo;
     this.memberId = memberId;
     this.productsName = productsName;
     this.totalAmount = totalAmount;
+    this.usedPoints = usedPoints;
+    this.deliveryFee = deliveryFee;
+    this.totalCouponDiscountPrice = totalCouponDiscountPrice;
     this.type = type;
   }
 

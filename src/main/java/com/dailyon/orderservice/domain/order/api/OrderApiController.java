@@ -31,4 +31,11 @@ public class OrderApiController {
       @PathVariable(name = "orderNo") String orderNo) {
     return ResponseEntity.ok(orderFacade.getOrderDetails(orderNo, memberId));
   }
+
+  @GetMapping("/order-details/{orderDetailId}")
+  public ResponseEntity<Long> cancelOrderDetail(
+      @RequestHeader(value = "memberId") Long memberId,
+      @PathVariable(name = "orderDetailNo") String orderDetailNo) {
+    return ResponseEntity.ok(orderFacade.cancelOrderDetail(orderDetailNo, memberId));
+  }
 }
