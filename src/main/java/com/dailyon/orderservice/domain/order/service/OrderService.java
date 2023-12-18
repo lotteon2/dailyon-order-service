@@ -4,6 +4,7 @@ import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
 import com.dailyon.orderservice.domain.order.implement.OrderAppender;
 import com.dailyon.orderservice.domain.order.implement.OrderDetailAppender;
+import com.dailyon.orderservice.domain.order.implement.OrderManager;
 import com.dailyon.orderservice.domain.order.implement.OrderReader;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class OrderService {
   private final OrderAppender orderAppender;
   private final OrderDetailAppender orderDetailAppender;
   private final OrderReader orderReader;
+  private final OrderManager orderManager;
 
   @Transactional
   public Order createOrder(TOrder tOrder) {
@@ -37,5 +39,12 @@ public class OrderService {
 
   public List<OrderDetail> getOrderDetails(String orderNo, Long memberId) {
     return orderReader.readDetails(orderNo, memberId);
+  }
+
+  @Transactional
+  public OrderDetail cancelOrderDetail(String orderDetailNo, Long memberId) {
+    OrderDetail orderDetail = orderReader.readDetail(orderDetailNo, memberId);
+    orderManager.cancelDetail(orderDetail);
+    return orderDetail;
   }
 }

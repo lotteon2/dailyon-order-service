@@ -2,6 +2,7 @@ package com.dailyon.orderservice.domain.order.entity;
 
 import com.dailyon.orderservice.domain.common.BaseEntity;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus;
+import com.dailyon.orderservice.domain.order.exception.CancellationNotAllowedException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +13,14 @@ import org.hibernate.annotations.DynamicInsert;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderDetailStatus.*;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @BatchSize(size = 100)
 @Entity
+@Table(indexes = @Index(name = "idx_order_detail_no", columnList = "orderDetailNo", unique = true))
 public class OrderDetail extends BaseEntity {
 
   @Id
@@ -28,6 +32,8 @@ public class OrderDetail extends BaseEntity {
   private Order order;
 
   @NotNull private String orderNo;
+
+  @NotNull private String orderDetailNo;
 
   @NotNull private Long productId;
   @NotNull private Long productSizeId;
@@ -46,19 +52,20 @@ public class OrderDetail extends BaseEntity {
   private String couponName;
 
   @Column(nullable = true)
-  private Integer couponDiscountPrice;
+  private int couponDiscountPrice;
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  private OrderDetailStatus status = OrderDetailStatus.COMPLETED;
+  private OrderDetailStatus status = BEFORE_DELIVERY;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
-  private Boolean reviewCheck;
+  private Boolean reviewCheck = false;
 
   @Builder
   private OrderDetail(
       Order order,
       String orderNo,
+      String orderDetailNo,
       Long productId,
       Long productSizeId,
       Long couponInfoId,
@@ -72,6 +79,7 @@ public class OrderDetail extends BaseEntity {
       Integer couponDiscountPrice) {
     this.order = order;
     this.orderNo = orderNo;
+    this.orderDetailNo = orderDetailNo;
     this.productId = productId;
     this.productSizeId = productSizeId;
     this.couponInfoId = couponInfoId;
@@ -83,5 +91,24 @@ public class OrderDetail extends BaseEntity {
     this.orderPrice = orderPrice;
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
+  }
+
+  public void cancel() {
+    if (!status.equals(BEFORE_DELIVERY)) {
+      throw new CancellationNotAllowedException();
+    }
+    this.status = CANCEL;
+  }
+
+  public void prepareDelivery() {
+    this.status = DELIVERY_PREPARE;
+  }
+
+  public void startDelivery() {
+    this.status = DELIVERING;
+  }
+
+  public void completeDelivery() {
+    this.status = COMPLETE_DELIVERY;
   }
 }

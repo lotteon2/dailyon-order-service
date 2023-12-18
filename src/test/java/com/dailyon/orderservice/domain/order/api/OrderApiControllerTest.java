@@ -31,4 +31,17 @@ class OrderApiControllerTest extends ControllerTestSupport {
         .perform(get("/orders/{orderNo}", orderNo).header("memberId", memberId))
         .andExpect(status().isOk());
   }
+
+  @DisplayName("주문 상세에서 배송 전인 상품을 주문 취소한다.")
+  @Test
+  void cancelOrderDetail() throws Exception {
+    // given
+    Long memberId = 1L;
+    // when // then
+    mockMvc
+        .perform(
+            get("/orders/order-details/{orderDetailNo}", "orderDetailNo")
+                .header("memberId", memberId))
+        .andExpect(status().isOk());
+  }
 }

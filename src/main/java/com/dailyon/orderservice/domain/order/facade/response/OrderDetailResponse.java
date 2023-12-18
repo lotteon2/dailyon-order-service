@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @NoArgsConstructor
 public class OrderDetailResponse {
 
-  private Long id;
+  private String orderDetailNo;
   private String orderNo;
   private String productName;
   private Integer productQuantity;
@@ -21,7 +24,7 @@ public class OrderDetailResponse {
 
   @Builder
   private OrderDetailResponse(
-      Long id,
+      String orderDetailNo,
       String orderNo,
       String productName,
       Integer productQuantity,
@@ -30,7 +33,7 @@ public class OrderDetailResponse {
       String couponName,
       Integer couponDiscountPrice,
       String status) {
-    this.id = id;
+    this.orderDetailNo = orderDetailNo;
     this.orderNo = orderNo;
     this.productName = productName;
     this.productQuantity = productQuantity;
@@ -43,7 +46,7 @@ public class OrderDetailResponse {
 
   public static OrderDetailResponse from(OrderDetail orderDetail) {
     return OrderDetailResponse.builder()
-        .id(orderDetail.getId())
+        .orderDetailNo(orderDetail.getOrderDetailNo())
         .orderNo(orderDetail.getOrderNo())
         .productName(orderDetail.getProductName())
         .productQuantity(orderDetail.getProductQuantity())
@@ -53,5 +56,11 @@ public class OrderDetailResponse {
         .couponDiscountPrice(orderDetail.getCouponDiscountPrice())
         .status(orderDetail.getStatus().getMessage())
         .build();
+  }
+
+  public static List<OrderDetailResponse> from(List<OrderDetail> orderDetails) {
+    return orderDetails.stream()
+        .map(OrderDetailResponse::from)
+        .collect(Collectors.toUnmodifiableList());
   }
 }

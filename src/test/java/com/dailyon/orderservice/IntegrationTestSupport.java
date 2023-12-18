@@ -18,10 +18,13 @@ import javax.persistence.EntityManager;
     properties = {
       "cloud.aws.dynamodb.endpoint=http://localhost:8000",
       "cloud.aws.credentials.ACCESS_KEY_ID=testkey",
-      "cloud.aws.credentials.SECRET_ACCESS_KEY=testkey"
+      "cloud.aws.credentials.SECRET_ACCESS_KEY=testkey",
+      "endpoint.member-service:http://localhost:8080",
+      "endpoint.promotion-service:http://localhost:8084",
+      "endpoint.product-service=http://localhost:8085",
+      "endpoint.payment-service=http://localhost:8089"
     })
 public class IntegrationTestSupport {
 
   @Autowired protected ObjectMapper objectMapper;
-  @Autowired protected EntityManager em;
 }

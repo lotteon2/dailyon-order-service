@@ -5,7 +5,6 @@ import com.dailyon.orderservice.domain.torder.kafka.event.dto.OrderDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ public class OrderEventListener {
   public void saveOrder(String message, Acknowledgment ack) {
     try {
       OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);
-      orderFacade.orderCreate(orderDTO.getTOrder(), orderDTO.getOrderEvent());
+      orderFacade.orderCreate(orderDTO.getOrderNo(), orderDTO.getOrderEvent());
       ack.acknowledge();
     } catch (JsonProcessingException e) {
       e.printStackTrace();

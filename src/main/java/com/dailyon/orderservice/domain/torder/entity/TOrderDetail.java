@@ -56,7 +56,7 @@ public class TOrderDetail {
   private Integer couponDiscountPrice;
 
   @DynamoDBAttribute(attributeName = "status")
-  private String status = OrderDetailStatus.PENDING.name();
+  private String status = OrderDetailStatus.BEFORE_DELIVERY.name();
 
   @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.BOOL) // 빼면 0으로 들어감, 넣으면 false로 들어감
   @DynamoDBAttribute(attributeName = "review_check")
@@ -94,6 +94,7 @@ public class TOrderDetail {
     return OrderDetail.builder()
         .order(order)
         .orderNo(orderNo)
+        .orderDetailNo(id)
         .productSize(productSize)
         .couponDiscountPrice(couponDiscountPrice)
         .couponInfoId(couponInfoId)

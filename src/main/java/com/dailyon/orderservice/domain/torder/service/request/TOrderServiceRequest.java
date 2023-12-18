@@ -93,20 +93,21 @@ public class TOrderServiceRequest {
                       orderPrice);
                 })
             .collect(Collectors.toUnmodifiableList());
-    Long totalAmount = orderDetails.stream().mapToLong(TOrderDetail::getOrderPrice).sum();
+    Long totalAmount =
+        orderDetails.stream().mapToLong(TOrderDetail::getOrderPrice).sum() - orderInfo.usedPoints;
 
     return TOrder.builder()
         .id(orderId)
         .memberId(memberId)
-        .deliveryFee(orderInfo.getDeliveryFee())
-        .usedPoints(orderInfo.getUsedPoints())
+        .deliveryFee(orderInfo.deliveryFee)
+        .usedPoints(orderInfo.usedPoints)
         .totalCouponDiscountPrice(orderInfo.getTotalCouponDiscountPrice())
         .productsName(
             orderDetails.size() == 1
                 ? orderDetails.get(0).getProductName()
                 : orderDetails.get(0).getProductName() + "외 " + (orderDetails.size() - 1) + "항목")
         .totalAmount(totalAmount)
-        .type(orderInfo.getType().name())
+        .type(orderInfo.type.name())
         .orderDetails(orderDetails)
         .delivery(deliveryInfo != null ? deliveryInfo.toEntity(orderId) : null)
         .build();

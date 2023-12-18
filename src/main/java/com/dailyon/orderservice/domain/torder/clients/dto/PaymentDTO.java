@@ -22,7 +22,7 @@ public class PaymentDTO {
     private int totalCouponDiscountPrice;
     private int usedPoints;
 
-    public static PaymentReadyParam from(
+    public static PaymentReadyParam of(
         TOrder order, String method, Integer usedPoints) { // TODO : 결제 수단 enum 관리
       return PaymentReadyParam.builder()
           .orderId(order.getId())

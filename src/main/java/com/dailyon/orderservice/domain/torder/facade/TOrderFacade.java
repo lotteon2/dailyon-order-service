@@ -49,11 +49,11 @@ public class TOrderFacade {
   public String orderReady(TOrderFacadeCreateRequest request, Long memberId) {
 
     List<ProductCouponDTO> productCoupons = getProductCoupons(request.toCouponParams(), memberId);
-    List<OrderProductDTO> orderProducts =
-        getOrderProducts(request.toOrderProductParams());
+    List<OrderProductDTO> orderProducts = getOrderProducts(request.toOrderProductParams());
 
-    int points = memberFeignClient.getMyPoints(memberId);
-    validateMemberPoint(request.getOrderInfo().getUsedPoints(), points);
+    int memberPoints = getMemberPoints(memberId);
+    int usedPoints = request.getOrderInfo().getUsedPoints();
+    validateMemberPoint(usedPoints, memberPoints);
 
     Map<Long, OrderProductInfo> orderProductMap = request.extractOrderInfoToMap();
     Map<Long, ProductCouponDTO> productCouponMap = extractProductCouponToMap(productCoupons);
@@ -69,8 +69,7 @@ public class TOrderFacade {
             memberId);
 
     PaymentReadyParam paymentReadyParam =
-        PaymentReadyParam.from(
-            tOrder, "KAKAOPAY", tOrder.getUsedPoints()); // TODO : method, usedPoints 나중에 바꿈;
+        PaymentReadyParam.of(tOrder, "KAKAOPAY", usedPoints); // TODO : method, usedPoints 나중에 바꿈;
     String nextUrl = paymentFeignClient.orderPaymentReady(memberId, paymentReadyParam);
     return nextUrl;
   }
@@ -78,7 +77,7 @@ public class TOrderFacade {
   public String orderApprove(TOrderFacadeApproveRequest request) {
     String orderId = request.getOrderId();
     TOrder tOrder = tOrderService.getTOrder(orderId);
-    producer.orderCreated(OrderDTO.from(tOrder, request.getPgToken()));
+    producer.orderCreated(OrderDTO.of(tOrder, request.getPgToken()));
     return tOrder.getId();
   }
 
@@ -88,8 +87,7 @@ public class TOrderFacade {
         : promotionFeignClient.getProductCoupons(memberId, couponParams);
   }
 
-  private List<OrderProductDTO> getOrderProducts(
-      List<OrderProductParam> orderProductParams) {
+  private List<OrderProductDTO> getOrderProducts(List<OrderProductParam> orderProductParams) {
     return productFeignClient.getOrderProducts(orderProductParams).getResponse();
   }
 
@@ -97,5 +95,9 @@ public class TOrderFacade {
       List<ProductCouponDTO> productCoupons) {
     return productCoupons.stream()
         .collect(toMap(ProductCouponDTO::getProductId, Function.identity()));
+  }
+
+  private int getMemberPoints(Long memberId) {
+    return memberFeignClient.getMyPoints(memberId);
   }
 }

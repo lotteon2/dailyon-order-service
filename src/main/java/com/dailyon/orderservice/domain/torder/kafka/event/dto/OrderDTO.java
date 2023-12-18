@@ -28,7 +28,7 @@ public class OrderDTO {
   private OrderEvent orderEvent;
   private TOrder tOrder;
 
-  public static OrderDTO from(TOrder tOrder, String pgToken) {
+  public static OrderDTO of(TOrder tOrder, String pgToken) {
     List<ProductInfo> productInfo = createProductInfo(tOrder.getOrderDetails());
     List<Long> couponInfo = createCouponInfo(tOrder.getOrderDetails());
     PaymentInfo paymentInfo = createPaymentInfo(pgToken);

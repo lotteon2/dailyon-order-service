@@ -8,7 +8,6 @@ import com.dailyon.orderservice.domain.order.entity.enums.OrderStatus;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent;
 import lombok.*;
-import org.socialsignin.spring.data.dynamodb.config.EnableDynamoDBAuditing;
 
 import javax.persistence.Id;
 import java.time.LocalDateTime;
@@ -103,10 +102,13 @@ public class TOrder {
   public Order toEntity() {
     return Order.builder()
         .orderNo(id)
-        .type(OrderType.valueOf(type))
         .memberId(memberId)
         .productsName(productsName)
         .totalAmount(totalAmount)
+        .totalAmount(totalAmount)
+        .usedPoints(usedPoints)
+        .deliveryFee(deliveryFee)
+        .type(OrderType.valueOf(type))
         .build();
   }
 

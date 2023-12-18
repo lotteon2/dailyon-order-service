@@ -23,7 +23,7 @@ public class TDelivery {
   private String orderNo;
 
   @DynamoDBAttribute(attributeName = "status")
-  private String status = DeliveryStatus.READY.name();
+  private String status = DeliveryStatus.BEFORE_DELIVERY.name();
 
   @DynamoDBAttribute(attributeName = "receiver")
   private String receiver;
