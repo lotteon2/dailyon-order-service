@@ -17,8 +17,9 @@ public class TOrderEventListener {
 
   @KafkaListener(topics = "cancel-order")
   public void cancel(String message, Acknowledgment ack) {
+    OrderDTO orderDTO = null;
     try {
-      OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);
+      orderDTO = objectMapper.readValue(message, OrderDTO.class);
       tOrderService.modifyTOrder(orderDTO.getOrderNo(), orderDTO.getOrderEvent());
       ack.acknowledge();
     } catch (JsonProcessingException e) {
