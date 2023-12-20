@@ -15,7 +15,7 @@ public class TOrderEventListener {
   private final ObjectMapper objectMapper;
   private final TOrderService tOrderService;
 
-  @KafkaListener(topics = "order-cancel")
+  @KafkaListener(topics = "cancel-order")
   public void cancel(String message, Acknowledgment ack) {
     try {
       OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);

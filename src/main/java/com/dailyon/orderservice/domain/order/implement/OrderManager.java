@@ -13,4 +13,8 @@ public class OrderManager {
   public void cancelDetail(OrderDetail orderDetail) {
     orderDetail.cancel();
   }
+
+  public void changeReviewCheck(OrderDetail orderDetail) {
+    orderDetail.changeReviewCheck();
+  }
 }

@@ -111,4 +111,8 @@ public class OrderDetail extends BaseEntity {
   public void completeDelivery() {
     this.status = COMPLETE_DELIVERY;
   }
+
+  public void changeReviewCheck() {
+    this.reviewCheck = true;
+  }
 }

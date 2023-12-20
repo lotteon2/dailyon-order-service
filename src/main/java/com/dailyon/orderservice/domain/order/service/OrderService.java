@@ -47,4 +47,10 @@ public class OrderService {
     orderManager.cancelDetail(orderDetail);
     return orderDetail;
   }
+
+  @Transactional
+  public void modifyOrderDetail(String orderDetailNo, Long memberId) {
+    OrderDetail orderDetail = orderReader.readDetail(orderDetailNo, memberId);
+    orderManager.changeReviewCheck(orderDetail);
+  }
 }
