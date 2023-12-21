@@ -105,9 +105,9 @@ public class TOrder {
         .memberId(memberId)
         .productsName(productsName)
         .totalAmount(totalAmount)
-        .totalAmount(totalAmount)
         .usedPoints(usedPoints)
         .deliveryFee(deliveryFee)
+        .totalCouponDiscountPrice(totalCouponDiscountPrice)
         .type(OrderType.valueOf(type))
         .build();
   }

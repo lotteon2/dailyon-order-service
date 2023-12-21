@@ -5,10 +5,7 @@ import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.CouponInfo;
 import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -153,6 +150,7 @@ public class TOrderRequest {
   }
 
   @Getter
+  @Setter
   @NoArgsConstructor
   @AllArgsConstructor
   @Builder

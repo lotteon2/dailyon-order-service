@@ -18,10 +18,11 @@ public class OrderEventListener {
   private final OrderFacade orderFacade;
   private final OrderService orderService;
 
-  @KafkaListener(topics = "payment-approved")
+  @KafkaListener(topics = "approve-payment")
   public void saveOrder(String message, Acknowledgment ack) {
+    OrderDTO orderDTO = null;
     try {
-      OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);
+      orderDTO = objectMapper.readValue(message, OrderDTO.class);
       orderFacade.orderCreate(orderDTO.getOrderNo(), orderDTO.getOrderEvent());
       ack.acknowledge();
     } catch (JsonProcessingException e) {

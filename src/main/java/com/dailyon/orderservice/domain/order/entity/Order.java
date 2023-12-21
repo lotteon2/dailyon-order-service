@@ -45,7 +45,7 @@ public class Order extends BaseEntity {
   private OrderStatus status = OrderStatus.COMPLETED;
 
   @Column(nullable = false, columnDefinition = "boolean default false")
-  private Boolean isDeleted;
+  private Boolean isDeleted = false;
 
   @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
   private List<OrderDetail> orderDetails;

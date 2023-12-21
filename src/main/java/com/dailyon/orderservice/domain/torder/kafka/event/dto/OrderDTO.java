@@ -26,7 +26,6 @@ public class OrderDTO {
   private Long memberId;
   private int usedPoints;
   private OrderEvent orderEvent;
-  private TOrder tOrder;
 
   public static OrderDTO of(TOrder tOrder, String pgToken) {
     List<ProductInfo> productInfo = createProductInfo(tOrder.getOrderDetails());
@@ -40,7 +39,6 @@ public class OrderDTO {
         .memberId(tOrder.getMemberId())
         .usedPoints(tOrder.getUsedPoints())
         .orderEvent(PENDING)
-        .tOrder(tOrder)
         .build();
   }
 

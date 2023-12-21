@@ -32,13 +32,13 @@ public class DynamoDbConfig {
 
   static final String DYNAMO_DOMAIN_PACKAGE = "com.dailyon.orderservice.domain.torder.repository";
 
-  @Value("${cloud.aws.dynamodb.endpoint:test}")
+  @Value("${cloud.aws.dynamodb.endpoint:dynamodb.ap-northeast-2.amazonaws.com}")
   private String amazonDynamoDBEndpoint;
 
-  @Value("${cloud.aws.credentials.ACCESS_KEY_ID:test}")
+  @Value("${cloud.aws.credentials.ACCESS_KEY_ID}")
   private String amazonAWSAccessKey;
 
-  @Value("${cloud.aws.credentials.SECRET_ACCESS_KEY:test}")
+  @Value("${cloud.aws.credentials.SECRET_ACCESS_KEY}")
   private String amazonAWSSecretKey;
 
   public AWSCredentials amazonAWSCredentials() {
