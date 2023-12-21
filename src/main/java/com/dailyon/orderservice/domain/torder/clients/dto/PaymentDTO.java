@@ -36,7 +36,7 @@ public class PaymentDTO {
                       + "항목")
           .deliveryFee(0)
           .quantity(order.getOrderDetails().size())
-          .totalAmount(order.calculateTotalAmount().intValue())
+          .totalAmount(order.getTotalAmount().intValue())
           .totalCouponDiscountPrice(order.calculateTotalCouponDiscountPrice())
           .usedPoints(usedPoints)
           .build();
