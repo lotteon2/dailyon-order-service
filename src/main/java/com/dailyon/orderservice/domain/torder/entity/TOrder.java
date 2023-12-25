@@ -12,6 +12,7 @@ import lombok.*;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.dailyon.orderservice.domain.torder.entity.TOrder.DYNAMO_TABLE_NAME;
@@ -92,7 +93,11 @@ public class TOrder {
   }
 
   public Integer calculateTotalCouponDiscountPrice() {
-    return orderDetails.stream().mapToInt(TOrderDetail::getCouponDiscountPrice).sum();
+    return orderDetails.stream()
+        .map(TOrderDetail::getCouponDiscountPrice)
+        .filter(Objects::nonNull) // null이 아닌 값만 필터링
+        .mapToInt(Integer::intValue)
+        .sum();
   }
 
   public void changeStatus(OrderEvent status) {

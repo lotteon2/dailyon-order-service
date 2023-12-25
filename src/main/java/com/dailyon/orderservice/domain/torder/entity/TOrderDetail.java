@@ -53,7 +53,7 @@ public class TOrderDetail {
   private String couponName;
 
   @DynamoDBAttribute(attributeName = "coupon_discount_price")
-  private Integer couponDiscountPrice;
+  private int couponDiscountPrice;
 
   @DynamoDBAttribute(attributeName = "status")
   private String status = OrderDetailStatus.BEFORE_DELIVERY.name();
@@ -75,7 +75,7 @@ public class TOrderDetail {
       String productImgUrl,
       Integer orderPrice,
       String couponName,
-      Integer couponDiscountPrice) {
+      int couponDiscountPrice) {
     this.orderNo = orderNo;
     this.productId = productId;
     this.productSizeId = productSizeId;

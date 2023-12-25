@@ -76,7 +76,7 @@ public class OrderDetail extends BaseEntity {
       String productImgUrl,
       Integer orderPrice,
       String couponName,
-      Integer couponDiscountPrice) {
+      int couponDiscountPrice) {
     this.order = order;
     this.orderNo = orderNo;
     this.orderDetailNo = orderDetailNo;

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent.PENDING;
@@ -57,6 +58,7 @@ public class OrderDTO {
   private static List<Long> createCouponInfo(List<TOrderDetail> details) {
     return details.stream()
         .map(TOrderDetail::getCouponInfoId)
+        .filter(Objects::nonNull)
         .collect(Collectors.toUnmodifiableList());
   }
 
