@@ -81,3 +81,5 @@ endpoint:
   promotion-service: localhost:8084
   product-service: localhost:8085
   payment-service: localhost:8090
+
+redirect_url: http://localhost:5173/order-success

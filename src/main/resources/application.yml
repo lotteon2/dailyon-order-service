@@ -10,8 +10,7 @@ spring:
   cloud:
     config:
       name: order-service
-  jpa:
-    open-in-view: false
+
 management:
   endpoints:
     web:
