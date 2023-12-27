@@ -1,5 +1,8 @@
 package com.dailyon.orderservice.domain.torder.facade;
 
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto;
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest.RegisterItemRequest;
 import com.dailyon.orderservice.domain.torder.clients.MemberFeignClient;
 import com.dailyon.orderservice.domain.torder.clients.PaymentFeignClient;
 import com.dailyon.orderservice.domain.torder.clients.ProductFeignClient;
@@ -10,13 +13,10 @@ import com.dailyon.orderservice.domain.torder.clients.dto.PaymentDTO.PaymentRead
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductParam;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeApproveRequest;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
 import com.dailyon.orderservice.domain.torder.kafka.event.TOrderEventProducer;
 import com.dailyon.orderservice.domain.torder.kafka.event.dto.OrderDTO;
 import com.dailyon.orderservice.domain.torder.service.TOrderService;
-import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest;
+import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand.RegisterTOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,35 +38,21 @@ public class TOrderFacade {
   private final MemberFeignClient memberFeignClient;
   private final PaymentFeignClient paymentFeignClient;
   private final TOrderEventProducer producer;
+  private final TOrderDtoMapper tOrderDtoMapper;
 
-  /**
-   * ready 결제 준비 성공 시 QR Code를 반환한다.
-   *
-   * @param request
-   * @param memberId
-   * @return String
-   */
-  public String orderReady(TOrderFacadeCreateRequest request, Long memberId) {
+  public String orderReady(TOrderCreateRequest request, Long memberId) {
+    var orderItemList = request.getOrderItems();
 
-    List<ProductCouponDTO> productCoupons = getProductCoupons(request.toCouponParams(), memberId);
-    List<OrderProductDTO> orderProducts = getOrderProducts(request.toOrderProductParams());
+    var productCoupons = getProductCoupons(tOrderDtoMapper.toCouponParams(orderItemList), memberId);
+    var orderProducts = getOrderProducts(tOrderDtoMapper.toOrderProductParams(orderItemList));
 
     int memberPoints = getMemberPoints(memberId);
-    int usedPoints = request.getOrderInfo().getUsedPoints();
+    int usedPoints = request.getUsedPoints();
+
     validateMemberPoint(usedPoints, memberPoints);
 
-    Map<Long, OrderProductInfo> orderProductMap = request.extractOrderInfoToMap();
-    Map<Long, ProductCouponDTO> productCouponMap = extractProductCouponToMap(productCoupons);
-
-    TOrder tOrder =
-        tOrderService.createTOrder(
-            TOrderServiceRequest.of(
-                orderProducts,
-                orderProductMap,
-                productCouponMap,
-                request.toServiceOrderInfo(),
-                request.getDeliveryInfo().toServiceDeliveryInfo()),
-            memberId);
+    RegisterTOrder tOrderCommand = tOrderDtoMapper.of(request, productCoupons, orderProducts);
+    TOrder tOrder = tOrderService.createTOrder(tOrderCommand, memberId);
 
     PaymentReadyParam paymentReadyParam =
         PaymentReadyParam.of(tOrder, "KAKAOPAY", usedPoints); // TODO : method, usedPoints 나중에 바꿈;
@@ -74,10 +60,9 @@ public class TOrderFacade {
     return nextUrl;
   }
 
-  public String orderApprove(TOrderFacadeApproveRequest request) {
-    String orderId = request.getOrderId();
-    TOrder tOrder = tOrderService.getTOrder(orderId);
-    producer.orderCreated(OrderDTO.of(tOrder, request.getPgToken()));
+  public String orderApprove(TOrderDto.OrderApproveRequest request, String orderNo) {
+    TOrder tOrder = tOrderService.getTOrder(orderNo);
+    producer.orderCreated(OrderDTO.of(tOrder, request.getPg_token()));
     return tOrder.getId();
   }
 

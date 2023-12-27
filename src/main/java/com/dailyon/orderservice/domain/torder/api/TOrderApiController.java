@@ -1,7 +1,6 @@
 package com.dailyon.orderservice.domain.torder.api;
 
-import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest;
-import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest;
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto;
 import com.dailyon.orderservice.domain.torder.facade.TOrderFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,16 +24,19 @@ public class TOrderApiController {
   @PostMapping("")
   public ResponseEntity<String> orderReady(
       @RequestHeader(value = "memberId") Long memberId,
-      @Valid @RequestBody TOrderCreateRequest request) {
+      @Valid @RequestBody TOrderDto.TOrderCreateRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(tOrderFacade.orderReady(request.toOrderFacadeCreateRequest(), memberId));
+        .body(tOrderFacade.orderReady(request, memberId));
   }
 
-  @GetMapping("/approve/{orderId}")
+  @GetMapping("/approve/{orderNo}")
   public void approve(
-          @PathVariable(name = "orderId") String orderId,
-          @Valid TOrderRequest.OrderApproveRequest request, HttpServletResponse response) throws IOException {
-    String orderNo = tOrderFacade.orderApprove(request.toFacadeRequest(orderId));
-    response.sendRedirect(REDIRECT_URL+"/"+orderNo);
+      @PathVariable(name = "orderNo") String orderNo,
+      @Valid TOrderDto.OrderApproveRequest request,
+      HttpServletResponse response)
+      throws IOException {
+    String orderToken = tOrderFacade.orderApprove(request, orderNo);
+    response.setStatus(HttpStatus.CREATED.value());
+    response.sendRedirect(REDIRECT_URL + "/" + orderToken);
   }
 }

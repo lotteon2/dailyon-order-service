@@ -2,10 +2,9 @@ package com.dailyon.orderservice.domain.torder.api;
 
 import com.dailyon.orderservice.ControllerTestSupport;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
-import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest;
-import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest.DeliveryInfo;
-import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest.OrderInfo;
-import com.dailyon.orderservice.domain.torder.api.request.TOrderRequest.TOrderCreateRequest.OrderItem;
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest.RegisterDeliveryRequest;
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest.RegisterItemRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -23,35 +22,31 @@ class TOrderApiControllerTest extends ControllerTestSupport {
   @Test
   void createTOrderReady() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .orderPrice(100000)
-                .referralCode("test")
-                .categoryId(1L)
-                .productId(1L)
-                .couponInfoId(1L)
-                .quantity(1)
-                .sizeId(1L)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder()
-            .type(SINGLE)
-            .deliveryFee(0)
-            .totalCouponDiscountPrice(0)
-            .usedPoints(0)
-            .build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
 
-    String paymentType = "KAKAOPAY";
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
+
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(100000);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(1L);
+    itemRequest.setCategoryId(1L);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(1);
+    itemRequest.setSizeId(1L);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = 0;
+    int usedPoints = 0;
+    OrderType type = SINGLE;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+        createTOrderRequest(
+            deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc
@@ -63,38 +58,54 @@ class TOrderApiControllerTest extends ControllerTestSupport {
         .andExpect(status().isCreated());
   }
 
+  private TOrderCreateRequest createTOrderRequest(
+      int deliveryFee,
+      int usedPoints,
+      OrderType orderType,
+      int totalCouponDiscountPrice,
+      RegisterDeliveryRequest deliveryCreateRequest,
+      List<RegisterItemRequest> itemRequests) {
+    TOrderCreateRequest request = new TOrderCreateRequest();
+    request.setDeliveryFee(deliveryFee);
+    request.setPaymentType("KAKAOPAY");
+    request.setUsedPoints(usedPoints);
+    request.setType(orderType);
+    request.setTotalCouponDiscountPrice(totalCouponDiscountPrice);
+
+    request.setOrderItems(itemRequests);
+    request.setDeliveryInfo(deliveryCreateRequest);
+
+    return request;
+  }
+
   @DisplayName("주문 등록 시 상품 아이디는 필수 이다. ")
   @Test
   void createTOrderReadyWithNoExistProductId() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .orderPrice(100000)
-                .referralCode("test")
-                .categoryId(1L)
-                .couponInfoId(1L)
-                .quantity(1)
-                .sizeId(1L)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder()
-            .type(SINGLE)
-            .deliveryFee(0)
-            .totalCouponDiscountPrice(0)
-            .usedPoints(0)
-            .build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
 
-    String paymentType = "KAKAOPAY";
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(100000);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(null);
+    itemRequest.setCategoryId(1L);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(1);
+    itemRequest.setSizeId(1L);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = 0;
+    int usedPoints = 0;
+    OrderType type = SINGLE;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+            createTOrderRequest(
+                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc
@@ -108,38 +119,34 @@ class TOrderApiControllerTest extends ControllerTestSupport {
         .andExpect(jsonPath("$.validation.*").value("상품 아이디는 필수 입니다."));
   }
 
-  @DisplayName("주문 등록 시 상품 아이디는 필수 이다. ")
+  @DisplayName("주문 등록 시 카테고리 아이디는 필수 이다. ")
   @Test
   void createTOrderReadyWithNoExistCategoryId() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .orderPrice(100000)
-                .referralCode("test")
-                .productId(1L)
-                .couponInfoId(1L)
-                .quantity(1)
-                .sizeId(1L)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder()
-            .type(SINGLE)
-            .deliveryFee(0)
-            .totalCouponDiscountPrice(0)
-            .usedPoints(0)
-            .build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
 
-    String paymentType = "KAKAOPAY";
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(100000);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(1L);
+    itemRequest.setCategoryId(null);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(1);
+    itemRequest.setSizeId(1L);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = 0;
+    int usedPoints = 0;
+    OrderType type = SINGLE;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+            createTOrderRequest(
+                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc
@@ -157,34 +164,30 @@ class TOrderApiControllerTest extends ControllerTestSupport {
   @Test
   void createTOrderReadyWithNoExistSizeId() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .orderPrice(100000)
-                .referralCode("test")
-                .productId(1L)
-                .categoryId(1L)
-                .couponInfoId(1L)
-                .quantity(1)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder()
-            .type(SINGLE)
-            .deliveryFee(0)
-            .totalCouponDiscountPrice(0)
-            .usedPoints(0)
-            .build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
 
-    String paymentType = "KAKAOPAY";
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(100000);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(1L);
+    itemRequest.setCategoryId(1L);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(1);
+    itemRequest.setSizeId(null);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = 0;
+    int usedPoints = 0;
+    OrderType type = SINGLE;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+            createTOrderRequest(
+                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc
@@ -202,34 +205,30 @@ class TOrderApiControllerTest extends ControllerTestSupport {
   @Test
   void createTOrderReadyWithNoExistOrderPrice() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .referralCode("test")
-                .productId(1L)
-                .categoryId(1L)
-                .couponInfoId(1L)
-                .quantity(1)
-                .sizeId(1L)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder()
-            .type(SINGLE)
-            .deliveryFee(0)
-            .totalCouponDiscountPrice(0)
-            .usedPoints(0)
-            .build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
 
-    String paymentType = "KAKAOPAY";
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(null);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(1L);
+    itemRequest.setCategoryId(1L);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(1);
+    itemRequest.setSizeId(1L);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = 0;
+    int usedPoints = 0;
+    OrderType type = SINGLE;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+            createTOrderRequest(
+                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc
@@ -247,35 +246,30 @@ class TOrderApiControllerTest extends ControllerTestSupport {
   @Test
   void createTOrderReadyWithZeroQuantity() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .orderPrice(100000)
-                .referralCode("test")
-                .productId(1L)
-                .categoryId(1L)
-                .couponInfoId(1L)
-                .quantity(0)
-                .sizeId(1L)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder()
-            .type(SINGLE)
-            .deliveryFee(0)
-            .totalCouponDiscountPrice(0)
-            .usedPoints(0)
-            .build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
 
-    String paymentType = "KAKAOPAY";
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(100000);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(1L);
+    itemRequest.setCategoryId(1L);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(0);
+    itemRequest.setSizeId(1L);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = 0;
+    int usedPoints = 0;
+    OrderType type = SINGLE;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+            createTOrderRequest(
+                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc
@@ -293,35 +287,30 @@ class TOrderApiControllerTest extends ControllerTestSupport {
   @Test
   void createTOrderReadyWithMinusPoints() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .orderPrice(100000)
-                .referralCode("test")
-                .productId(1L)
-                .categoryId(1L)
-                .couponInfoId(1L)
-                .quantity(1)
-                .sizeId(1L)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder()
-            .type(SINGLE)
-            .deliveryFee(0)
-            .totalCouponDiscountPrice(0)
-            .usedPoints(-1)
-            .build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
 
-    String paymentType = "KAKAOPAY";
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(100000);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(1L);
+    itemRequest.setCategoryId(1L);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(1);
+    itemRequest.setSizeId(1L);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = 0;
+    int usedPoints = -1;
+    OrderType type = SINGLE;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+            createTOrderRequest(
+                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc
@@ -339,30 +328,30 @@ class TOrderApiControllerTest extends ControllerTestSupport {
   @Test
   void createTOrderReadyWithNoExistOrderType() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .orderPrice(100000)
-                .referralCode("test")
-                .productId(1L)
-                .categoryId(1L)
-                .couponInfoId(1L)
-                .quantity(1)
-                .sizeId(1L)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder().deliveryFee(0).totalCouponDiscountPrice(0).usedPoints(0).build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
 
-    String paymentType = "KAKAOPAY";
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(100000);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(1L);
+    itemRequest.setCategoryId(1L);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(1);
+    itemRequest.setSizeId(1L);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = 0;
+    int usedPoints = 0;
+    OrderType type = null;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+            createTOrderRequest(
+                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc
@@ -380,35 +369,30 @@ class TOrderApiControllerTest extends ControllerTestSupport {
   @Test
   void createTOrderReadyWithMinusDeliveryFee() throws Exception {
     // given
-    List<OrderItem> orderItems =
-        List.of(
-            OrderItem.builder()
-                .orderPrice(100000)
-                .referralCode("test")
-                .productId(1L)
-                .categoryId(1L)
-                .couponInfoId(1L)
-                .quantity(1)
-                .sizeId(1L)
-                .build());
-    OrderInfo orderInfo =
-        OrderInfo.builder()
-            .type(SINGLE)
-            .deliveryFee(-1)
-            .totalCouponDiscountPrice(0)
-            .usedPoints(0)
-            .build();
-    DeliveryInfo deliveryInfo =
-        DeliveryInfo.builder()
-            .receiver("수령인")
-            .postCode("201-201")
-            .roadAddress("서울시 강남구")
-            .detailAddress("비트교육센터")
-            .build();
+    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
+    deliveryRequest.setReceiver("testReceiver");
+    deliveryRequest.setDetailAddress("testDetailAddress");
+    deliveryRequest.setRoadAddress("testRoadAddress");
+    deliveryRequest.setPostCode("testPostCode");
 
-    String paymentType = "KAKAOPAY";
+    RegisterItemRequest itemRequest = new RegisterItemRequest();
+    itemRequest.setOrderPrice(100000);
+    itemRequest.setReferralCode("test");
+    itemRequest.setProductId(1L);
+    itemRequest.setCategoryId(1L);
+    itemRequest.setCouponInfoId(1L);
+    itemRequest.setQuantity(1);
+    itemRequest.setSizeId(1L);
+    List<RegisterItemRequest> irList = List.of(itemRequest);
+
+    int deliveryFee = -1;
+    int usedPoints = 0;
+    OrderType type = SINGLE;
+    int totalCouponDiscountPrice = 0;
+
     TOrderCreateRequest request =
-        new TOrderCreateRequest(orderItems, orderInfo, deliveryInfo, paymentType);
+            createTOrderRequest(
+                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
 
     // when // then
     mockMvc

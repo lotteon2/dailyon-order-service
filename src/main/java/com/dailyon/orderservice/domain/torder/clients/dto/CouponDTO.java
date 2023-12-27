@@ -1,16 +1,12 @@
 package com.dailyon.orderservice.domain.torder.clients.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 public class CouponDTO {
 
   @Getter
-  @NoArgsConstructor
-  @AllArgsConstructor
   @Builder
+  @ToString
   public static class CouponParam {
     private Long productId;
     private Long categoryId;

@@ -16,10 +16,9 @@ import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProduc
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
 import com.dailyon.orderservice.domain.torder.exception.InsufficientStockException;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
 import com.dailyon.orderservice.domain.torder.repository.OrderDynamoRepository;
-import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest;
-import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest.OrderInfo;
+import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand;
+import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand.RegisterOrderItem;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -79,15 +78,16 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .stock(30)
             .build();
     List<OrderProductDTO> orderProductDTOList = List.of(orderProductDTO);
-    OrderProductInfo opInfo =
-        OrderProductInfo.builder()
-            .quantity(2)
+    RegisterOrderItem orderItem =
+        RegisterOrderItem.builder()
             .productId(1L)
-            .referralCode("reCode")
             .sizeId(1L)
+            .quantity(2)
+            .referralCode("reCode")
             .build();
 
-    Map<Long, OrderProductInfo> productInfoMap = Map.of(1L, opInfo);
+    Map<Long, RegisterOrderItem> productInfoMap = Map.of(1L, orderItem);
+
     ProductCouponDTO couponDTO =
         ProductCouponDTO.builder()
             .maxDiscountAmount(0L)
@@ -98,19 +98,23 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .discountType("FIXED_AMOUNT")
             .discountValue(2000L)
             .build();
+
     Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
 
-    OrderInfo orderInfo = OrderInfo.builder().type(SINGLE).build();
-
-    TOrderServiceRequest request =
-        TOrderServiceRequest.builder()
+    TOrderCommand.RegisterTOrder request =
+        TOrderCommand.RegisterTOrder.builder()
             .orderProductDTOList(orderProductDTOList)
             .productInfoMap(productInfoMap)
             .couponInfoMap(couponInfoMap)
-            .orderInfo(orderInfo)
+            .deliveryFee(0)
+            .totalCouponDiscountPrice(0)
+            .usedPoints(0)
+            .paymentType("KAKAOPAY")
+            .type(SINGLE)
             .build();
 
     Long memberId = 1L;
+
     // when
     TOrder tOrder = tOrderService.createTOrder(request, memberId);
     // then
@@ -164,15 +168,15 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .stock(30)
             .build();
     List<OrderProductDTO> orderProductDTOList = List.of(orderProductDTO);
-    OrderProductInfo opInfo =
-        OrderProductInfo.builder()
-            .quantity(2)
+    RegisterOrderItem orderItem =
+        RegisterOrderItem.builder()
             .productId(1L)
-            .referralCode("reCode")
             .sizeId(1L)
+            .quantity(2)
+            .referralCode("reCode")
             .build();
 
-    Map<Long, OrderProductInfo> productInfoMap = Map.of(1L, opInfo);
+    Map<Long, RegisterOrderItem> productInfoMap = Map.of(1L, orderItem);
     ProductCouponDTO couponDTO =
         ProductCouponDTO.builder()
             .minPurchaseAmount(30001L)
@@ -185,14 +189,16 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .build();
     Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
 
-    OrderInfo orderInfo = OrderInfo.builder().type(SINGLE).build();
-
-    TOrderServiceRequest request =
-        TOrderServiceRequest.builder()
+    TOrderCommand.RegisterTOrder request =
+        TOrderCommand.RegisterTOrder.builder()
             .orderProductDTOList(orderProductDTOList)
             .productInfoMap(productInfoMap)
             .couponInfoMap(couponInfoMap)
-            .orderInfo(orderInfo)
+            .deliveryFee(0)
+            .totalCouponDiscountPrice(0)
+            .usedPoints(0)
+            .paymentType("KAKAOPAY")
+            .type(SINGLE)
             .build();
 
     Long memberId = 1L;
@@ -219,15 +225,15 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .stock(30)
             .build();
     List<OrderProductDTO> orderProductDTOList = List.of(orderProductDTO);
-    OrderProductInfo opInfo =
-        OrderProductInfo.builder()
-            .quantity(1)
+    RegisterOrderItem orderItem =
+        RegisterOrderItem.builder()
             .productId(1L)
-            .referralCode("reCode")
             .sizeId(1L)
+            .quantity(1)
+            .referralCode("reCode")
             .build();
 
-    Map<Long, OrderProductInfo> productInfoMap = Map.of(1L, opInfo);
+    Map<Long, RegisterOrderItem> productInfoMap = Map.of(1L, orderItem);
     ProductCouponDTO couponDTO =
         ProductCouponDTO.builder()
             .minPurchaseAmount(0L)
@@ -240,14 +246,16 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .build();
     Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
 
-    OrderInfo orderInfo = OrderInfo.builder().type(SINGLE).build();
-
-    TOrderServiceRequest request =
-        TOrderServiceRequest.builder()
+    TOrderCommand.RegisterTOrder request =
+        TOrderCommand.RegisterTOrder.builder()
             .orderProductDTOList(orderProductDTOList)
             .productInfoMap(productInfoMap)
             .couponInfoMap(couponInfoMap)
-            .orderInfo(orderInfo)
+            .deliveryFee(0)
+            .totalCouponDiscountPrice(0)
+            .usedPoints(0)
+            .paymentType("KAKAOPAY")
+            .type(SINGLE)
             .build();
 
     Long memberId = 1L;
@@ -275,15 +283,15 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .stock(1)
             .build();
     List<OrderProductDTO> orderProductDTOList = List.of(orderProductDTO);
-    OrderProductInfo opInfo =
-        OrderProductInfo.builder()
-            .quantity(2)
+    RegisterOrderItem orderItem =
+        RegisterOrderItem.builder()
             .productId(1L)
-            .referralCode("reCode")
             .sizeId(1L)
+            .quantity(2)
+            .referralCode("reCode")
             .build();
 
-    Map<Long, OrderProductInfo> productInfoMap = Map.of(1L, opInfo);
+    Map<Long, RegisterOrderItem> productInfoMap = Map.of(1L, orderItem);
     ProductCouponDTO couponDTO =
         ProductCouponDTO.builder()
             .maxDiscountAmount(0L)
@@ -296,14 +304,16 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .build();
     Map<Long, ProductCouponDTO> couponInfoMap = Map.of(1L, couponDTO);
 
-    OrderInfo orderInfo = OrderInfo.builder().type(SINGLE).build();
-
-    TOrderServiceRequest request =
-        TOrderServiceRequest.builder()
+    TOrderCommand.RegisterTOrder request =
+        TOrderCommand.RegisterTOrder.builder()
             .orderProductDTOList(orderProductDTOList)
             .productInfoMap(productInfoMap)
             .couponInfoMap(couponInfoMap)
-            .orderInfo(orderInfo)
+            .deliveryFee(0)
+            .totalCouponDiscountPrice(0)
+            .usedPoints(0)
+            .paymentType("KAKAOPAY")
+            .type(SINGLE)
             .build();
 
     Long memberId = 1L;
