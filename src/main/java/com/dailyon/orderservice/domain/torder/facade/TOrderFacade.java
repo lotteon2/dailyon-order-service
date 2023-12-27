@@ -1,5 +1,7 @@
 package com.dailyon.orderservice.domain.torder.facade;
 
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto;
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
 import com.dailyon.orderservice.domain.torder.clients.MemberFeignClient;
 import com.dailyon.orderservice.domain.torder.clients.PaymentFeignClient;
 import com.dailyon.orderservice.domain.torder.clients.ProductFeignClient;
@@ -10,23 +12,17 @@ import com.dailyon.orderservice.domain.torder.clients.dto.PaymentDTO.PaymentRead
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductParam;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeApproveRequest;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
 import com.dailyon.orderservice.domain.torder.kafka.event.TOrderEventProducer;
 import com.dailyon.orderservice.domain.torder.kafka.event.dto.OrderDTO;
 import com.dailyon.orderservice.domain.torder.service.TOrderService;
-import com.dailyon.orderservice.domain.torder.service.request.TOrderServiceRequest;
+import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand.RegisterTOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 import static com.dailyon.orderservice.common.utils.OrderValidator.validateMemberPoint;
 import static java.util.Collections.EMPTY_LIST;
-import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -38,46 +34,28 @@ public class TOrderFacade {
   private final MemberFeignClient memberFeignClient;
   private final PaymentFeignClient paymentFeignClient;
   private final TOrderEventProducer producer;
+  private final TOrderDtoMapper tOrderDtoMapper;
 
-  /**
-   * ready 결제 준비 성공 시 QR Code를 반환한다.
-   *
-   * @param request
-   * @param memberId
-   * @return String
-   */
-  public String orderReady(TOrderFacadeCreateRequest request, Long memberId) {
-
-    List<ProductCouponDTO> productCoupons = getProductCoupons(request.toCouponParams(), memberId);
-    List<OrderProductDTO> orderProducts = getOrderProducts(request.toOrderProductParams());
+  public String orderReady(TOrderCreateRequest request, Long memberId) {
+    var orderItemList = request.getOrderItems();
+    var productCoupons = getProductCoupons(tOrderDtoMapper.toCouponParams(orderItemList), memberId);
+    var orderProducts = getOrderProducts(tOrderDtoMapper.toOrderProductParams(orderItemList));
 
     int memberPoints = getMemberPoints(memberId);
-    int usedPoints = request.getOrderInfo().getUsedPoints();
+    int usedPoints = request.getUsedPoints();
     validateMemberPoint(usedPoints, memberPoints);
 
-    Map<Long, OrderProductInfo> orderProductMap = request.extractOrderInfoToMap();
-    Map<Long, ProductCouponDTO> productCouponMap = extractProductCouponToMap(productCoupons);
-
-    TOrder tOrder =
-        tOrderService.createTOrder(
-            TOrderServiceRequest.of(
-                orderProducts,
-                orderProductMap,
-                productCouponMap,
-                request.toServiceOrderInfo(),
-                request.getDeliveryInfo().toServiceDeliveryInfo()),
-            memberId);
-
-    PaymentReadyParam paymentReadyParam =
-        PaymentReadyParam.of(tOrder, "KAKAOPAY", usedPoints); // TODO : method, usedPoints 나중에 바꿈;
-    String nextUrl = paymentFeignClient.orderPaymentReady(memberId, paymentReadyParam);
+    RegisterTOrder tOrderCommand = tOrderDtoMapper.of(request, productCoupons, orderProducts);
+    TOrder tOrder = tOrderService.createTOrder(tOrderCommand, memberId);
+    PaymentReadyParam param = tOrderDtoMapper.toPaymentReadyParam(tOrder, "KAKAOPAY", usedPoints);
+    String nextUrl = paymentFeignClient.orderPaymentReady(memberId, param);
     return nextUrl;
   }
 
-  public String orderApprove(TOrderFacadeApproveRequest request) {
-    String orderId = request.getOrderId();
-    TOrder tOrder = tOrderService.getTOrder(orderId);
-    producer.orderCreated(OrderDTO.of(tOrder, request.getPgToken()));
+  public String orderApprove(TOrderDto.OrderApproveRequest request, String orderNo) {
+    TOrder tOrder = tOrderService.getTOrder(orderNo);
+    OrderDTO orderDTO = tOrderDtoMapper.of(tOrder, request.getPg_token());
+    producer.orderCreated(orderDTO);
     return tOrder.getId();
   }
 
@@ -89,12 +67,6 @@ public class TOrderFacade {
 
   private List<OrderProductDTO> getOrderProducts(List<OrderProductParam> orderProductParams) {
     return productFeignClient.getOrderProducts(orderProductParams).getResponse();
-  }
-
-  private Map<Long, ProductCouponDTO> extractProductCouponToMap(
-      List<ProductCouponDTO> productCoupons) {
-    return productCoupons.stream()
-        .collect(toMap(ProductCouponDTO::getProductId, Function.identity()));
   }
 
   private int getMemberPoints(Long memberId) {

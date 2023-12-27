@@ -2,7 +2,7 @@ package com.dailyon.orderservice.common.utils;
 
 import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
 import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
-import com.dailyon.orderservice.domain.torder.facade.request.TOrderFacadeRequest.TOrderFacadeCreateRequest.OrderProductInfo;
+import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand;
 
 public class OrderCalculator {
 
@@ -30,7 +30,9 @@ public class OrderCalculator {
   }
 
   public static int calculateOrderPrice(
-      OrderProductDTO orderProduct, OrderProductInfo orderProductInfo, int discountedPrice) {
-    return (orderProduct.getPrice() * orderProductInfo.getQuantity()) - discountedPrice;
+      OrderProductDTO orderProduct,
+      TOrderCommand.RegisterOrderItem orderItem,
+      int discountedPrice) {
+    return (orderProduct.getPrice() * orderItem.getQuantity()) - discountedPrice;
   }
 }

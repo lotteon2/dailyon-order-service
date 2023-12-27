@@ -1,21 +1,17 @@
 package com.dailyon.orderservice.domain.torder.clients.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 public class ProductDTO {
 
   @Getter
-  @NoArgsConstructor
-  @AllArgsConstructor
   @Builder
+  @ToString
   public static class OrderProductParam {
-    private Long productId;
-    private Long sizeId;
+    private final Long productId;
+    private final Long sizeId;
   }
 
   @Getter

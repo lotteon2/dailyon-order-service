@@ -8,8 +8,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -22,7 +20,8 @@ import javax.persistence.EntityManager;
       "endpoint.member-service:http://localhost:8080",
       "endpoint.promotion-service:http://localhost:8084",
       "endpoint.product-service=http://localhost:8085",
-      "endpoint.payment-service=http://localhost:8089"
+      "endpoint.payment-service=http://localhost:8089",
+      "redirect_url=testRedirect_url"
     })
 public class IntegrationTestSupport {
 

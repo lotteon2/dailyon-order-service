@@ -74,7 +74,6 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
 
     // then
     TOrder savedTOrder = orderDynamoRepository.findAll().iterator().next();
-    System.out.println(savedTOrder.getCreatedAt());
     assertThat(savedTOrder.getId()).isEqualTo(orderId);
   }
 

@@ -55,6 +55,14 @@ dependencies {
     implementation 'io.github.boostchicken:spring-data-dynamodb:5.2.3'
     implementation 'software.amazon.awssdk:dynamodb:2.1.0'
 
+    //Mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+    annotationProcessor(
+            'org.projectlombok:lombok',
+            'org.projectlombok:lombok-mapstruct-binding:0.1.0'
+    )
+
     implementation platform('org.testcontainers:testcontainers-bom:1.19.3') //import bom
 
     compileOnly 'org.projectlombok:lombok'

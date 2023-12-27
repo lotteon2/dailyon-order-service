@@ -3,10 +3,7 @@ package com.dailyon.orderservice.domain.torder.kafka.event.dto;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
 import com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,9 +12,8 @@ import java.util.stream.Collectors;
 import static com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent.PENDING;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@ToString
 public class OrderDTO {
 
   private List<ProductInfo> productInfos;
