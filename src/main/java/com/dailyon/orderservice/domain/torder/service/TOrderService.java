@@ -6,8 +6,8 @@ import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.implement.TOrderAppender;
 import com.dailyon.orderservice.domain.torder.implement.TOrderManager;
 import com.dailyon.orderservice.domain.torder.implement.TOrderReader;
-import com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent;
 import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand;
+import dailyon.domain.order.kafka.enums.OrderEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

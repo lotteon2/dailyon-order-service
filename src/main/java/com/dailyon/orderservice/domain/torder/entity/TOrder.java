@@ -6,7 +6,7 @@ import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderStatus;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
-import com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent;
+import dailyon.domain.order.kafka.enums.OrderEvent;
 import lombok.*;
 
 import javax.persistence.Id;

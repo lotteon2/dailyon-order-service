@@ -1,9 +1,9 @@
 package com.dailyon.orderservice.domain.torder.service.request;
 
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
-import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
-import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.entity.TDelivery;
+import dailyon.domain.order.clients.CouponDTO.ProductCouponDTO;
+import dailyon.domain.order.clients.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import lombok.*;
 
 import java.util.List;

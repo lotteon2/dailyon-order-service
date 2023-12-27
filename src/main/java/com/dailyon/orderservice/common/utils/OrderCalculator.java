@@ -1,8 +1,8 @@
 package com.dailyon.orderservice.common.utils;
 
-import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO.ProductCouponDTO;
-import com.dailyon.orderservice.domain.torder.clients.dto.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand;
+import dailyon.domain.order.clients.CouponDTO.ProductCouponDTO;
+import dailyon.domain.order.clients.ProductDTO.OrderProductListDTO.OrderProductDTO;
 
 public class OrderCalculator {
 

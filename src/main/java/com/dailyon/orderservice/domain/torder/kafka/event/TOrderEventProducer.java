@@ -1,8 +1,8 @@
 package com.dailyon.orderservice.domain.torder.kafka.event;
 
-import com.dailyon.orderservice.domain.torder.kafka.event.dto.OrderDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dailyon.domain.order.kafka.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -18,8 +18,7 @@ public class TOrderEventProducer {
   public void orderCreated(OrderDTO orderDTO) {
     log.info("order-created -> orderId {}", orderDTO.getOrderNo());
     try {
-      kafkaTemplate.send(
-          "create-order", objectMapper.writeValueAsString(orderDTO));
+      kafkaTemplate.send("create-order", objectMapper.writeValueAsString(orderDTO));
     } catch (JsonProcessingException e) {
       e.printStackTrace();
     }

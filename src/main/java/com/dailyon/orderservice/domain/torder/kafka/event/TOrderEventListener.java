@@ -1,9 +1,9 @@
 package com.dailyon.orderservice.domain.torder.kafka.event;
 
-import com.dailyon.orderservice.domain.torder.kafka.event.dto.OrderDTO;
 import com.dailyon.orderservice.domain.torder.service.TOrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dailyon.domain.order.kafka.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;

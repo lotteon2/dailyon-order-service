@@ -63,6 +63,8 @@ dependencies {
             'org.projectlombok:lombok-mapstruct-binding:0.1.0'
     )
 
+    // daily-common-maven
+    implementation group: 'io.github.dailyon-maven', name: 'daily-on-common', version: '0.0.2'
     implementation platform('org.testcontainers:testcontainers-bom:1.19.3') //import bom
 
     compileOnly 'org.projectlombok:lombok'

@@ -1,8 +1,8 @@
 package com.dailyon.orderservice.domain.torder.implement;
 
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
-import com.dailyon.orderservice.domain.torder.kafka.event.dto.enums.OrderEvent;
 import com.dailyon.orderservice.domain.torder.repository.OrderDynamoRepository;
+import dailyon.domain.order.kafka.enums.OrderEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
