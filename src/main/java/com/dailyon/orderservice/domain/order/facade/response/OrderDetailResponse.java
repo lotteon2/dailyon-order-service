@@ -21,6 +21,7 @@ public class OrderDetailResponse {
   private String couponName;
   private Integer couponDiscountPrice;
   private String status;
+  private boolean reviewCheck;
 
   @Builder
   private OrderDetailResponse(
@@ -32,7 +33,8 @@ public class OrderDetailResponse {
       Integer orderPrice,
       String couponName,
       Integer couponDiscountPrice,
-      String status) {
+      String status,
+      boolean reviewCheck) {
     this.orderDetailNo = orderDetailNo;
     this.orderNo = orderNo;
     this.productName = productName;
@@ -42,6 +44,7 @@ public class OrderDetailResponse {
     this.couponName = couponName;
     this.couponDiscountPrice = couponDiscountPrice;
     this.status = status;
+    this.reviewCheck = reviewCheck;
   }
 
   public static OrderDetailResponse from(OrderDetail orderDetail) {
@@ -55,6 +58,7 @@ public class OrderDetailResponse {
         .couponName(orderDetail.getCouponName())
         .couponDiscountPrice(orderDetail.getCouponDiscountPrice())
         .status(orderDetail.getStatus().getMessage())
+        .reviewCheck(orderDetail.getReviewCheck())
         .build();
   }
 
