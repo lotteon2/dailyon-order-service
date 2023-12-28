@@ -1,9 +1,9 @@
 package com.dailyon.orderservice.common.utils;
 
 import com.dailyon.orderservice.common.exception.InvalidParamException;
-import com.dailyon.orderservice.domain.torder.clients.dto.CouponDTO;
 import com.dailyon.orderservice.domain.torder.exception.InsufficientPointException;
 import com.dailyon.orderservice.domain.torder.exception.InsufficientStockException;
+import dailyon.domain.order.clients.CouponDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
