@@ -52,3 +52,17 @@ endpoint:
   payment-service: http://payment-service:8090
 
 redirect_url: http://localhost:5173/order-success
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
+      apache:
+        kafka: ERROR
+        zookeeper: ERROR
+      kafka: ERROR

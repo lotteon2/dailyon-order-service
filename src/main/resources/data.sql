@@ -7,8 +7,7 @@ VALUES ('202112130001', 1, '여성 원피스', 100000, 'SINGLE', 'COMPLETED', '2
        ('202112180001', 1, '여성 원피스', 250000, 'CART', 'PENDING', '2021-12-18 00:00:00'),
        ('202112190001', 1, '남성 셔츠', 180000, 'GIFT', 'COMPLETED', '2021-12-19 00:00:00'),
        ('202112200001', 1, '백팩', 320000, 'AUCTION', 'PENDING', '2021-12-20 00:00:00'),
-       ('202112210001', 1, '여성 스커트', 120000, 'SINGLE', 'COMPLETED', '2021-12-21 00:00:00'),
-       ('202112220001', 1, '남성 청바지', 280000, 'CART', 'PENDING', '2021-12-22 00:00:00');
+       ('202112210001', 1, '여성 스커트', 120000, 'SINGLE', 'COMPLETED', '2021-12-21 00:00:00');
 
 INSERT INTO order_detail (order_id, order_no, order_detail_no, product_id, product_size_id, coupon_info_id,
                           product_name,
