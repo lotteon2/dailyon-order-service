@@ -57,4 +57,4 @@ logging:
       apache:
         kafka: ERROR
         zookeeper: ERROR
-      kafka : ERROR
+      kafka: ERROR
