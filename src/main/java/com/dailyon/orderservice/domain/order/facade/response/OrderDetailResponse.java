@@ -14,6 +14,8 @@ public class OrderDetailResponse {
 
   private String orderDetailNo;
   private String orderNo;
+  private Long productId;
+  private String productSize;
   private String productName;
   private Integer productQuantity;
   private String thumbnail;
@@ -27,6 +29,8 @@ public class OrderDetailResponse {
   private OrderDetailResponse(
       String orderDetailNo,
       String orderNo,
+      Long productId,
+      String productSize,
       String productName,
       Integer productQuantity,
       String thumbnail,
@@ -37,6 +41,8 @@ public class OrderDetailResponse {
       boolean reviewCheck) {
     this.orderDetailNo = orderDetailNo;
     this.orderNo = orderNo;
+    this.productId = productId;
+    this.productSize = productSize;
     this.productName = productName;
     this.productQuantity = productQuantity;
     this.thumbnail = thumbnail;
@@ -51,6 +57,8 @@ public class OrderDetailResponse {
     return OrderDetailResponse.builder()
         .orderDetailNo(orderDetail.getOrderDetailNo())
         .orderNo(orderDetail.getOrderNo())
+        .productId(orderDetail.getProductId())
+        .productSize(orderDetail.getProductSize())
         .productName(orderDetail.getProductName())
         .productQuantity(orderDetail.getProductQuantity())
         .thumbnail(orderDetail.getProductImgUrl())
