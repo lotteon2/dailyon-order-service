@@ -57,3 +57,5 @@ logging:
       apache.kafka: ERROR
       kafka: ERROR
       apache.zookeeper: ERROR
+
+redirect_url: https://dailyon.lotteon2.com/order-success
