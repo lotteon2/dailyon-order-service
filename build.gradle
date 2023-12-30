@@ -26,6 +26,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://s3-us-west-2.amazonaws.com/dynamodb-local/release' } // for DynamoDBLocal Lib
 }
 
 ext {
@@ -43,14 +44,28 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-//    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
     // querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-//    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
+
+    implementation 'io.github.boostchicken:spring-data-dynamodb:5.2.3'
+    implementation 'software.amazon.awssdk:dynamodb:2.1.0'
+
+    //Mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+    annotationProcessor(
+            'org.projectlombok:lombok',
+            'org.projectlombok:lombok-mapstruct-binding:0.1.0'
+    )
+
+    // daily-common-maven
+    implementation group: 'io.github.dailyon-maven', name: 'daily-on-common', version: '0.0.6'
+    implementation platform('org.testcontainers:testcontainers-bom:1.19.3') //import bom
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -60,6 +75,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
+    testImplementation 'org.testcontainers:testcontainers:1.19.3'
+    testImplementation "org.testcontainers:junit-jupiter:1.19.3"
 }
 
 dependencyManagement {

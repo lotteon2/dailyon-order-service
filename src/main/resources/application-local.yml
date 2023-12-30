@@ -19,16 +19,25 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:order-service;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;MODE=MySQL
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://localhost:3306/order-service
+  #    username: ssafy
+  #    password: ssafy
   jpa:
     hibernate:
       ddl-auto: create
+    generate-ddl: true
+    show-sql: true
+    # Bean이 생성되기 전에 ddl 실행
+    defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true
 
   cloud:
     discovery:
-      enabled: false
+      enabled: true
 
   kafka:
     producer:
@@ -66,3 +75,15 @@ logging:
         jdbc:
           core:
             JdbcTemplate: DEBUG
+      apache:
+        kafka: ERROR
+        zookeeper: ERROR
+      kafka: ERROR
+
+endpoint:
+  member-service: localhost:8080
+  promotion-service: localhost:8084
+  product-service: localhost:8085
+  payment-service: localhost:8090
+
+redirect_url: http://localhost:5173/order-success

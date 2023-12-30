@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:~/order-service
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  profiles:
+    active: test
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false # 테스트 코드 동작시 false로 해야 한다.
+  kafka:
+    consumer:
+      group-id: sjy
+  sql:
+    init:
+      mode: never
