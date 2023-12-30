@@ -54,7 +54,6 @@ endpoint:
 logging:
   level:
     org:
-      apache:
-        kafka: ERROR
-        zookeeper: ERROR
+      apache.kafka: ERROR
       kafka: ERROR
+      apache.zookeeper: ERROR
