@@ -17,7 +17,10 @@ public class OrderResponse {
   private Long totalAmount;
   private String status;
 
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(
+      shape = JsonFormat.Shape.STRING,
+      pattern = "yyyy-MM-dd HH:mm:ss",
+      timezone = "Asia/Seoul")
   private LocalDateTime createdAt;
 
   @Builder
