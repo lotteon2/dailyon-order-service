@@ -10,8 +10,6 @@ spring:
   cloud:
     config:
       name: order-service
-  jackson:
-    time-zone: Asia/Seoul
 management:
   endpoints:
     web:
