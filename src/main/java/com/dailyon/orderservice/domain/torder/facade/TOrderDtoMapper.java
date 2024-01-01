@@ -1,5 +1,7 @@
 package com.dailyon.orderservice.domain.torder.facade;
 
+import com.dailyon.orderservice.domain.order.service.request.GiftCommand;
+import com.dailyon.orderservice.domain.torder.api.request.TOrderDto;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest.RegisterDeliveryRequest;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest.RegisterItemRequest;
@@ -42,6 +44,11 @@ public interface TOrderDtoMapper {
   CouponParam toCouponParam(RegisterItemRequest request);
 
   OrderProductParam toOrderProductParam(RegisterItemRequest request);
+
+  @Mapping(target = "receiverId", source = "request.receiverId")
+  @Mapping(target = "receiverName", source = "request.receiverName")
+  @Mapping(target = "senderName", source = "request.senderName")
+  GiftCommand.RegisterGift toGiftCommand(TOrderDto.TOrderCreateRequest request);
 
   @Mapping(target = "registerDelivery", source = "request.deliveryInfo")
   @Mapping(target = "couponInfoMap", source = "productCoupons")
@@ -124,6 +131,7 @@ public interface TOrderDtoMapper {
   }
 
   default RegisterDelivery toRegisterDelivery(RegisterDeliveryRequest delivery) {
+    if(delivery == null) return null;
     return RegisterDelivery.builder()
         .receiver(delivery.getReceiver())
         .postCode(delivery.getPostCode())
