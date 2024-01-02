@@ -10,4 +10,6 @@ public interface GiftCustomRepository {
   Optional<Gift> findByOrderNo(String orderNo);
 
   Page<Gift> findByReceiverId(Long receiverId, Pageable pageable);
+
+  Page<Gift> findBySenderId(Long memberId, Pageable pageable);
 }

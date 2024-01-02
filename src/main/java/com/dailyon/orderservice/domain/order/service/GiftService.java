@@ -1,5 +1,7 @@
 package com.dailyon.orderservice.domain.order.service;
 
+import com.dailyon.orderservice.domain.delivery.entity.Delivery;
+import com.dailyon.orderservice.domain.delivery.implement.DeliveryAppender;
 import com.dailyon.orderservice.domain.order.entity.Gift;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.implement.GiftAppender;
@@ -19,6 +21,7 @@ public class GiftService {
   private final GiftAppender giftAppender;
   private final GiftManager giftManager;
   private final GiftReader giftReader;
+  private final DeliveryAppender deliveryAppender;
 
   @Transactional
   public Gift createGift(GiftCommand.RegisterGift giftCommand, String orderNo) {
@@ -34,6 +37,19 @@ public class GiftService {
   }
 
   public Page<Gift> getGiftsByReceiver(Long receiverId, Pageable pageable) {
-    return giftReader.read(receiverId, pageable);
+    return giftReader.readByReceiver(receiverId, pageable);
+  }
+
+  public Page<Gift> getGiftsBySender(Long memberId, Pageable pageable) {
+    return giftReader.readBySender(memberId, pageable);
+  }
+
+  @Transactional
+  public Gift accept(GiftCommand.Accept request, Long memberId) {
+    Gift gift = giftReader.read(request.getOrderNo());
+    Delivery delivery = request.toEntity(gift.getOrder());
+    deliveryAppender.append(delivery);
+    giftManager.accept(gift);
+    return gift;
   }
 }

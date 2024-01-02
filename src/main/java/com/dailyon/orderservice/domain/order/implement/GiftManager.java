@@ -14,4 +14,9 @@ public class GiftManager {
     gift.orderComplete();
     return gift;
   }
+
+  public Gift accept(Gift gift) {
+    gift.accept();
+    return gift;
+  }
 }

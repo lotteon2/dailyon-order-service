@@ -17,7 +17,11 @@ public class GiftReader {
     return giftRepository.findByOrderNo(orderNo).orElseThrow(OrderNotFoundException::new);
   }
 
-  public Page<Gift> read(Long receiverId,Pageable pageable) {
+  public Page<Gift> readByReceiver(Long receiverId, Pageable pageable) {
     return giftRepository.findByReceiverId(receiverId, pageable);
+  }
+
+  public Page<Gift> readBySender(Long memberId, Pageable pageable) {
+    return giftRepository.findBySenderId(memberId, pageable);
   }
 }

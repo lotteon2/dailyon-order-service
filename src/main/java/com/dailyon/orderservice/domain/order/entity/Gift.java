@@ -51,4 +51,8 @@ public class Gift extends BaseEntity {
   public void orderComplete() {
     this.status = GiftStatus.ORDER_COMPLETE;
   }
+
+  public void accept() {
+    this.status = GiftStatus.ACCEPT;
+  }
 }
