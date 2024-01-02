@@ -14,6 +14,7 @@ public class GiftResponse {
   private String receiverName;
   private String status;
   private String productName;
+  private String imgUrl;
 
   public static GiftResponse from(Gift gift) {
     return GiftResponse.builder()
@@ -22,6 +23,7 @@ public class GiftResponse {
         .receiverName(gift.getReceiverName())
         .status(gift.getStatus().getMessage())
         .productName(gift.getOrder().getProductsName())
+        .imgUrl(gift.getOrder().getOrderDetails().get(0).getProductImgUrl())
         .build();
   }
 }
