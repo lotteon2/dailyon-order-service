@@ -22,7 +22,7 @@ public class OrderCalculator {
             (int)
                 ((orderProduct.getPrice() * quantity)
                     * (coupon.getDiscountValue().intValue() * 0.01)),
-            coupon.getMaxDiscountAmount().intValue());
+            (int) coupon.getMaxDiscountAmount());
       default:
         throw new IllegalArgumentException(
             "잘못된 형식의 쿠폰 타입 : " + coupon.getDiscountType()); // TODO : 예외 처리
