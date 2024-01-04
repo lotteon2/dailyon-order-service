@@ -31,6 +31,10 @@ public class TOrderDto {
     @NotBlank(message = "결제 수단은 필수 입니다.")
     private String paymentType;
 
+    private Long receiverId;
+    private String receiverName;
+    private String senderName;
+
     @Getter
     @Setter
     @ToString

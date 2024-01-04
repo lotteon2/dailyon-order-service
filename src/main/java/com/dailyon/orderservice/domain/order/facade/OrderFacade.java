@@ -4,10 +4,12 @@ import com.dailyon.orderservice.domain.delivery.service.DeliveryService;
 import com.dailyon.orderservice.domain.delivery.service.request.DeliveryServiceRequest;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.facade.response.OrderDetailResponse;
 import com.dailyon.orderservice.domain.order.facade.response.OrderPageResponse;
 import com.dailyon.orderservice.domain.order.kafka.event.OrderEventProducer;
 import com.dailyon.orderservice.domain.order.kafka.event.dto.RefundDTO;
+import com.dailyon.orderservice.domain.order.service.GiftService;
 import com.dailyon.orderservice.domain.order.service.OrderService;
 import com.dailyon.orderservice.domain.refund.entity.Refund;
 import com.dailyon.orderservice.domain.refund.service.RefundService;
@@ -22,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.GIFT;
+
 @Service
 @RequiredArgsConstructor
 public class OrderFacade {
@@ -29,12 +33,18 @@ public class OrderFacade {
   private final TOrderService tOrderService;
   private final DeliveryService deliveryService;
   private final RefundService refundService;
+  private final GiftService giftService;
   private final OrderEventProducer producer;
 
   public String orderCreate(String orderNo, OrderEvent event) {
     TOrder tOrder = tOrderService.getTOrder(orderNo);
-    orderService.createOrder(tOrder);
-    deliveryService.createDelivery(DeliveryServiceRequest.from(tOrder.getDelivery()));
+    Order order = orderService.createOrder(tOrder);
+
+    if (GIFT.equals(OrderType.valueOf(tOrder.getType()))) { // TODO
+      giftService.update(order);
+    } else {
+      deliveryService.createDelivery(DeliveryServiceRequest.from(tOrder.getDelivery()));
+    }
     tOrderService.deleteTOrder(tOrder.getId());
     return tOrder.getId();
   }

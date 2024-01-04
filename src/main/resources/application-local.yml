@@ -69,12 +69,6 @@ eureka:
 logging:
   level:
     org:
-      hibernate:
-        SQL: DEBUG
-      springframework:
-        jdbc:
-          core:
-            JdbcTemplate: DEBUG
       apache:
         kafka: ERROR
         zookeeper: ERROR

@@ -1,5 +1,7 @@
 package com.dailyon.orderservice.domain.torder.facade;
 
+import com.dailyon.orderservice.domain.order.service.GiftService;
+import com.dailyon.orderservice.domain.order.service.request.GiftCommand;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
 import com.dailyon.orderservice.domain.torder.clients.MemberFeignClient;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.dailyon.orderservice.common.utils.OrderValidator.validateMemberPoint;
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.GIFT;
 import static java.util.Collections.EMPTY_LIST;
 
 @Service
@@ -29,6 +32,7 @@ import static java.util.Collections.EMPTY_LIST;
 public class TOrderFacade {
 
   private final TOrderService tOrderService;
+  private final GiftService giftService;
   private final ProductFeignClient productFeignClient;
   private final PromotionFeignClient promotionFeignClient;
   private final MemberFeignClient memberFeignClient;
@@ -37,17 +41,15 @@ public class TOrderFacade {
   private final TOrderDtoMapper tOrderDtoMapper;
 
   public String orderReady(TOrderCreateRequest request, Long memberId) {
-    var orderItemList = request.getOrderItems();
-    var productCoupons = getProductCoupons(tOrderDtoMapper.toCouponParams(orderItemList), memberId);
-    var orderProducts = getOrderProducts(tOrderDtoMapper.toOrderProductParams(orderItemList));
-
-    int memberPoints = getMemberPoints(memberId);
-    int usedPoints = request.getUsedPoints();
-    validateMemberPoint(usedPoints, memberPoints);
-
-    RegisterTOrder tOrderCommand = tOrderDtoMapper.of(request, productCoupons, orderProducts);
+    RegisterTOrder tOrderCommand = extractCommand(request, memberId);
     TOrder tOrder = tOrderService.createTOrder(tOrderCommand, memberId);
-    PaymentReadyParam param = tOrderDtoMapper.toPaymentReadyParam(tOrder, "KAKAOPAY", usedPoints);
+    PaymentReadyParam param =
+        tOrderDtoMapper.toPaymentReadyParam(tOrder, "KAKAOPAY", request.getUsedPoints());
+    if (GIFT == request.getType()) {
+      GiftCommand.RegisterGift registerGift = tOrderDtoMapper.toGiftCommand(request);
+      giftService.createGift(registerGift, tOrder.getId());
+    }
+
     String nextUrl = paymentFeignClient.orderPaymentReady(memberId, param);
     return nextUrl;
   }
@@ -71,5 +73,18 @@ public class TOrderFacade {
 
   private int getMemberPoints(Long memberId) {
     return memberFeignClient.getMyPoints(memberId);
+  }
+
+  private RegisterTOrder extractCommand(TOrderCreateRequest request, Long memberId) {
+    var orderItemList = request.getOrderItems();
+    var productCoupons = getProductCoupons(tOrderDtoMapper.toCouponParams(orderItemList), memberId);
+    var orderProducts = getOrderProducts(tOrderDtoMapper.toOrderProductParams(orderItemList));
+
+    int memberPoints = getMemberPoints(memberId);
+    int usedPoints = request.getUsedPoints();
+    validateMemberPoint(usedPoints, memberPoints);
+
+    RegisterTOrder tOrderCommand = tOrderDtoMapper.of(request, productCoupons, orderProducts);
+    return tOrderCommand;
   }
 }
