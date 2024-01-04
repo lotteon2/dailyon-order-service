@@ -58,4 +58,4 @@ logging:
       kafka: ERROR
       apache.zookeeper: ERROR
 
-redirect_url: https://dailyon.lotteon2.com/order-success
+redirect_url: https://dailyon.lotteedu.com/order-success
