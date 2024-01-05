@@ -18,11 +18,15 @@ public class OrderCalculator {
       case FIXED_AMOUNT:
         return coupon.getDiscountValue().intValue();
       case PERCENTAGE:
-        return Math.min(
-            (int)
+        return coupon.getMaxDiscountAmount() != 0
+            ? Math.min(
+                (int)
+                    ((orderProduct.getPrice() * quantity)
+                        * (coupon.getDiscountValue().intValue() * 0.01)),
+                (int) coupon.getMaxDiscountAmount())
+            : (int)
                 ((orderProduct.getPrice() * quantity)
-                    * (coupon.getDiscountValue().intValue() * 0.01)),
-            (int) coupon.getMaxDiscountAmount());
+                    * (coupon.getDiscountValue().intValue() * 0.01));
       default:
         throw new IllegalArgumentException(
             "잘못된 형식의 쿠폰 타입 : " + coupon.getDiscountType()); // TODO : 예외 처리

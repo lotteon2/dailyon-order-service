@@ -105,7 +105,7 @@ public class TOrderAppender {
 
     if (coupon != null) {
       builder
-          .couponInfoId(coupon.getProductId())
+          .couponInfoId(coupon.getCouponInfoId())
           .couponDiscountPrice(discountedPrice)
           .couponName(coupon.getCouponName());
     }
