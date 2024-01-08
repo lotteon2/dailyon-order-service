@@ -4,6 +4,7 @@ import com.dailyon.orderservice.ControllerTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,7 +41,7 @@ class OrderApiControllerTest extends ControllerTestSupport {
     // when // then
     mockMvc
         .perform(
-            get("/orders/order-details/{orderDetailNo}", "orderDetailNo")
+           delete("/orders/order-details/{orderDetailNo}", "orderDetailNo")
                 .header("memberId", memberId))
         .andExpect(status().isOk());
   }
