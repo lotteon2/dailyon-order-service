@@ -35,7 +35,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
             .where(order.memberId.eq(memberId))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .orderBy(order.id.desc())
+            .orderBy(order.createdAt.desc())
             .fetch();
 
     if (CollectionUtils.isEmpty(ids)) {
