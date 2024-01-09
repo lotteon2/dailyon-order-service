@@ -39,6 +39,7 @@ public class RefundDTO {
         .orderNo(orderDetail.getOrderNo())
         .couponInfoId(orderDetail.getCouponInfoId())
         .memberId(orderDetail.getOrder().getMemberId())
+        .refundPoints(refund.getPoints())
         .build();
   }
 
