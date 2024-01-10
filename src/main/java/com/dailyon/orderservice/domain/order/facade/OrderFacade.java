@@ -42,8 +42,10 @@ public class OrderFacade {
 
     if (GIFT.equals(OrderType.valueOf(tOrder.getType()))) { // TODO
       giftService.update(order);
+      // TODO : 선물하기 완료
     } else {
       deliveryService.createDelivery(DeliveryServiceRequest.from(tOrder.getDelivery()));
+      // TODO : 여기 일반 주문 완료 알림
     }
     tOrderService.deleteTOrder(tOrder.getId());
     return tOrder.getId();
@@ -64,6 +66,7 @@ public class OrderFacade {
     OrderDetail orderDetail = orderService.cancelOrderDetail(OrderDetailNo, memberId);
     Refund refund = refundService.createRefund(orderDetail);
     producer.createRefund(orderDetail.getOrderDetailNo(), RefundDTO.of(orderDetail, refund));
+    // TODO 주문 취소 알림
     return refund.getId();
   }
 }
