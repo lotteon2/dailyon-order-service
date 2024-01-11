@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
+import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -26,4 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class IntegrationTestSupport {
 
   @Autowired protected ObjectMapper objectMapper;
+
+    @MockBean
+    SimpleMessageListenerContainer simpleMessageListenerContainer;
+
+    @MockBean
+    QueueMessagingTemplate queueMessagingTemplate;
 }
