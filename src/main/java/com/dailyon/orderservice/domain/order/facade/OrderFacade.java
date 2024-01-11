@@ -2,6 +2,7 @@ package com.dailyon.orderservice.domain.order.facade;
 
 import com.dailyon.orderservice.domain.delivery.service.DeliveryService;
 import com.dailyon.orderservice.domain.delivery.service.request.DeliveryServiceRequest;
+import com.dailyon.orderservice.domain.order.entity.Gift;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
@@ -11,6 +12,9 @@ import com.dailyon.orderservice.domain.order.kafka.event.OrderEventProducer;
 import com.dailyon.orderservice.domain.order.kafka.event.dto.RefundDTO;
 import com.dailyon.orderservice.domain.order.service.GiftService;
 import com.dailyon.orderservice.domain.order.service.OrderService;
+import com.dailyon.orderservice.domain.order.sqs.OrderSqsProducer;
+import com.dailyon.orderservice.domain.order.sqs.dto.RawNotificationData;
+import com.dailyon.orderservice.domain.order.sqs.dto.SQSNotificationDto;
 import com.dailyon.orderservice.domain.refund.entity.Refund;
 import com.dailyon.orderservice.domain.refund.service.RefundService;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
@@ -25,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.GIFT;
+import static com.dailyon.orderservice.domain.order.sqs.OrderSqsProducer.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,15 +40,28 @@ public class OrderFacade {
   private final RefundService refundService;
   private final GiftService giftService;
   private final OrderEventProducer producer;
+  private final OrderSqsProducer orderSqsProducer;
 
   public String orderCreate(String orderNo, OrderEvent event) {
     TOrder tOrder = tOrderService.getTOrder(orderNo);
     Order order = orderService.createOrder(tOrder);
 
-    if (GIFT.equals(OrderType.valueOf(tOrder.getType()))) { // TODO
-      giftService.update(order);
+    if (GIFT.equals(OrderType.valueOf(tOrder.getType()))) {
+      Gift gift = giftService.update(order);
+
+      RawNotificationData notificationData =
+              RawNotificationData.forGiftReceived(gift.getReceiverName());
+      SQSNotificationDto notificationDto =
+              SQSNotificationDto.of(gift.getReceiverId(), notificationData);
+      orderSqsProducer.produce(GIFT_RECEIVED_NOTIFICATION_QUEUE, notificationDto);
     } else {
       deliveryService.createDelivery(DeliveryServiceRequest.from(tOrder.getDelivery()));
+
+      RawNotificationData notificationData =
+              RawNotificationData.forOrderComplete(order.getId(), order.getTotalAmount());
+      SQSNotificationDto notificationDto =
+              SQSNotificationDto.of(order.getMemberId(), notificationData);
+      orderSqsProducer.produce(ORDER_COMPLETE_NOTIFICATION_QUEUE, notificationDto);
     }
     tOrderService.deleteTOrder(tOrder.getId());
     return tOrder.getId();
@@ -64,6 +82,15 @@ public class OrderFacade {
     OrderDetail orderDetail = orderService.cancelOrderDetail(OrderDetailNo, memberId);
     Refund refund = refundService.createRefund(orderDetail);
     producer.createRefund(orderDetail.getOrderDetailNo(), RefundDTO.of(orderDetail, refund));
+
+    RawNotificationData notificationData =
+            RawNotificationData.forOrderCanceled(orderDetail.getOrderPrice(),
+                    orderDetail.getProductName(),
+                    orderDetail.getProductQuantity()
+            );
+    SQSNotificationDto notificationDto =
+            SQSNotificationDto.of(memberId, notificationData);
+    orderSqsProducer.produce(ORDER_CANCELED_NOTIFICATION_QUEUE, notificationDto);
     return refund.getId();
   }
 }
