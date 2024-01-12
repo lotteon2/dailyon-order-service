@@ -21,7 +21,7 @@ public class OrderSqsProducer {
 
     public static final String ORDER_SHIPPED_NOTIFICATION_QUEUE = "order-shipped-notification-queue";
 
-    public static final String ORDER_CANCELED_NOTIFICATION_QUEUE = "order-canceled_notification_queue";
+    public static final String ORDER_CANCELED_NOTIFICATION_QUEUE = "order-canceled-notification-queue";
 
 
     public void produce(String queueName, SQSNotificationDto sqsNotificationDto) {
