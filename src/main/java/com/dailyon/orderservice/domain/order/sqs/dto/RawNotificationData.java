@@ -30,9 +30,9 @@ public class RawNotificationData {
         );
     }
 
-    public static RawNotificationData forOrderComplete(Long orderId, Long totalAmount) {
+    public static RawNotificationData forOrderComplete(String orderNo, Long totalAmount) {
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("orderId", String.valueOf(orderId));
+        parameters.put("orderId", orderNo);
         parameters.put("totalAmount", String.valueOf(totalAmount));
 
         return new RawNotificationData(
