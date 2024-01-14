@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.dailyon.orderservice.common.utils.OrderConstants.BEST_SELLER_LIMIT;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -52,5 +54,9 @@ public class OrderService {
   public void modifyOrderDetail(String orderDetailNo, Long memberId) {
     OrderDetail orderDetail = orderReader.readDetail(orderDetailNo, memberId);
     orderManager.changeReviewCheck(orderDetail);
+  }
+
+  public List<Long> getMostSoldProductIds() {
+    return orderReader.readMostSoldProductIds(BEST_SELLER_LIMIT);
   }
 }

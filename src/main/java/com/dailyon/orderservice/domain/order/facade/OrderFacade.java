@@ -91,4 +91,8 @@ public class OrderFacade {
     orderSqsProducer.produce(ORDER_CANCELED_NOTIFICATION_QUEUE, notificationDto);
     return refund.getId();
   }
+
+  public List<Long> getMostSoldProductIds() {
+    return orderService.getMostSoldProductIds();
+  }
 }

@@ -43,6 +43,10 @@ public class OrderReader {
     return orderDetail;
   }
 
+  public List<Long> readMostSoldProductIds(int limit) {
+    return orderDetailRepository.findProductIdsOrderByCount(limit);
+  }
+
   private void checkAuthorization(Order order, Long memberId) {
     if (order.getMemberId() != memberId) {
       throw new AuthorizationException();
