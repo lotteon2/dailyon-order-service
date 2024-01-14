@@ -50,6 +50,9 @@ public class TOrder {
   @DynamoDBAttribute(attributeName = "total_amount")
   private Long totalAmount;
 
+  @DynamoDBAttribute(attributeName = "referral_code")
+  private String referralCode;
+
   @DynamoDBAttribute(attributeName = "status")
   private String status = OrderStatus.PENDING.name();
 
@@ -74,6 +77,7 @@ public class TOrder {
       int totalCouponDiscountPrice,
       String productsName,
       Long totalAmount,
+      String referralCode,
       List<TOrderDetail> orderDetails,
       TDelivery delivery) {
     this.id = id;
@@ -84,6 +88,7 @@ public class TOrder {
     this.totalCouponDiscountPrice = totalCouponDiscountPrice;
     this.productsName = productsName;
     this.totalAmount = totalAmount;
+    this.referralCode = referralCode;
     this.orderDetails = orderDetails;
     this.delivery = delivery;
   }

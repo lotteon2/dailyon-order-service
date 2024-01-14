@@ -16,32 +16,32 @@ import org.springframework.core.env.Environment;
 @Profile("!test")
 @Configuration
 public class SqsConfig {
-    // bus-refresh 적용된 부분
-    private final Environment environment;
+  // bus-refresh 적용된 부분
+  private final Environment environment;
 
-    @Autowired
-    public SqsConfig(Environment environment) {
-        this.environment = environment;
-    }
+  @Autowired
+  public SqsConfig(Environment environment) {
+    this.environment = environment;
+  }
 
-    @Bean
-    @Primary
-    @RefreshScope
-    public AmazonSQSAsync amazonSQSAsync() {
+  @Bean
+  @Primary
+  @RefreshScope
+  public AmazonSQSAsync amazonSQSAsync() {
 
-        String accessKey = environment.getProperty("cloud.aws.credentials.ACCESS_KEY_ID");
-        String secretKey = environment.getProperty("cloud.aws.credentials.SECRET_ACCESS_KEY");
-        String sqsRegion = environment.getProperty("cloud.aws.sqs.region");
+    String accessKey = environment.getProperty("cloud.aws.credentials.ACCESS_KEY_ID");
+    String secretKey = environment.getProperty("cloud.aws.credentials.SECRET_ACCESS_KEY");
+    String sqsRegion = environment.getProperty("cloud.aws.sqs.region");
 
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
-        return AmazonSQSAsyncClientBuilder.standard()
-                .withRegion(sqsRegion)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-                .build();
-    }
+    BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
+    return AmazonSQSAsyncClientBuilder.standard()
+        .withRegion(sqsRegion)
+        .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+        .build();
+  }
 
-    @Bean
-    public QueueMessagingTemplate queueMessagingTemplate(AmazonSQSAsync amazonSQSAsync) {
-        return new QueueMessagingTemplate(amazonSQSAsync);
-    }
+  @Bean
+  public QueueMessagingTemplate queueMessagingTemplate(AmazonSQSAsync amazonSQSAsync) {
+    return new QueueMessagingTemplate(amazonSQSAsync);
+  }
 }

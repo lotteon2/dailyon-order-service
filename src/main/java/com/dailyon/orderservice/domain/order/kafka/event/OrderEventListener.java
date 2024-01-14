@@ -23,7 +23,7 @@ public class OrderEventListener {
     OrderDTO orderDTO = null;
     try {
       orderDTO = objectMapper.readValue(message, OrderDTO.class);
-      orderFacade.orderCreate(orderDTO.getOrderNo(), orderDTO.getOrderEvent());
+      orderFacade.orderCreate(orderDTO.getOrderNo());
       ack.acknowledge();
     } catch (JsonProcessingException e) {
       e.printStackTrace();

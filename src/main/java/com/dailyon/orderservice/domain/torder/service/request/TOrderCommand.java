@@ -24,6 +24,7 @@ public class TOrderCommand {
     private final Map<Long, ProductCouponDTO> couponInfoMap;
     private final Map<Long, RegisterOrderItem> productInfoMap;
     private String paymentType;
+    private String referralCode;
 
     public TDelivery createTDelivery(String orderNo) {
       return registerDelivery != null ? registerDelivery.toEntity(orderNo) : null;
@@ -37,7 +38,6 @@ public class TOrderCommand {
     private Long productId;
     private Long sizeId;
     private Integer quantity;
-    private String referralCode;
   }
 
   @Getter

@@ -35,6 +35,8 @@ public class TOrderDto {
     private String receiverName;
     private String senderName;
 
+    private String referralCode;
+
     @Getter
     @Setter
     @ToString
@@ -57,8 +59,6 @@ public class TOrderDto {
       private Integer quantity;
 
       private Long couponInfoId;
-
-      private String referralCode;
     }
 
     @Getter
