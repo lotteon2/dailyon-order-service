@@ -58,7 +58,7 @@ public class OrderFacade {
       deliveryService.createDelivery(DeliveryServiceRequest.from(tOrder.getDelivery()));
 
       RawNotificationData notificationData =
-              RawNotificationData.forOrderComplete(order.getId(), order.getTotalAmount());
+              RawNotificationData.forOrderComplete(order.getOrderNo(), order.getTotalAmount());
       SQSNotificationDto notificationDto =
               SQSNotificationDto.of(order.getMemberId(), notificationData);
       orderSqsProducer.produce(ORDER_COMPLETE_NOTIFICATION_QUEUE, notificationDto);
