@@ -7,6 +7,7 @@ import com.dailyon.orderservice.domain.order.implement.OrderDetailAppender;
 import com.dailyon.orderservice.domain.order.implement.OrderManager;
 import com.dailyon.orderservice.domain.order.implement.OrderReader;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
+import dailyon.domain.order.clients.ProductRankResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +57,7 @@ public class OrderService {
     orderManager.changeReviewCheck(orderDetail);
   }
 
-  public List<Long> getMostSoldProductIds() {
-    return orderReader.readMostSoldProductIds(BEST_SELLER_LIMIT);
+  public List<ProductRankResponse> getMostSoldProducts() {
+    return orderReader.readMostSoldProducts(BEST_SELLER_LIMIT);
   }
 }
