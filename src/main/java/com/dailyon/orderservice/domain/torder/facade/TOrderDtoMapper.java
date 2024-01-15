@@ -118,6 +118,7 @@ public interface TOrderDtoMapper {
         .memberId(tOrder.getMemberId())
         .usedPoints(tOrder.getUsedPoints())
         .orderEvent(PENDING)
+        .referralCode(tOrder.getReferralCode())
         .build();
   }
 
@@ -130,7 +131,7 @@ public interface TOrderDtoMapper {
   }
 
   default RegisterDelivery toRegisterDelivery(RegisterDeliveryRequest delivery) {
-    if(delivery == null) return null;
+    if (delivery == null) return null;
     return RegisterDelivery.builder()
         .receiver(delivery.getReceiver())
         .postCode(delivery.getPostCode())
