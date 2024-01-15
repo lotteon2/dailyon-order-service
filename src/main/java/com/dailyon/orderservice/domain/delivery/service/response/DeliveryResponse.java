@@ -38,7 +38,7 @@ public class DeliveryResponse {
         .roadAddress(delivery.getRoadAddress())
         .detailAddress(delivery.getDetailAddress())
         .phoneNumber(delivery.getPhoneNumber())
-        .status(delivery.getStatus().name())
+        .status(delivery.getStatus().getMessage())
         .build();
   }
 }
