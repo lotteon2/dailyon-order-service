@@ -19,7 +19,6 @@ import com.dailyon.orderservice.domain.refund.entity.Refund;
 import com.dailyon.orderservice.domain.refund.service.RefundService;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.service.TOrderService;
-import dailyon.domain.order.kafka.enums.OrderEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +29,9 @@ import java.util.List;
 
 import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.GIFT;
 import static com.dailyon.orderservice.domain.order.sqs.OrderSqsProducer.*;
+import static com.dailyon.orderservice.domain.order.sqs.dto.RawNotificationData.forGiftReceived;
+import static com.dailyon.orderservice.domain.order.sqs.dto.RawNotificationData.forOrderComplete;
+import static com.dailyon.orderservice.domain.order.sqs.dto.SQSNotificationDto.of;
 
 @Service
 @RequiredArgsConstructor
@@ -42,25 +44,22 @@ public class OrderFacade {
   private final OrderEventProducer producer;
   private final OrderSqsProducer orderSqsProducer;
 
-  public String orderCreate(String orderNo, OrderEvent event) {
+  public String orderCreate(String orderNo) {
     TOrder tOrder = tOrderService.getTOrder(orderNo);
     Order order = orderService.createOrder(tOrder);
 
     if (GIFT.equals(OrderType.valueOf(tOrder.getType()))) {
       Gift gift = giftService.update(order);
 
-      RawNotificationData notificationData =
-              RawNotificationData.forGiftReceived(gift.getReceiverName());
-      SQSNotificationDto notificationDto =
-              SQSNotificationDto.of(gift.getReceiverId(), notificationData);
+      RawNotificationData notificationData = forGiftReceived(gift.getReceiverName());
+      SQSNotificationDto notificationDto = of(gift.getReceiverId(), notificationData);
       orderSqsProducer.produce(GIFT_RECEIVED_NOTIFICATION_QUEUE, notificationDto);
     } else {
       deliveryService.createDelivery(DeliveryServiceRequest.from(tOrder.getDelivery()));
 
       RawNotificationData notificationData =
-              RawNotificationData.forOrderComplete(order.getOrderNo(), order.getTotalAmount());
-      SQSNotificationDto notificationDto =
-              SQSNotificationDto.of(order.getMemberId(), notificationData);
+          forOrderComplete(order.getOrderNo(), order.getTotalAmount());
+      SQSNotificationDto notificationDto = of(order.getMemberId(), notificationData);
       orderSqsProducer.produce(ORDER_COMPLETE_NOTIFICATION_QUEUE, notificationDto);
     }
     tOrderService.deleteTOrder(tOrder.getId());
@@ -84,13 +83,16 @@ public class OrderFacade {
     producer.createRefund(orderDetail.getOrderDetailNo(), RefundDTO.of(orderDetail, refund));
 
     RawNotificationData notificationData =
-            RawNotificationData.forOrderCanceled(orderDetail.getOrderPrice(),
-                    orderDetail.getProductName(),
-                    orderDetail.getProductQuantity()
-            );
-    SQSNotificationDto notificationDto =
-            SQSNotificationDto.of(memberId, notificationData);
+        RawNotificationData.forOrderCanceled(
+            orderDetail.getOrderPrice(),
+            orderDetail.getProductName(),
+            orderDetail.getProductQuantity());
+    SQSNotificationDto notificationDto = of(memberId, notificationData);
     orderSqsProducer.produce(ORDER_CANCELED_NOTIFICATION_QUEUE, notificationDto);
     return refund.getId();
+  }
+
+  public List<Long> getMostSoldProductIds() {
+    return orderService.getMostSoldProductIds();
   }
 }

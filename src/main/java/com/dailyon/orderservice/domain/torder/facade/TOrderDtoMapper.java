@@ -126,7 +126,6 @@ public interface TOrderDtoMapper {
         .productId(item.getProductId())
         .sizeId(item.getSizeId())
         .quantity(item.getQuantity())
-        .referralCode(item.getReferralCode())
         .build();
   }
 

@@ -70,7 +70,7 @@ dependencies {
     )
 
     // daily-common-maven
-    implementation group: 'io.github.dailyon-maven', name: 'daily-on-common', version: '0.0.7'
+    implementation group: 'io.github.dailyon-maven', name: 'daily-on-common', version: '0.0.8'
     implementation platform('org.testcontainers:testcontainers-bom:1.19.3') //import bom
 
     compileOnly 'org.projectlombok:lombok'

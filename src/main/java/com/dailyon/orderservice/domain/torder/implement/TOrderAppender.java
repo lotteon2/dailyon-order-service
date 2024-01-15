@@ -78,6 +78,7 @@ public class TOrderAppender {
         .totalCouponDiscountPrice(requestOrder.getTotalCouponDiscountPrice())
         .productsName(getProductsName(orderDetails))
         .totalAmount(totalAmount)
+        .referralCode(requestOrder.getReferralCode())
         .type(requestOrder.getType().name())
         .orderDetails(orderDetails)
         .delivery(tDelivery)

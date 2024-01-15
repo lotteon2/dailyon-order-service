@@ -83,7 +83,6 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .productId(1L)
             .sizeId(1L)
             .quantity(2)
-            .referralCode("reCode")
             .build();
 
     Map<Long, RegisterOrderItem> productInfoMap = Map.of(1L, orderItem);
@@ -173,7 +172,6 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .productId(1L)
             .sizeId(1L)
             .quantity(2)
-            .referralCode("reCode")
             .build();
 
     Map<Long, RegisterOrderItem> productInfoMap = Map.of(1L, orderItem);
@@ -230,7 +228,6 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .productId(1L)
             .sizeId(1L)
             .quantity(1)
-            .referralCode("reCode")
             .build();
 
     Map<Long, RegisterOrderItem> productInfoMap = Map.of(1L, orderItem);
@@ -288,7 +285,6 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
             .productId(1L)
             .sizeId(1L)
             .quantity(2)
-            .referralCode("reCode")
             .build();
 
     Map<Long, RegisterOrderItem> productInfoMap = Map.of(1L, orderItem);

@@ -31,7 +31,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(100000);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(1L);
     itemRequest.setCategoryId(1L);
     itemRequest.setCouponInfoId(1L);
@@ -90,7 +89,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(100000);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(null);
     itemRequest.setCategoryId(1L);
     itemRequest.setCouponInfoId(1L);
@@ -131,7 +129,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(100000);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(1L);
     itemRequest.setCategoryId(null);
     itemRequest.setCouponInfoId(1L);
@@ -172,7 +169,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(100000);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(1L);
     itemRequest.setCategoryId(1L);
     itemRequest.setCouponInfoId(1L);
@@ -213,7 +209,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(null);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(1L);
     itemRequest.setCategoryId(1L);
     itemRequest.setCouponInfoId(1L);
@@ -254,7 +249,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(100000);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(1L);
     itemRequest.setCategoryId(1L);
     itemRequest.setCouponInfoId(1L);
@@ -295,7 +289,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(100000);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(1L);
     itemRequest.setCategoryId(1L);
     itemRequest.setCouponInfoId(1L);
@@ -336,7 +329,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(100000);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(1L);
     itemRequest.setCategoryId(1L);
     itemRequest.setCouponInfoId(1L);
@@ -377,7 +369,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
 
     RegisterItemRequest itemRequest = new RegisterItemRequest();
     itemRequest.setOrderPrice(100000);
-    itemRequest.setReferralCode("test");
     itemRequest.setProductId(1L);
     itemRequest.setCategoryId(1L);
     itemRequest.setCouponInfoId(1L);
