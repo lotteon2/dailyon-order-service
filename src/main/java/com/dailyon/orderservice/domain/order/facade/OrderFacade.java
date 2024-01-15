@@ -19,6 +19,7 @@ import com.dailyon.orderservice.domain.refund.entity.Refund;
 import com.dailyon.orderservice.domain.refund.service.RefundService;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.service.TOrderService;
+import dailyon.domain.order.clients.ProductRankResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,7 +93,7 @@ public class OrderFacade {
     return refund.getId();
   }
 
-  public List<Long> getMostSoldProductIds() {
-    return orderService.getMostSoldProductIds();
+  public List<ProductRankResponse> getMostSoldProducts() {
+    return orderService.getMostSoldProducts();
   }
 }

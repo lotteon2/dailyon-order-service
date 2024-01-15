@@ -1,7 +1,9 @@
 package com.dailyon.orderservice.domain.order.repository.custom;
 
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import dailyon.domain.order.clients.ProductRankResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -25,9 +27,11 @@ public class OrderDetailRepositoryImpl implements OrderDetailRepositoryCustom {
   }
 
   @Override
-  public List<Long> findProductIdsOrderByCount(int limit) {
+  public List<ProductRankResponse> findProductIdsOrderByCount(int limit) {
     return queryFactory
-        .select(orderDetail.productId)
+        .select(
+            Projections.constructor(
+                ProductRankResponse.class, orderDetail.productId, orderDetail.id.count()))
         .from(orderDetail)
         .groupBy(orderDetail.productId)
         .orderBy(orderDetail.id.count().desc())

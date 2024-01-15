@@ -7,6 +7,7 @@ import com.dailyon.orderservice.domain.order.exception.OrderDetailNotFoundExcept
 import com.dailyon.orderservice.domain.order.exception.OrderNotFoundException;
 import com.dailyon.orderservice.domain.order.repository.OrderDetailRepository;
 import com.dailyon.orderservice.domain.order.repository.OrderRepository;
+import dailyon.domain.order.clients.ProductRankResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +44,7 @@ public class OrderReader {
     return orderDetail;
   }
 
-  public List<Long> readMostSoldProductIds(int limit) {
+  public List<ProductRankResponse> readMostSoldProducts(int limit) {
     return orderDetailRepository.findProductIdsOrderByCount(limit);
   }
 
