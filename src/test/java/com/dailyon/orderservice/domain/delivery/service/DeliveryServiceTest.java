@@ -74,7 +74,7 @@ class DeliveryServiceTest extends IntegrationTestSupport {
         .isNotNull()
         .extracting("receiver", "postCode", "roadAddress", "detailAddress", "status")
         .containsExactlyInAnyOrder(
-            receiver, postCode, roadAddress, detailAddress, delivery.getStatus().name());
+            receiver, postCode, roadAddress, detailAddress, delivery.getStatus().getMessage());
   }
 
   @DisplayName("배송 조회 시 해당 주문이 존재 하지 않는 경우 예외가 발생한다.")
