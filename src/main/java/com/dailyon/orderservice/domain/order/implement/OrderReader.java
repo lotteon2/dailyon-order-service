@@ -25,8 +25,8 @@ public class OrderReader {
     return orderRepository.findByOrderNo(orderNo).orElseThrow(OrderNotFoundException::new);
   }
 
-  public Page<Order> read(Pageable pageable, Long memberId) {
-    return orderRepository.findAllWithPaging(pageable, memberId);
+  public Page<Order> read(Pageable pageable, String role, Long memberId) {
+    return orderRepository.findAllWithPaging(pageable, role, memberId);
   }
 
   public List<OrderDetail> readDetails(String orderNo, Long memberId) {

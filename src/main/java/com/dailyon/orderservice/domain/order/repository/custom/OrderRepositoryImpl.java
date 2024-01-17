@@ -1,6 +1,7 @@
 package com.dailyon.orderservice.domain.order.repository.custom;
 
 import com.dailyon.orderservice.domain.order.entity.Order;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,13 +27,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
   }
 
   @Override
-  public Page<Order> findAllWithPaging(Pageable pageable, Long memberId) {
+  public Page<Order> findAllWithPaging(Pageable pageable, String role, Long memberId) {
 
     List<Long> ids =
         queryFactory
             .select(order.id)
             .from(order)
-            .where(order.memberId.eq(memberId))
+            .where(getRoleCondition(role, memberId))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .orderBy(order.createdAt.desc())
@@ -54,5 +55,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         .from(order)
         .where(order.memberId.eq(memberId))
         .fetchOne();
+  }
+
+  private BooleanExpression getRoleCondition(String role, Long memberId) {
+    return "ROLE_ADMIN".equals(role) ? null : order.memberId.eq(memberId);
   }
 }

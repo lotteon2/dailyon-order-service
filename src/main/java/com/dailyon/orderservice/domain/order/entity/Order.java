@@ -17,7 +17,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @Entity(name = "orders")
-@Table(indexes = @Index(name = "idx_order_no", columnList = "orderNo", unique = true))
+@Table(
+    indexes = {
+      @Index(name = "idx_order_no", columnList = "orderNo", unique = true),
+      @Index(name = "idx_order_type", columnList = "type")
+    })
 public class Order extends BaseEntity {
 
   @Id
@@ -31,8 +35,10 @@ public class Order extends BaseEntity {
 
   @Column(columnDefinition = "int default 0")
   private int usedPoints;
+
   @Column(columnDefinition = "int default 0")
   private int deliveryFee;
+
   @Column(columnDefinition = "int default 0")
   private int totalCouponDiscountPrice;
 

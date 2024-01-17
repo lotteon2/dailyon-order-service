@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface OrderRepositoryCustom {
   Optional<Order> findByOrderNo(String orderNo);
 
-  Page<Order> findAllWithPaging(Pageable pageable, Long memberId);
+  Page<Order> findAllWithPaging(Pageable pageable, String role, Long memberId);
 }

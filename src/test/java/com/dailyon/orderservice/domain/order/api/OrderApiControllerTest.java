@@ -17,7 +17,11 @@ class OrderApiControllerTest extends ControllerTestSupport {
     Long memberId = 1L;
     // when // then
     mockMvc
-        .perform(get("/orders").header("memberId", memberId).param("page", "0"))
+        .perform(
+            get("/orders")
+                .header("memberId", memberId)
+                .header("role", "ROLE_USER")
+                .param("page", "0"))
         .andExpect(status().isOk());
   }
 
@@ -41,7 +45,7 @@ class OrderApiControllerTest extends ControllerTestSupport {
     // when // then
     mockMvc
         .perform(
-           delete("/orders/order-details/{orderDetailNo}", "orderDetailNo")
+            delete("/orders/order-details/{orderDetailNo}", "orderDetailNo")
                 .header("memberId", memberId))
         .andExpect(status().isOk());
   }

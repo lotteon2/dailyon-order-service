@@ -19,6 +19,7 @@ public class TOrderEventProducer {
   public void orderCreated(OrderDTO orderDTO) {
     log.info("order-created -> orderId {}", orderDTO.getOrderNo());
     try {
+      System.out.println(orderDTO.getReferralCode());
       kafkaTemplate.send(KafkaTopic.CREATE_ORDER, objectMapper.writeValueAsString(orderDTO));
     } catch (JsonProcessingException e) {
       e.printStackTrace();

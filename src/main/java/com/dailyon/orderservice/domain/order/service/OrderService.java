@@ -36,8 +36,8 @@ public class OrderService {
     return savedOrder;
   }
 
-  public Page<Order> getOrders(Pageable pageable, Long memberId) {
-    return orderReader.read(pageable, memberId);
+  public Page<Order> getOrders(Pageable pageable, String role, Long memberId) {
+    return orderReader.read(pageable, role, memberId);
   }
 
   public List<OrderDetail> getOrderDetails(String orderNo, Long memberId) {

@@ -32,7 +32,8 @@ class OrderRepositoryImplTest extends IntegrationTestSupport {
               OrderType.SINGLE));
     }
     // when
-    Page<Order> orders = orderRepository.findAllWithPaging(PageRequest.of(0, 8), memberId);
+    Page<Order> orders =
+        orderRepository.findAllWithPaging(PageRequest.of(0, 8), "ROLE_USER", memberId);
     // then
     assertThat(orders.getContent()).isNotEmpty().hasSize(8);
   }

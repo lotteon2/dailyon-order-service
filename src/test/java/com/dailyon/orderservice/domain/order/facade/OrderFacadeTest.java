@@ -33,7 +33,7 @@ class OrderFacadeTest extends IntegrationTestSupport {
               OrderType.SINGLE));
     }
     // when
-    OrderPageResponse orders = orderFacade.getOrders(PageRequest.of(0, 8), memberId);
+    OrderPageResponse orders = orderFacade.getOrders(PageRequest.of(0, 8), "ROLE_USER", memberId);
     // then
     assertThat(orders.getOrders()).isNotEmpty().hasSize(8);
     assertThat(orders.getTotalElements()).isEqualTo(10);
