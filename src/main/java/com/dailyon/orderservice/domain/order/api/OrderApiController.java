@@ -1,5 +1,6 @@
 package com.dailyon.orderservice.domain.order.api;
 
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.facade.OrderFacade;
 import com.dailyon.orderservice.domain.order.facade.response.OrderDetailResponse;
 import com.dailyon.orderservice.domain.order.facade.response.OrderPageResponse;
@@ -22,8 +23,9 @@ public class OrderApiController {
   public ResponseEntity<OrderPageResponse> getOrders(
       @RequestHeader(value = "memberId") Long memberId,
       @RequestHeader(value = "role") String role,
+      @RequestParam(name = "type", defaultValue = "SINGLE") OrderType type,
       @PageableDefault(size = 8) Pageable pageable) {
-    return ResponseEntity.ok(orderFacade.getOrders(pageable, role, memberId));
+    return ResponseEntity.ok(orderFacade.getOrders(pageable, type, role, memberId));
   }
 
   @GetMapping("/{orderNo}")

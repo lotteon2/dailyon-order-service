@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class OrderResponse {
   private String orderNo;
   private String productsName;
+  private int usedPoints;
   private Long totalAmount;
   private String status;
 
@@ -27,11 +28,13 @@ public class OrderResponse {
   private OrderResponse(
       String orderNo,
       String productsName,
+      int usedPoints,
       Long totalAmount,
       String status,
       LocalDateTime createdAt) {
     this.orderNo = orderNo;
     this.productsName = productsName;
+    this.usedPoints = usedPoints;
     this.totalAmount = totalAmount;
     this.status = status;
     this.createdAt = createdAt;
@@ -41,6 +44,7 @@ public class OrderResponse {
     return OrderResponse.builder()
         .orderNo(order.getOrderNo())
         .productsName(order.getProductsName())
+        .usedPoints(order.getUsedPoints())
         .totalAmount(order.getTotalAmount())
         .status(order.getStatus().getMessage())
         .createdAt(order.getCreatedAt())

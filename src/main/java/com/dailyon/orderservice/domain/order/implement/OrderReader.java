@@ -3,6 +3,7 @@ package com.dailyon.orderservice.domain.order.implement;
 import com.dailyon.orderservice.common.exception.AuthorizationException;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.exception.OrderDetailNotFoundException;
 import com.dailyon.orderservice.domain.order.exception.OrderNotFoundException;
 import com.dailyon.orderservice.domain.order.repository.OrderDetailRepository;
@@ -25,8 +26,8 @@ public class OrderReader {
     return orderRepository.findByOrderNo(orderNo).orElseThrow(OrderNotFoundException::new);
   }
 
-  public Page<Order> read(Pageable pageable, String role, Long memberId) {
-    return orderRepository.findAllWithPaging(pageable, role, memberId);
+  public Page<Order> read(Pageable pageable, OrderType type, String role, Long memberId) {
+    return orderRepository.findAllWithPaging(pageable, type, role, memberId);
   }
 
   public List<OrderDetail> readDetails(String orderNo, Long memberId) {

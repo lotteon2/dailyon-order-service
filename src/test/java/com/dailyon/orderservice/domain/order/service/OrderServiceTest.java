@@ -74,7 +74,7 @@ class OrderServiceTest extends IntegrationTestSupport {
     }
     // when
     PageRequest page = PageRequest.of(0, 8);
-    Page<Order> orders = orderService.getOrders(page, "ROLE_USER", memberId);
+    Page<Order> orders = orderService.getOrders(page, SINGLE, "ROLE_USER", memberId);
     // then
     assertThat(orders.getContent()).isNotEmpty().hasSize(8);
   }

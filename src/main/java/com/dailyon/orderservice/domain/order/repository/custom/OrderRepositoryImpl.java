@@ -1,6 +1,7 @@
 package com.dailyon.orderservice.domain.order.repository.custom;
 
 import com.dailyon.orderservice.domain.order.entity.Order;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dailyon.orderservice.domain.order.entity.QOrder.order;
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.CART;
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.SINGLE;
 
 @RequiredArgsConstructor
 public class OrderRepositoryImpl implements OrderRepositoryCustom {
@@ -27,13 +30,14 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
   }
 
   @Override
-  public Page<Order> findAllWithPaging(Pageable pageable, String role, Long memberId) {
+  public Page<Order> findAllWithPaging(
+      Pageable pageable, OrderType type, String role, Long memberId) {
 
     List<Long> ids =
         queryFactory
             .select(order.id)
             .from(order)
-            .where(getRoleCondition(role, memberId))
+            .where(getRoleCondition(role, memberId), eqType(type))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .orderBy(order.createdAt.desc())
@@ -59,5 +63,11 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
   private BooleanExpression getRoleCondition(String role, Long memberId) {
     return "ROLE_ADMIN".equals(role) ? null : order.memberId.eq(memberId);
+  }
+
+  private BooleanExpression eqType(OrderType type) {
+    return type == SINGLE || type == CART
+        ? order.type.eq(SINGLE).or(order.type.eq(CART))
+        : order.type.eq(type);
   }
 }

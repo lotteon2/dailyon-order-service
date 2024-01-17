@@ -67,8 +67,8 @@ public class OrderFacade {
     return tOrder.getId();
   }
 
-  public OrderPageResponse getOrders(Pageable pageable, String role, Long memberId) {
-    Page<Order> page = orderService.getOrders(pageable, role, memberId);
+  public OrderPageResponse getOrders(Pageable pageable, OrderType type, String role, Long memberId) {
+    Page<Order> page = orderService.getOrders(pageable, type, role, memberId);
     return OrderPageResponse.from(page);
   }
 
