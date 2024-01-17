@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import static com.dailyon.orderservice.common.utils.OrderNoGenerator.generate;
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.SINGLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderFacadeTest extends IntegrationTestSupport {
@@ -26,14 +27,11 @@ class OrderFacadeTest extends IntegrationTestSupport {
     for (int i = 0; i < 10; i++) {
       orderRepository.save(
           createOrder(
-              generate(memberId),
-              memberId,
-              "testProducts" + i,
-              (long) (10000 * i),
-              OrderType.SINGLE));
+              generate(memberId), memberId, "testProducts" + i, (long) (10000 * i), SINGLE));
     }
     // when
-    OrderPageResponse orders = orderFacade.getOrders(PageRequest.of(0, 8), memberId);
+    OrderPageResponse orders =
+        orderFacade.getOrders(PageRequest.of(0, 8), SINGLE, "ROLE_USER", memberId);
     // then
     assertThat(orders.getOrders()).isNotEmpty().hasSize(8);
     assertThat(orders.getTotalElements()).isEqualTo(10);
