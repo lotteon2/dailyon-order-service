@@ -37,8 +37,8 @@ public class OrderService {
     return savedOrder;
   }
 
-  public Page<Order> getOrders(Pageable pageable, OrderType type, String role, Long memberId) {
-    return orderReader.read(pageable, type, role, memberId);
+  public Page<Order> getOrders(Pageable pageable, OrderType type, Long memberId) {
+    return orderReader.read(pageable, type, memberId);
   }
 
   public List<OrderDetail> getOrderDetails(String orderNo, Long memberId) {
@@ -48,7 +48,7 @@ public class OrderService {
   @Transactional
   public OrderDetail cancelOrderDetail(String orderDetailNo, Long memberId) {
     OrderDetail orderDetail = orderReader.readDetail(orderDetailNo, memberId);
-    orderManager.cancelDetail(orderDetail);
+    orderManager.cancelDetail(orderDetail, memberId);
     return orderDetail;
   }
 

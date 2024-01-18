@@ -93,7 +93,11 @@ public class OrderDetail extends BaseEntity {
     this.couponDiscountPrice = couponDiscountPrice;
   }
 
-  public void cancel() {
+  public void cancel(Long memberId) {
+    if (memberId == 0) {
+      this.status = CANCEL;
+      return;
+    }
     if (!status.equals(BEFORE_DELIVERY)) {
       throw new CancellationNotAllowedException();
     }

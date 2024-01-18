@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 public class OrderManager {
   private final OrderDetailRepository orderDetailRepository;
 
-  public void cancelDetail(OrderDetail orderDetail) {
-    orderDetail.cancel();
+  public void cancelDetail(OrderDetail orderDetail, Long memberId) {
+    orderDetail.cancel(memberId);
   }
 
   public void changeReviewCheck(OrderDetail orderDetail) {

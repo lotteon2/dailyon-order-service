@@ -30,14 +30,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
   }
 
   @Override
-  public Page<Order> findAllWithPaging(
-      Pageable pageable, OrderType type, String role, Long memberId) {
+  public Page<Order> findAllWithPaging(Pageable pageable, OrderType type, Long memberId) {
 
     List<Long> ids =
         queryFactory
             .select(order.id)
             .from(order)
-            .where(getRoleCondition(role, memberId), eqType(type))
+            .where(getRoleCondition(memberId), eqType(type))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .orderBy(order.createdAt.desc())
@@ -50,22 +49,23 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     List<Order> fetch =
         queryFactory.selectFrom(order).where(order.id.in(ids)).orderBy(order.id.desc()).fetch();
 
-    return PageableExecutionUtils.getPage(fetch, pageable, () -> getTotalPageCount(memberId));
+    return PageableExecutionUtils.getPage(fetch, pageable, () -> getTotalPageCount(type, memberId));
   }
 
-  private Long getTotalPageCount(Long memberId) {
+  private Long getTotalPageCount(OrderType type, Long memberId) {
     return queryFactory
         .select(order.count())
         .from(order)
-        .where(order.memberId.eq(memberId))
+        .where(getRoleCondition(memberId), eqType(type))
         .fetchOne();
   }
 
-  private BooleanExpression getRoleCondition(String role, Long memberId) {
-    return "ROLE_ADMIN".equals(role) ? null : order.memberId.eq(memberId);
+  private BooleanExpression getRoleCondition(Long memberId) {
+    return memberId == 0 ? null : order.memberId.eq(memberId);
   }
 
   private BooleanExpression eqType(OrderType type) {
+    if (type == null) return null;
     return type == SINGLE || type == CART
         ? order.type.eq(SINGLE).or(order.type.eq(CART))
         : order.type.eq(type);
