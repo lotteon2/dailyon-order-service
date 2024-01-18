@@ -22,15 +22,14 @@ public class OrderApiController {
   @GetMapping("")
   public ResponseEntity<OrderPageResponse> getOrders(
       @RequestHeader(value = "memberId") Long memberId,
-      @RequestHeader(value = "role") String role,
       @RequestParam(name = "type", defaultValue = "SINGLE") OrderType type,
       @PageableDefault(size = 8) Pageable pageable) {
-    return ResponseEntity.ok(orderFacade.getOrders(pageable, type, role, memberId));
+    return ResponseEntity.ok(orderFacade.getOrders(pageable, type, memberId));
   }
 
   @GetMapping("/{orderNo}")
   public ResponseEntity<List<OrderDetailResponse>> getOrderDetails(
-      @RequestHeader(value = "memberId", defaultValue = "1") Long memberId,
+      @RequestHeader(value = "memberId") Long memberId,
       @PathVariable(name = "orderNo") String orderNo) {
     return ResponseEntity.ok(orderFacade.getOrderDetails(orderNo, memberId));
   }

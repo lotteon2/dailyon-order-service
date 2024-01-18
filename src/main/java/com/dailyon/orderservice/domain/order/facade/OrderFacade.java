@@ -67,8 +67,8 @@ public class OrderFacade {
     return tOrder.getId();
   }
 
-  public OrderPageResponse getOrders(Pageable pageable, OrderType type, String role, Long memberId) {
-    Page<Order> page = orderService.getOrders(pageable, type, role, memberId);
+  public OrderPageResponse getOrders(Pageable pageable, OrderType type, Long memberId) {
+    Page<Order> page = orderService.getOrders(pageable, type, memberId);
     return OrderPageResponse.from(page);
   }
 
@@ -88,7 +88,7 @@ public class OrderFacade {
             orderDetail.getOrderPrice(),
             orderDetail.getProductName(),
             orderDetail.getProductQuantity());
-    SQSNotificationDto notificationDto = of(memberId, notificationData);
+    SQSNotificationDto notificationDto = of(orderDetail.getOrder().getMemberId(), notificationData);
     orderSqsProducer.produce(ORDER_CANCELED_NOTIFICATION_QUEUE, notificationDto);
     return refund.getId();
   }

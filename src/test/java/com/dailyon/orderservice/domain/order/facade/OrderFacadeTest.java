@@ -30,8 +30,7 @@ class OrderFacadeTest extends IntegrationTestSupport {
               generate(memberId), memberId, "testProducts" + i, (long) (10000 * i), SINGLE));
     }
     // when
-    OrderPageResponse orders =
-        orderFacade.getOrders(PageRequest.of(0, 8), SINGLE, "ROLE_USER", memberId);
+    OrderPageResponse orders = orderFacade.getOrders(PageRequest.of(0, 8), SINGLE, memberId);
     // then
     assertThat(orders.getOrders()).isNotEmpty().hasSize(8);
     assertThat(orders.getTotalElements()).isEqualTo(10);
