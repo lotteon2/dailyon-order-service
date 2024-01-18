@@ -2,6 +2,7 @@ package com.dailyon.orderservice.domain.order.service;
 
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
+import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.implement.OrderAppender;
 import com.dailyon.orderservice.domain.order.implement.OrderDetailAppender;
 import com.dailyon.orderservice.domain.order.implement.OrderManager;
@@ -36,8 +37,8 @@ public class OrderService {
     return savedOrder;
   }
 
-  public Page<Order> getOrders(Pageable pageable, Long memberId) {
-    return orderReader.read(pageable, memberId);
+  public Page<Order> getOrders(Pageable pageable, OrderType type, String role, Long memberId) {
+    return orderReader.read(pageable, type, role, memberId);
   }
 
   public List<OrderDetail> getOrderDetails(String orderNo, Long memberId) {

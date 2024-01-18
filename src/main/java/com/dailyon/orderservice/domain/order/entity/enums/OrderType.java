@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum OrderType {
-  SINGLE("단건주문"),
-  CART("장바구니주문"),
+  SINGLE("단건"),
+  CART("장바구니"),
   GIFT("선물하기"),
-  AUCTION("경매주문");
+  AUCTION("경매");
 
   private final String message;
 
