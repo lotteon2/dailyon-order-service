@@ -26,8 +26,8 @@ public class OrderReader {
     return orderRepository.findByOrderNo(orderNo).orElseThrow(OrderNotFoundException::new);
   }
 
-  public Page<Order> read(Pageable pageable, OrderType type, String role, Long memberId) {
-    return orderRepository.findAllWithPaging(pageable, type, role, memberId);
+  public Page<Order> read(Pageable pageable, OrderType type, Long memberId) {
+    return orderRepository.findAllWithPaging(pageable, type, memberId);
   }
 
   public List<OrderDetail> readDetails(String orderNo, Long memberId) {
@@ -50,6 +50,7 @@ public class OrderReader {
   }
 
   private void checkAuthorization(Order order, Long memberId) {
+    if (memberId == 0) return;
     if (order.getMemberId() != memberId) {
       throw new AuthorizationException();
     }

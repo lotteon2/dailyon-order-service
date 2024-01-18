@@ -26,15 +26,10 @@ class OrderRepositoryImplTest extends IntegrationTestSupport {
     for (int i = 0; i < 10; i++) {
       orderRepository.save(
           createOrder(
-              generate(memberId),
-              memberId,
-              "testProducts" + i,
-              (long) (10000 * i),
-              SINGLE));
+              generate(memberId), memberId, "testProducts" + i, (long) (10000 * i), SINGLE));
     }
     // when
-    Page<Order> orders =
-        orderRepository.findAllWithPaging(PageRequest.of(0, 8), SINGLE, "ROLE_USER", memberId);
+    Page<Order> orders = orderRepository.findAllWithPaging(PageRequest.of(0, 8), SINGLE, memberId);
     // then
     assertThat(orders.getContent()).isNotEmpty().hasSize(8);
   }
