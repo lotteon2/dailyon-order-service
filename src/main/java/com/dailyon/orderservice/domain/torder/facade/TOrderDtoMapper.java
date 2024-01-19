@@ -119,6 +119,7 @@ public interface TOrderDtoMapper {
         .usedPoints(tOrder.getUsedPoints())
         .orderEvent(PENDING)
         .referralCode(tOrder.getReferralCode())
+        .orderType(OrderDTO.OrderType.valueOf(tOrder.getType()))
         .build();
   }
 
