@@ -53,6 +53,9 @@ public class TOrder {
   @DynamoDBAttribute(attributeName = "referral_code")
   private String referralCode;
 
+  @DynamoDBAttribute(attributeName = "auction_id")
+  private String auctionId;
+
   @DynamoDBAttribute(attributeName = "status")
   private String status = OrderStatus.PENDING.name();
 

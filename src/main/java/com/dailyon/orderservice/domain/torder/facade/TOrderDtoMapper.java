@@ -122,6 +122,7 @@ public interface TOrderDtoMapper {
         .orderEvent(PENDING)
         .referralCode(tOrder.getReferralCode())
         .orderType(OrderDTO.OrderType.valueOf(tOrder.getType()))
+        .auctionId(tOrder.getAuctionId())
         .build();
   }
 
