@@ -53,10 +53,12 @@ public interface TOrderDtoMapper {
   @Mapping(target = "registerDelivery", source = "request.deliveryInfo")
   @Mapping(target = "couponInfoMap", source = "productCoupons")
   @Mapping(target = "productInfoMap", source = "request")
+  @Mapping(target = "orderPrice", source = "auctionOrderPrice")
   RegisterTOrder of(
       TOrderCreateRequest request,
       List<ProductCouponDTO> productCoupons,
-      List<OrderProductDTO> orderProductDTOList);
+      List<OrderProductDTO> orderProductDTOList,
+      Long auctionOrderPrice);
 
   default Map<Long, ProductCouponDTO> toCouponInfoMap(List<ProductCouponDTO> productCoupons) {
     return productCoupons.stream()
