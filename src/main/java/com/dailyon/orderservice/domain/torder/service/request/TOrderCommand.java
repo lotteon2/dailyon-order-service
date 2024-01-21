@@ -35,6 +35,7 @@ public class TOrderCommand {
     private String paymentType;
     private String referralCode;
     private Long orderPrice;
+    private String auctionId;
 
     public TDelivery createTDelivery(String orderNo) {
       return registerDelivery != null ? registerDelivery.toEntity(orderNo) : null;
@@ -88,6 +89,7 @@ public class TOrderCommand {
           .productsName(getProductsName(orderDetails))
           .totalAmount(totalAmount)
           .referralCode(referralCode)
+          .auctionId(auctionId)
           .type(type.name())
           .orderDetails(orderDetails)
           .delivery(tDelivery)

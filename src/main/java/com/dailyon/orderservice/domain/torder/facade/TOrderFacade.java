@@ -56,6 +56,7 @@ public class TOrderFacade {
   public String orderApprove(TOrderDto.OrderApproveRequest request, String orderNo) {
     TOrder tOrder = tOrderService.getTOrder(orderNo);
     OrderDTO orderDTO = tOrderDtoMapper.of(tOrder, request.getPg_token());
+    System.out.println(orderDTO.getAuctionId());
     producer.orderCreated(orderDTO);
     return tOrder.getId();
   }

@@ -81,6 +81,7 @@ public class TOrder {
       String productsName,
       Long totalAmount,
       String referralCode,
+      String auctionId,
       List<TOrderDetail> orderDetails,
       TDelivery delivery) {
     this.id = id;
@@ -92,6 +93,7 @@ public class TOrder {
     this.productsName = productsName;
     this.totalAmount = totalAmount;
     this.referralCode = referralCode;
+    this.auctionId = auctionId;
     this.orderDetails = orderDetails;
     this.delivery = delivery;
   }
