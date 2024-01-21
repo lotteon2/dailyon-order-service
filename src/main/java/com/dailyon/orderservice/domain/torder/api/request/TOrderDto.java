@@ -46,7 +46,6 @@ public class TOrderDto {
       @NotNull(message = "상품 아이디는 필수 입니다.")
       private Long productId;
 
-      @NotNull(message = "카테고리 아이디는 필수 입니다.")
       private Long categoryId;
 
       @NotNull(message = "치수는 필수 입니다.")
