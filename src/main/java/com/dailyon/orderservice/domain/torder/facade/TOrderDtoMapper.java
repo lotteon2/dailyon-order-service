@@ -54,6 +54,7 @@ public interface TOrderDtoMapper {
   @Mapping(target = "couponInfoMap", source = "productCoupons")
   @Mapping(target = "productInfoMap", source = "request")
   @Mapping(target = "orderPrice", source = "auctionOrderPrice")
+  @Mapping(target = "auctionId", source = "request.auctionId")
   RegisterTOrder of(
       TOrderCreateRequest request,
       List<ProductCouponDTO> productCoupons,
@@ -122,6 +123,7 @@ public interface TOrderDtoMapper {
         .orderEvent(PENDING)
         .referralCode(tOrder.getReferralCode())
         .orderType(OrderDTO.OrderType.valueOf(tOrder.getType()))
+        .auctionId(tOrder.getAuctionId())
         .build();
   }
 
