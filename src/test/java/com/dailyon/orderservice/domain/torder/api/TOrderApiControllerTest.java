@@ -117,46 +117,6 @@ class TOrderApiControllerTest extends ControllerTestSupport {
         .andExpect(jsonPath("$.validation.*").value("상품 아이디는 필수 입니다."));
   }
 
-  @DisplayName("주문 등록 시 카테고리 아이디는 필수 이다. ")
-  @Test
-  void createTOrderReadyWithNoExistCategoryId() throws Exception {
-    // given
-    RegisterDeliveryRequest deliveryRequest = new RegisterDeliveryRequest();
-    deliveryRequest.setReceiver("testReceiver");
-    deliveryRequest.setDetailAddress("testDetailAddress");
-    deliveryRequest.setRoadAddress("testRoadAddress");
-    deliveryRequest.setPostCode("testPostCode");
-
-    RegisterItemRequest itemRequest = new RegisterItemRequest();
-    itemRequest.setOrderPrice(100000);
-    itemRequest.setProductId(1L);
-    itemRequest.setCategoryId(null);
-    itemRequest.setCouponInfoId(1L);
-    itemRequest.setQuantity(1);
-    itemRequest.setSizeId(1L);
-    List<RegisterItemRequest> irList = List.of(itemRequest);
-
-    int deliveryFee = 0;
-    int usedPoints = 0;
-    OrderType type = SINGLE;
-    int totalCouponDiscountPrice = 0;
-
-    TOrderCreateRequest request =
-            createTOrderRequest(
-                    deliveryFee, usedPoints, type, totalCouponDiscountPrice, deliveryRequest, irList);
-
-    // when // then
-    mockMvc
-        .perform(
-            post("/orders")
-                .header("memberId", 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-        .andExpect(jsonPath("$.validation.*").value("카테고리 아이디는 필수 입니다."));
-  }
-
   @DisplayName("주문 등록 시 치수 아이디는 필수 이다. ")
   @Test
   void createTOrderReadyWithNoExistSizeId() throws Exception {

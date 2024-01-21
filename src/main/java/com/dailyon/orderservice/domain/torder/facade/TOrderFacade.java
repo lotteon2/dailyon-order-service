@@ -4,10 +4,8 @@ import com.dailyon.orderservice.domain.order.service.GiftService;
 import com.dailyon.orderservice.domain.order.service.request.GiftCommand;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
-import com.dailyon.orderservice.domain.torder.clients.MemberFeignClient;
-import com.dailyon.orderservice.domain.torder.clients.PaymentFeignClient;
-import com.dailyon.orderservice.domain.torder.clients.ProductFeignClient;
-import com.dailyon.orderservice.domain.torder.clients.PromotionFeignClient;
+import com.dailyon.orderservice.domain.torder.clients.*;
+import com.dailyon.orderservice.domain.torder.clients.dto.AuctionProductDTO;
 import com.dailyon.orderservice.domain.torder.entity.TOrder;
 import com.dailyon.orderservice.domain.torder.kafka.event.TOrderEventProducer;
 import com.dailyon.orderservice.domain.torder.service.TOrderService;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.dailyon.orderservice.common.utils.OrderValidator.validateMemberPoint;
+import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.AUCTION;
 import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.GIFT;
 import static java.util.Collections.EMPTY_LIST;
 
@@ -37,6 +36,7 @@ public class TOrderFacade {
   private final PromotionFeignClient promotionFeignClient;
   private final MemberFeignClient memberFeignClient;
   private final PaymentFeignClient paymentFeignClient;
+  private final AuctionClient auctionClient;
   private final TOrderEventProducer producer;
   private final TOrderDtoMapper tOrderDtoMapper;
 
@@ -76,14 +76,24 @@ public class TOrderFacade {
 
   private RegisterTOrder extractCommand(TOrderCreateRequest request, Long memberId) {
     var orderItemList = request.getOrderItems();
-    var productCoupons = getProductCoupons(tOrderDtoMapper.toCouponParams(orderItemList), memberId);
-    var orderProducts = getOrderProducts(tOrderDtoMapper.toOrderProductParams(orderItemList));
-
     int memberPoints = getMemberPoints(memberId);
     int usedPoints = request.getUsedPoints();
     validateMemberPoint(usedPoints, memberPoints);
 
-    RegisterTOrder tOrderCommand = tOrderDtoMapper.of(request, productCoupons, orderProducts);
+    if (request.getType().equals(AUCTION)) {
+      AuctionProductDTO auctionProductInfo =
+          auctionClient.getAuctionProductInfo(memberId, request.getAuctionId());
+      if (!auctionProductInfo.isWinner()) {
+        throw new RuntimeException("경매 낙찰자가 아닙니다.");
+      }
+      var orderProducts = auctionProductInfo.createOrderProducts();
+      return tOrderDtoMapper.of(
+          request, EMPTY_LIST, orderProducts, auctionProductInfo.getOrderPrice());
+    }
+    var productCoupons = getProductCoupons(tOrderDtoMapper.toCouponParams(orderItemList), memberId);
+    var orderProducts = getOrderProducts(tOrderDtoMapper.toOrderProductParams(orderItemList));
+
+    RegisterTOrder tOrderCommand = tOrderDtoMapper.of(request, productCoupons, orderProducts, null);
     return tOrderCommand;
   }
 }

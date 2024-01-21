@@ -53,6 +53,7 @@ endpoint:
   promotion-service: http://promotion-service:8084
   product-service: http://product-service:8085
   payment-service: http://payment-service:8090
+  auction-service: http://auction-service:8083
 
 logging:
   level:

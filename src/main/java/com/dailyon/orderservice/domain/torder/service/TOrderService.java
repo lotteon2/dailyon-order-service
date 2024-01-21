@@ -21,8 +21,8 @@ public class TOrderService {
   public TOrder createTOrder(TOrderCommand.RegisterTOrder requestOrder, Long memberId) {
     String orderNo = OrderNoGenerator.generate(memberId);
     TDelivery tDelivery = requestOrder.createTDelivery(orderNo);
-    TOrder savedOrder = tOrderAppender.append(requestOrder, orderNo, memberId, tDelivery);
-    return savedOrder;
+    TOrder order = requestOrder.createOrder(orderNo, memberId, tDelivery);
+    return tOrderAppender.append(order);
   }
 
   public TOrder getTOrder(String orderNo) {
