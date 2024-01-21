@@ -36,6 +36,7 @@ public class TOrderDto {
     private String senderName;
 
     private String referralCode;
+    private String auctionId;
 
     @Getter
     @Setter
