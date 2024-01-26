@@ -18,6 +18,18 @@ public class OrderEventListener {
   private final OrderFacade orderFacade;
   private final OrderService orderService;
 
+  @KafkaListener(topics = "cancel-order")
+  public void cancel(String message, Acknowledgment ack) {
+    OrderDTO orderDTO = null;
+    try {
+      orderDTO = objectMapper.readValue(message, OrderDTO.class);
+      orderService.modifyTOrder(orderDTO.getOrderNo(), orderDTO.getOrderEvent());
+      ack.acknowledge();
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+  }
+
   @KafkaListener(topics = "approve-payment")
   public void saveOrder(String message, Acknowledgment ack) {
     OrderDTO orderDTO = null;

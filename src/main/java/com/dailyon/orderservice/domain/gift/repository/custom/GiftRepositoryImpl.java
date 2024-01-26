@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dailyon.orderservice.domain.order.entity.QGift.gift;
+import static com.dailyon.orderservice.domain.gift.entity.QGift.gift;
 
 @RequiredArgsConstructor
 public class GiftRepositoryImpl implements GiftCustomRepository {

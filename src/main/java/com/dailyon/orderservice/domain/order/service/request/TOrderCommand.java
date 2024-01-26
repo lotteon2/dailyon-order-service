@@ -1,4 +1,4 @@
-package com.dailyon.orderservice.domain.order.service;
+package com.dailyon.orderservice.domain.order.service.request;
 
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.dynamo.document.TDelivery;

@@ -1,15 +1,21 @@
 package com.dailyon.orderservice.domain.order.api;
 
+import com.dailyon.orderservice.domain.order.api.request.TOrderDto;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.facade.OrderFacade;
 import com.dailyon.orderservice.domain.order.facade.response.OrderDetailResponse;
 import com.dailyon.orderservice.domain.order.facade.response.OrderPageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -18,6 +24,28 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderApiController {
   private final OrderFacade orderFacade;
+
+  @Value("${redirect_url}")
+  private String REDIRECT_URL;
+
+  @PostMapping("")
+  public ResponseEntity<String> orderReady(
+      @RequestHeader(value = "memberId") Long memberId,
+      @Valid @RequestBody TOrderDto.TOrderCreateRequest request) {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(orderFacade.orderReady(request, memberId));
+  }
+
+  @GetMapping("/approve/{orderNo}")
+  public void approve(
+      @PathVariable(name = "orderNo") String orderNo,
+      @Valid TOrderDto.OrderApproveRequest request,
+      HttpServletResponse response)
+      throws IOException {
+    String orderToken = orderFacade.orderApprove(request, orderNo);
+    response.setStatus(HttpStatus.CREATED.value());
+    response.sendRedirect(REDIRECT_URL + "/" + orderToken);
+  }
 
   @GetMapping("")
   public ResponseEntity<OrderPageResponse> getOrders(

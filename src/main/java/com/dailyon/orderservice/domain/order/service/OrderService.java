@@ -1,14 +1,15 @@
 package com.dailyon.orderservice.domain.order.service;
 
+import com.dailyon.orderservice.common.utils.OrderNoGenerator;
+import com.dailyon.orderservice.domain.order.dynamo.document.TDelivery;
+import com.dailyon.orderservice.domain.order.dynamo.document.TOrder;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
-import com.dailyon.orderservice.domain.order.implement.OrderAppender;
-import com.dailyon.orderservice.domain.order.implement.OrderDetailAppender;
-import com.dailyon.orderservice.domain.order.implement.OrderManager;
-import com.dailyon.orderservice.domain.order.implement.OrderReader;
-import com.dailyon.orderservice.domain.order.dynamo.document.TOrder;
+import com.dailyon.orderservice.domain.order.implement.*;
+import com.dailyon.orderservice.domain.order.service.request.TOrderCommand;
 import dailyon.domain.order.clients.ProductRankResponse;
+import dailyon.domain.order.kafka.enums.OrderEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,9 @@ public class OrderService {
   private final OrderDetailAppender orderDetailAppender;
   private final OrderReader orderReader;
   private final OrderManager orderManager;
+  private final TOrderAppender tOrderAppender;
+  private final TOrderReader tOrderReader;
+  private final TOrderManager tOrderManager;
 
   @Transactional
   public Order createOrder(TOrder tOrder) {
@@ -60,5 +64,26 @@ public class OrderService {
 
   public List<ProductRankResponse> getMostSoldProducts() {
     return orderReader.readMostSoldProducts(BEST_SELLER_LIMIT);
+  }
+
+  public TOrder createTOrder(TOrderCommand.RegisterTOrder requestOrder, Long memberId) {
+    String orderNo = OrderNoGenerator.generate(memberId);
+    TDelivery tDelivery = requestOrder.createTDelivery(orderNo);
+    TOrder order = requestOrder.createOrder(orderNo, memberId, tDelivery);
+    return tOrderAppender.append(order);
+  }
+
+  public TOrder getTOrder(String orderNo) {
+    return tOrderReader.read(orderNo);
+  }
+
+  public TOrder modifyTOrder(String orderNo, OrderEvent event) {
+    TOrder tOrder = tOrderReader.read(orderNo);
+    TOrder changedTOrder = tOrderManager.changeStatus(tOrder, event);
+    return changedTOrder;
+  }
+
+  public void deleteTOrder(String orderNo) {
+    tOrderManager.delete(orderNo);
   }
 }

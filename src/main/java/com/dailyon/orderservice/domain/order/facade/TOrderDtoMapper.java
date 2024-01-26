@@ -7,9 +7,9 @@ import com.dailyon.orderservice.domain.order.api.request.TOrderDto.TOrderCreateR
 import com.dailyon.orderservice.domain.order.api.request.TOrderDto.TOrderCreateRequest.RegisterItemRequest;
 import com.dailyon.orderservice.domain.order.dynamo.document.TOrder;
 import com.dailyon.orderservice.domain.order.dynamo.document.TOrderDetail;
-import com.dailyon.orderservice.domain.order.service.TOrderCommand.RegisterDelivery;
-import com.dailyon.orderservice.domain.order.service.TOrderCommand.RegisterOrderItem;
-import com.dailyon.orderservice.domain.order.service.TOrderCommand.RegisterTOrder;
+import com.dailyon.orderservice.domain.order.service.request.TOrderCommand.RegisterDelivery;
+import com.dailyon.orderservice.domain.order.service.request.TOrderCommand.RegisterOrderItem;
+import com.dailyon.orderservice.domain.order.service.request.TOrderCommand.RegisterTOrder;
 import dailyon.domain.order.clients.CouponDTO.CouponParam;
 import dailyon.domain.order.clients.CouponDTO.ProductCouponDTO;
 import dailyon.domain.order.clients.PaymentDTO.PaymentReadyParam;

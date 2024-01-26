@@ -3,6 +3,8 @@ package com.dailyon.orderservice.domain.order.message.kafka.event;
 import com.dailyon.orderservice.domain.order.message.kafka.event.dto.RefundDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dailyon.domain.common.KafkaTopic;
+import dailyon.domain.order.kafka.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,6 +23,16 @@ public class OrderEventProducer {
     try {
       String data = objectMapper.writeValueAsString(refundDTO);
       kafkaTemplate.send("create-refund", data);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void orderCreated(OrderDTO orderDTO) {
+    log.info("order-created -> orderId {}", orderDTO.getOrderNo());
+    try {
+      System.out.println(orderDTO.getReferralCode());
+      kafkaTemplate.send(KafkaTopic.CREATE_ORDER, objectMapper.writeValueAsString(orderDTO));
     } catch (JsonProcessingException e) {
       e.printStackTrace();
     }

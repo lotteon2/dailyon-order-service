@@ -1,6 +1,6 @@
 package com.dailyon.orderservice.common.utils;
 
-import com.dailyon.orderservice.domain.order.service.TOrderCommand;
+import com.dailyon.orderservice.domain.order.service.request.TOrderCommand;
 import dailyon.domain.order.clients.CouponDTO.ProductCouponDTO;
 import dailyon.domain.order.clients.ProductDTO.OrderProductListDTO.OrderProductDTO;
 
