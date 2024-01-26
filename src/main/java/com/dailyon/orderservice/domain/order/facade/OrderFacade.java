@@ -9,16 +9,16 @@ import com.dailyon.orderservice.domain.order.entity.OrderDetail;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.facade.response.OrderDetailResponse;
 import com.dailyon.orderservice.domain.order.facade.response.OrderPageResponse;
-import com.dailyon.orderservice.domain.order.kafka.event.OrderEventProducer;
-import com.dailyon.orderservice.domain.order.kafka.event.dto.RefundDTO;
+import com.dailyon.orderservice.domain.order.message.kafka.event.OrderEventProducer;
+import com.dailyon.orderservice.domain.order.message.kafka.event.dto.RefundDTO;
 import com.dailyon.orderservice.domain.order.service.OrderService;
-import com.dailyon.orderservice.domain.order.sqs.OrderSqsProducer;
-import com.dailyon.orderservice.domain.order.sqs.dto.RawNotificationData;
-import com.dailyon.orderservice.domain.order.sqs.dto.SQSNotificationDto;
+import com.dailyon.orderservice.domain.order.message.sqs.OrderSqsProducer;
+import com.dailyon.orderservice.domain.order.message.sqs.dto.RawNotificationData;
+import com.dailyon.orderservice.domain.order.message.sqs.dto.SQSNotificationDto;
 import com.dailyon.orderservice.domain.refund.entity.Refund;
 import com.dailyon.orderservice.domain.refund.service.RefundService;
-import com.dailyon.orderservice.domain.torder.entity.TOrder;
-import com.dailyon.orderservice.domain.torder.service.TOrderService;
+import com.dailyon.orderservice.domain.order.dynamo.document.TOrder;
+import com.dailyon.orderservice.domain.order.service.TOrderService;
 import dailyon.domain.order.clients.ProductRankResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,10 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.dailyon.orderservice.domain.order.entity.enums.OrderType.GIFT;
-import static com.dailyon.orderservice.domain.order.sqs.OrderSqsProducer.*;
-import static com.dailyon.orderservice.domain.order.sqs.dto.RawNotificationData.forGiftReceived;
-import static com.dailyon.orderservice.domain.order.sqs.dto.RawNotificationData.forOrderComplete;
-import static com.dailyon.orderservice.domain.order.sqs.dto.SQSNotificationDto.of;
+import static com.dailyon.orderservice.domain.order.message.sqs.OrderSqsProducer.*;
+import static com.dailyon.orderservice.domain.order.message.sqs.dto.RawNotificationData.forGiftReceived;
+import static com.dailyon.orderservice.domain.order.message.sqs.dto.RawNotificationData.forOrderComplete;
+import static com.dailyon.orderservice.domain.order.message.sqs.dto.SQSNotificationDto.of;
 
 @Service
 @RequiredArgsConstructor

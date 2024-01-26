@@ -7,7 +7,7 @@ import com.dailyon.orderservice.domain.order.implement.OrderAppender;
 import com.dailyon.orderservice.domain.order.implement.OrderDetailAppender;
 import com.dailyon.orderservice.domain.order.implement.OrderManager;
 import com.dailyon.orderservice.domain.order.implement.OrderReader;
-import com.dailyon.orderservice.domain.torder.entity.TOrder;
+import com.dailyon.orderservice.domain.order.dynamo.document.TOrder;
 import dailyon.domain.order.clients.ProductRankResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

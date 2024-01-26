@@ -1,7 +1,7 @@
 package com.dailyon.orderservice.domain.order.facade.response;
 
 import com.dailyon.orderservice.domain.order.entity.Order;
-import com.dailyon.orderservice.domain.torder.entity.TOrder;
+import com.dailyon.orderservice.domain.order.dynamo.document.TOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;

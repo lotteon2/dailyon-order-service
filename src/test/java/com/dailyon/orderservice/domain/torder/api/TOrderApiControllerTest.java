@@ -2,9 +2,9 @@ package com.dailyon.orderservice.domain.torder.api;
 
 import com.dailyon.orderservice.ControllerTestSupport;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
-import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
-import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest.RegisterDeliveryRequest;
-import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest.RegisterItemRequest;
+import com.dailyon.orderservice.domain.order.api.request.TOrderDto.TOrderCreateRequest;
+import com.dailyon.orderservice.domain.order.api.request.TOrderDto.TOrderCreateRequest.RegisterDeliveryRequest;
+import com.dailyon.orderservice.domain.order.api.request.TOrderDto.TOrderCreateRequest.RegisterItemRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

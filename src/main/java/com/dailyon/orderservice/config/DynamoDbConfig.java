@@ -30,7 +30,7 @@ import static com.dailyon.orderservice.config.DynamoDbConfig.*;
 @EnableDynamoDBRepositories(basePackages = DYNAMO_DOMAIN_PACKAGE)
 public class DynamoDbConfig {
 
-  static final String DYNAMO_DOMAIN_PACKAGE = "com.dailyon.orderservice.domain.torder.repository";
+  static final String DYNAMO_DOMAIN_PACKAGE = "com.dailyon.orderservice.domain.order.dynamo.repository";
 
   @Value("${cloud.aws.dynamodb.endpoint:dynamodb.ap-northeast-2.amazonaws.com}")
   private String amazonDynamoDBEndpoint;

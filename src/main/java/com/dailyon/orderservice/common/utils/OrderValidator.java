@@ -1,8 +1,8 @@
 package com.dailyon.orderservice.common.utils;
 
 import com.dailyon.orderservice.common.exception.InvalidParamException;
-import com.dailyon.orderservice.domain.torder.exception.InsufficientPointException;
-import com.dailyon.orderservice.domain.torder.exception.InsufficientStockException;
+import com.dailyon.orderservice.domain.order.exception.InsufficientPointException;
+import com.dailyon.orderservice.domain.order.exception.InsufficientStockException;
 import dailyon.domain.order.clients.CouponDTO.ProductCouponDTO;
 
 import java.util.Optional;

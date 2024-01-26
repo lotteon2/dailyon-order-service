@@ -2,7 +2,7 @@ package com.dailyon.orderservice.domain.delivery.service.request;
 
 import com.dailyon.orderservice.domain.delivery.entity.Delivery;
 import com.dailyon.orderservice.domain.order.entity.Order;
-import com.dailyon.orderservice.domain.torder.entity.TDelivery;
+import com.dailyon.orderservice.domain.order.dynamo.document.TDelivery;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

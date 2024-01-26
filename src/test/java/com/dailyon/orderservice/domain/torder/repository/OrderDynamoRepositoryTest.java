@@ -8,9 +8,10 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.dailyon.orderservice.ContainerBaseTestSupport;
 import com.dailyon.orderservice.common.utils.OrderNoGenerator;
+import com.dailyon.orderservice.domain.order.dynamo.repository.OrderDynamoRepository;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
-import com.dailyon.orderservice.domain.torder.entity.TOrder;
-import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
+import com.dailyon.orderservice.domain.order.dynamo.document.TOrder;
+import com.dailyon.orderservice.domain.order.dynamo.document.TOrderDetail;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +27,8 @@ class OrderDynamoRepositoryTest extends ContainerBaseTestSupport {
 
   @Autowired AmazonDynamoDB dynamoDB;
   @Autowired DynamoDBMapper dynamoDBMapper;
-  @Autowired OrderDynamoRepository orderDynamoRepository;
+  @Autowired
+  OrderDynamoRepository orderDynamoRepository;
 
   @BeforeEach
   void setup() {

@@ -11,12 +11,13 @@ import com.dailyon.orderservice.common.exception.InvalidParamException;
 import com.dailyon.orderservice.common.utils.OrderNoGenerator;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
 import com.dailyon.orderservice.domain.order.exception.OrderNotFoundException;
-import com.dailyon.orderservice.domain.torder.entity.TOrder;
-import com.dailyon.orderservice.domain.torder.entity.TOrderDetail;
-import com.dailyon.orderservice.domain.torder.exception.InsufficientStockException;
-import com.dailyon.orderservice.domain.torder.repository.OrderDynamoRepository;
-import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand;
-import com.dailyon.orderservice.domain.torder.service.request.TOrderCommand.RegisterOrderItem;
+import com.dailyon.orderservice.domain.order.dynamo.document.TOrder;
+import com.dailyon.orderservice.domain.order.dynamo.document.TOrderDetail;
+import com.dailyon.orderservice.domain.order.service.TOrderService;
+import com.dailyon.orderservice.domain.order.exception.InsufficientStockException;
+import com.dailyon.orderservice.domain.order.dynamo.repository.OrderDynamoRepository;
+import com.dailyon.orderservice.domain.order.service.TOrderCommand;
+import com.dailyon.orderservice.domain.order.service.TOrderCommand.RegisterOrderItem;
 import dailyon.domain.order.clients.CouponDTO.ProductCouponDTO;
 import dailyon.domain.order.clients.ProductDTO.OrderProductListDTO.OrderProductDTO;
 import org.junit.jupiter.api.AfterEach;
@@ -36,7 +37,8 @@ class TOrderServiceTest extends ContainerBaseTestSupport {
   @Autowired AmazonDynamoDB dynamoDB;
   @Autowired DynamoDBMapper dynamoDBMapper;
   @Autowired OrderDynamoRepository orderDynamoRepository;
-  @Autowired TOrderService tOrderService;
+  @Autowired
+  TOrderService tOrderService;
 
   @BeforeEach
   void setup() {
