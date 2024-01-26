@@ -1,6 +1,6 @@
-package com.dailyon.orderservice.domain.order.facade.response;
+package com.dailyon.orderservice.domain.gift.facade.response;
 
-import com.dailyon.orderservice.domain.order.entity.Gift;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,7 +1,7 @@
-package com.dailyon.orderservice.domain.order.service.request;
+package com.dailyon.orderservice.domain.gift.service.request;
 
 import com.dailyon.orderservice.domain.delivery.entity.Delivery;
-import com.dailyon.orderservice.domain.order.entity.Gift;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import lombok.Builder;
 import lombok.Getter;

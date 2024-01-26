@@ -1,6 +1,6 @@
-package com.dailyon.orderservice.domain.order.repository.custom;
+package com.dailyon.orderservice.domain.gift.repository.custom;
 
-import com.dailyon.orderservice.domain.order.entity.Gift;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +44,13 @@ public class GiftRepositoryImpl implements GiftCustomRepository {
     }
 
     List<Gift> fetch =
-        queryFactory.selectFrom(gift)
-                .join(gift.order)
-                .fetchJoin()
-                .where(gift.id.in(ids))
-                .orderBy(gift.id.desc()).fetch();
+        queryFactory
+            .selectFrom(gift)
+            .join(gift.order)
+            .fetchJoin()
+            .where(gift.id.in(ids))
+            .orderBy(gift.id.desc())
+            .fetch();
 
     JPAQuery<Long> query =
         queryFactory.select(gift.count()).from(gift).where(gift.receiverId.eq(receiverId));
@@ -74,11 +76,13 @@ public class GiftRepositoryImpl implements GiftCustomRepository {
     }
 
     List<Gift> fetch =
-            queryFactory.selectFrom(gift)
-                    .join(gift.order)
-                    .fetchJoin()
-                    .where(gift.id.in(ids))
-                    .orderBy(gift.id.desc()).fetch();
+        queryFactory
+            .selectFrom(gift)
+            .join(gift.order)
+            .fetchJoin()
+            .where(gift.id.in(ids))
+            .orderBy(gift.id.desc())
+            .fetch();
 
     JPAQuery<Long> query =
         queryFactory

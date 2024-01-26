@@ -1,7 +1,8 @@
-package com.dailyon.orderservice.domain.order.entity;
+package com.dailyon.orderservice.domain.gift.entity;
 
 import com.dailyon.orderservice.domain.common.BaseEntity;
-import com.dailyon.orderservice.domain.order.entity.enums.GiftStatus;
+import com.dailyon.orderservice.domain.order.entity.Order;
+import com.dailyon.orderservice.domain.gift.entity.enums.GiftStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

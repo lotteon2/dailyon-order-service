@@ -1,8 +1,8 @@
-package com.dailyon.orderservice.domain.order.implement;
+package com.dailyon.orderservice.domain.gift.implement;
 
-import com.dailyon.orderservice.domain.order.entity.Gift;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
 import com.dailyon.orderservice.domain.order.exception.OrderNotFoundException;
-import com.dailyon.orderservice.domain.order.repository.GiftRepository;
+import com.dailyon.orderservice.domain.gift.repository.GiftRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

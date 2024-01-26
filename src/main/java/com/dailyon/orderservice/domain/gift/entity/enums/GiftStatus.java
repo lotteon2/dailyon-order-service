@@ -1,4 +1,4 @@
-package com.dailyon.orderservice.domain.order.entity.enums;
+package com.dailyon.orderservice.domain.gift.entity.enums;
 
 import lombok.Getter;
 

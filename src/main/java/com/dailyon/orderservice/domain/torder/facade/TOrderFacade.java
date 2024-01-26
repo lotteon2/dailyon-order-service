@@ -1,7 +1,6 @@
 package com.dailyon.orderservice.domain.torder.facade;
 
-import com.dailyon.orderservice.domain.order.service.GiftService;
-import com.dailyon.orderservice.domain.order.service.request.GiftCommand;
+import com.dailyon.orderservice.domain.gift.service.GiftService;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
 import com.dailyon.orderservice.domain.torder.clients.*;
@@ -41,22 +40,32 @@ public class TOrderFacade {
   private final TOrderDtoMapper tOrderDtoMapper;
 
   public String orderReady(TOrderCreateRequest request, Long memberId) {
-    RegisterTOrder tOrderCommand = extractCommand(request, memberId);
-    TOrder tOrder = tOrderService.createTOrder(tOrderCommand, memberId);
-    PaymentReadyParam param =
-        tOrderDtoMapper.toPaymentReadyParam(tOrder, "KAKAOPAY", request.getUsedPoints());
+    TOrder tOrder = createTOrder(request, memberId);
     if (GIFT == request.getType()) {
-      GiftCommand.RegisterGift registerGift = tOrderDtoMapper.toGiftCommand(request);
-      giftService.createGift(registerGift, tOrder.getId());
+      createGift(request, tOrder);
     }
-    String nextUrl = paymentFeignClient.orderPaymentReady(memberId, param);
-    return nextUrl;
+    return orderPaymentReady(memberId, toPaymentReadyParam(tOrder, request.getUsedPoints()));
+  }
+
+  private TOrder createTOrder(TOrderCreateRequest request, Long memberId) {
+    return tOrderService.createTOrder(extractCommand(request, memberId), memberId);
+  }
+
+  private void createGift(TOrderCreateRequest request, TOrder tOrder) {
+    giftService.createGift(tOrderDtoMapper.toGiftCommand(request), tOrder.getId());
+  }
+
+  private PaymentReadyParam toPaymentReadyParam(TOrder tOrder, int usedPoints) {
+    return tOrderDtoMapper.toPaymentReadyParam(tOrder, "KAKAOPAY", usedPoints);
+  }
+
+  private String orderPaymentReady(Long memberId, PaymentReadyParam param) {
+    return paymentFeignClient.orderPaymentReady(memberId, param);
   }
 
   public String orderApprove(TOrderDto.OrderApproveRequest request, String orderNo) {
     TOrder tOrder = tOrderService.getTOrder(orderNo);
     OrderDTO orderDTO = tOrderDtoMapper.of(tOrder, request.getPg_token());
-    System.out.println(orderDTO.getAuctionId());
     producer.orderCreated(orderDTO);
     return tOrder.getId();
   }
@@ -76,25 +85,35 @@ public class TOrderFacade {
   }
 
   private RegisterTOrder extractCommand(TOrderCreateRequest request, Long memberId) {
-    var orderItemList = request.getOrderItems();
-    int memberPoints = getMemberPoints(memberId);
-    int usedPoints = request.getUsedPoints();
-    validateMemberPoint(usedPoints, memberPoints);
+    validateMemberPoint(getMemberPoints(memberId), request.getUsedPoints());
+    return isAuction(request)
+        ? createAuctionOrder(request, memberId)
+        : createNormalOrder(request, memberId);
+  }
 
-    if (request.getType().equals(AUCTION)) {
-      AuctionProductDTO auctionProductInfo =
-          auctionClient.getAuctionProductInfo(memberId, request.getAuctionId());
-      if (!auctionProductInfo.isWinner()) {
-        throw new RuntimeException("경매 낙찰자가 아닙니다.");
-      }
-      var orderProducts = auctionProductInfo.createOrderProducts();
-      return tOrderDtoMapper.of(
-          request, EMPTY_LIST, orderProducts, auctionProductInfo.getOrderPrice());
+  private boolean isAuction(TOrderCreateRequest request) {
+    return request.getType().equals(AUCTION);
+  }
+
+  private RegisterTOrder createAuctionOrder(TOrderCreateRequest request, Long memberId) {
+    AuctionProductDTO auctionProductInfo = getAuctionProductInfo(memberId, request.getAuctionId());
+    var orderProducts = auctionProductInfo.createOrderProducts();
+    return tOrderDtoMapper.of(
+        request, EMPTY_LIST, orderProducts, auctionProductInfo.getOrderPrice());
+  }
+
+  private AuctionProductDTO getAuctionProductInfo(Long memberId, String auctionId) {
+    AuctionProductDTO auctionProductInfo = auctionClient.getAuctionProductInfo(memberId, auctionId);
+    if (!auctionProductInfo.isWinner()) {
+      throw new RuntimeException("경매 낙찰자가 아닙니다.");
     }
+    return auctionProductInfo;
+  }
+
+  private RegisterTOrder createNormalOrder(TOrderCreateRequest request, Long memberId) {
+    var orderItemList = request.getOrderItems();
     var productCoupons = getProductCoupons(tOrderDtoMapper.toCouponParams(orderItemList), memberId);
     var orderProducts = getOrderProducts(tOrderDtoMapper.toOrderProductParams(orderItemList));
-
-    RegisterTOrder tOrderCommand = tOrderDtoMapper.of(request, productCoupons, orderProducts, null);
-    return tOrderCommand;
+    return tOrderDtoMapper.of(request, productCoupons, orderProducts, null);
   }
 }

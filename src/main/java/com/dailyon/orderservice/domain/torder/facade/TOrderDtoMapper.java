@@ -1,6 +1,6 @@
 package com.dailyon.orderservice.domain.torder.facade;
 
-import com.dailyon.orderservice.domain.order.service.request.GiftCommand;
+import com.dailyon.orderservice.domain.gift.service.request.GiftCommand;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest;
 import com.dailyon.orderservice.domain.torder.api.request.TOrderDto.TOrderCreateRequest.RegisterDeliveryRequest;

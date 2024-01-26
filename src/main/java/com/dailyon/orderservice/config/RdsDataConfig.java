@@ -15,7 +15,8 @@ import static com.dailyon.orderservice.config.RdsDataConfig.*;
     basePackages = {
       RDS_ORDER_DOMAIN_PACKAGE,
       RDS_DELIVERY_DOMAIN_PACKAGE,
-      RDS_REFUND_DOMAIN_PACKAGE
+      RDS_REFUND_DOMAIN_PACKAGE,
+      RDS_GIFT_DOMAIN_PACKAGE
     }) // JpaRepository 패키지 위치 등록
 @EnableConfigurationProperties({JpaProperties.class, HibernateProperties.class})
 public class RdsDataConfig {
@@ -25,4 +26,5 @@ public class RdsDataConfig {
       "com.dailyon.orderservice.domain.delivery.repository";
   static final String RDS_REFUND_DOMAIN_PACKAGE =
       "com.dailyon.orderservice.domain.refund.repository";
+  static final String RDS_GIFT_DOMAIN_PACKAGE = "com.dailyon.orderservice.domain.gift.repository";
 }

@@ -1,8 +1,8 @@
-package com.dailyon.orderservice.domain.order.api;
+package com.dailyon.orderservice.domain.gift.api;
 
-import com.dailyon.orderservice.domain.order.api.request.GiftDto;
-import com.dailyon.orderservice.domain.order.facade.GiftFacade;
-import com.dailyon.orderservice.domain.order.facade.response.GiftPageResponse;
+import com.dailyon.orderservice.domain.gift.api.request.GiftDto;
+import com.dailyon.orderservice.domain.gift.facade.GiftFacade;
+import com.dailyon.orderservice.domain.gift.facade.response.GiftPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

@@ -1,4 +1,4 @@
-package com.dailyon.orderservice.domain.order.api.request;
+package com.dailyon.orderservice.domain.gift.api.request;
 
 import lombok.Getter;
 import lombok.Setter;

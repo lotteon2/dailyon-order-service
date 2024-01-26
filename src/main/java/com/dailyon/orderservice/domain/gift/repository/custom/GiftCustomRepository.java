@@ -1,6 +1,6 @@
-package com.dailyon.orderservice.domain.order.repository.custom;
+package com.dailyon.orderservice.domain.gift.repository.custom;
 
-import com.dailyon.orderservice.domain.order.entity.Gift;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

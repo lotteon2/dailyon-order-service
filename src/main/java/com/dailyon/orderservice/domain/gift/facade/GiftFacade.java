@@ -1,10 +1,10 @@
-package com.dailyon.orderservice.domain.order.facade;
+package com.dailyon.orderservice.domain.gift.facade;
 
-import com.dailyon.orderservice.domain.order.api.request.GiftDto;
-import com.dailyon.orderservice.domain.order.entity.Gift;
-import com.dailyon.orderservice.domain.order.facade.response.GiftPageResponse;
-import com.dailyon.orderservice.domain.order.service.GiftService;
-import com.dailyon.orderservice.domain.order.service.request.GiftCommand;
+import com.dailyon.orderservice.domain.gift.api.request.GiftDto;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
+import com.dailyon.orderservice.domain.gift.facade.response.GiftPageResponse;
+import com.dailyon.orderservice.domain.gift.service.GiftService;
+import com.dailyon.orderservice.domain.gift.service.request.GiftCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GiftFacade {
   private final GiftService giftService;
-  private final OrderDtoMapper orderDtoMapper;
+  private final GiftDtoMapper giftDtoMapper;
 
   public GiftPageResponse getReceiverGifts(Long receiverId, Pageable pageable) {
     Page<Gift> page = giftService.getGiftsByReceiver(receiverId, pageable);
@@ -27,7 +27,7 @@ public class GiftFacade {
   }
 
   public void accept(GiftDto.createDelivery request, Long memberId) {
-    GiftCommand.Accept command = orderDtoMapper.from(request);
+    GiftCommand.Accept command = giftDtoMapper.from(request);
     giftService.accept(command, memberId);
   }
 }

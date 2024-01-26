@@ -1,6 +1,6 @@
-package com.dailyon.orderservice.domain.order.implement;
+package com.dailyon.orderservice.domain.gift.implement;
 
-import com.dailyon.orderservice.domain.order.entity.Gift;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

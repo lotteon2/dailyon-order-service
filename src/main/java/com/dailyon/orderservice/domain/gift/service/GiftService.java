@@ -1,13 +1,13 @@
-package com.dailyon.orderservice.domain.order.service;
+package com.dailyon.orderservice.domain.gift.service;
 
 import com.dailyon.orderservice.domain.delivery.entity.Delivery;
 import com.dailyon.orderservice.domain.delivery.implement.DeliveryAppender;
-import com.dailyon.orderservice.domain.order.entity.Gift;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
+import com.dailyon.orderservice.domain.gift.implement.GiftAppender;
+import com.dailyon.orderservice.domain.gift.implement.GiftManager;
+import com.dailyon.orderservice.domain.gift.implement.GiftReader;
+import com.dailyon.orderservice.domain.gift.service.request.GiftCommand;
 import com.dailyon.orderservice.domain.order.entity.Order;
-import com.dailyon.orderservice.domain.order.implement.GiftAppender;
-import com.dailyon.orderservice.domain.order.implement.GiftManager;
-import com.dailyon.orderservice.domain.order.implement.GiftReader;
-import com.dailyon.orderservice.domain.order.service.request.GiftCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -2,7 +2,8 @@ package com.dailyon.orderservice.domain.order.facade;
 
 import com.dailyon.orderservice.domain.delivery.service.DeliveryService;
 import com.dailyon.orderservice.domain.delivery.service.request.DeliveryServiceRequest;
-import com.dailyon.orderservice.domain.order.entity.Gift;
+import com.dailyon.orderservice.domain.gift.entity.Gift;
+import com.dailyon.orderservice.domain.gift.service.GiftService;
 import com.dailyon.orderservice.domain.order.entity.Order;
 import com.dailyon.orderservice.domain.order.entity.OrderDetail;
 import com.dailyon.orderservice.domain.order.entity.enums.OrderType;
@@ -10,7 +11,6 @@ import com.dailyon.orderservice.domain.order.facade.response.OrderDetailResponse
 import com.dailyon.orderservice.domain.order.facade.response.OrderPageResponse;
 import com.dailyon.orderservice.domain.order.kafka.event.OrderEventProducer;
 import com.dailyon.orderservice.domain.order.kafka.event.dto.RefundDTO;
-import com.dailyon.orderservice.domain.order.service.GiftService;
 import com.dailyon.orderservice.domain.order.service.OrderService;
 import com.dailyon.orderservice.domain.order.sqs.OrderSqsProducer;
 import com.dailyon.orderservice.domain.order.sqs.dto.RawNotificationData;
@@ -63,7 +63,6 @@ public class OrderFacade {
       SQSNotificationDto notificationDto = of(order.getMemberId(), notificationData);
       orderSqsProducer.produce(ORDER_COMPLETE_NOTIFICATION_QUEUE, notificationDto);
     }
-    tOrderService.deleteTOrder(tOrder.getId());
     return tOrder.getId();
   }
 
